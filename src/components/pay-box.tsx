@@ -18,7 +18,7 @@ export function PayBox({
   const [copied, setCopied] = useState("");
 
   useEffect(() => {
-    QRCode.toDataURL(upiLink, { margin: 1, width: 360, color: { dark: "#1e1b18", light: "#fffdf9" } })
+    QRCode.toDataURL(upiLink, { margin: 1, width: 360, color: { dark: "#211b1a", light: "#fbf7f4" } })
       .then(setQr)
       .catch(() => {});
   }, [upiLink]);

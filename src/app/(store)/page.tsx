@@ -195,7 +195,7 @@ export default async function HomePage() {
                   href={`/collections/${c.slug}`}
                   className="group relative block overflow-hidden border border-paper/10"
                 >
-                  <div className="aspect-[4/5] bg-[#2a2622]">
+                  <div className="aspect-[4/5] bg-cocoa">
                     {c.banner_url ? (
                       // eslint-disable-next-line @next/next/no-img-element -- collection banner
                       <img src={c.banner_url} alt={c.name} loading="lazy" className="size-full object-cover opacity-80" />
