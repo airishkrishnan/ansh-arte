@@ -1,0 +1,17 @@
+# Free Supabase projects pause after 7 days without activity. This visits the
+# store once a day (which reads the database) so it never pauses.
+# Set the repository variable SITE_URL (Settings → Secrets and variables →
+# Actions → Variables) to your live address, e.g. https://anshharte.com
+name: Keep database awake
+
+on:
+  schedule:
+    - cron: "30 3 * * *"
+  workflow_dispatch:
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    if: ${{ vars.SITE_URL != '' }}
+    steps:
+      - run: curl -fsS -o /dev/null "${{ vars.SITE_URL }}/collections"
