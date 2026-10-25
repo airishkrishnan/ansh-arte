@@ -13,10 +13,40 @@ export type NavItem = {
   collections: { name: string; href: string }[];
 };
 
-export function Logo({ className = "" }: { className?: string }) {
+/** The arch (jharokha) monogram. Strokes and letter follow `currentColor` unless overridden. */
+export function Monogram({
+  className = "",
+  arch = "currentColor",
+  letter = "currentColor",
+}: {
+  className?: string;
+  arch?: string;
+  letter?: string;
+}) {
   return (
-    <span className={`font-serif tracking-[0.18em] uppercase leading-none ${className}`}>
-      Ansh <span className="text-brass">Arte</span>
+    <svg viewBox="0 0 76 96" className={className} aria-hidden="true">
+      <path d="M6 94V40a32 32 0 0 1 64 0v54" fill="none" stroke={arch} strokeWidth="2" />
+      <path d="M14 94V42a24 24 0 0 1 48 0v52" fill="none" stroke={arch} strokeWidth="1" />
+      <circle cx="38" cy="4" r="3" fill={arch} />
+      <text
+        x="38"
+        y="80"
+        textAnchor="middle"
+        fontSize="44"
+        fontWeight="500"
+        fill={letter}
+        style={{ fontFamily: "var(--font-cormorant), Georgia, serif" }}
+      >
+        A
+      </text>
+    </svg>
+  );
+}
+
+export function Logo({ className = "", accent = "text-brass-deep" }: { className?: string; accent?: string }) {
+  return (
+    <span className={`font-serif tracking-[0.2em] uppercase leading-none ${className}`}>
+      Ansh <span className={accent}>Arte</span>
     </span>
   );
 }
@@ -77,7 +107,7 @@ export function Header({ nav, announcement }: { nav: NavItem[]; announcement: st
                   </Link>
                   {(item.children.length > 0 || item.collections.length > 0) && (
                     <div className="invisible absolute left-0 top-full z-50 w-[34rem] translate-y-2 opacity-0 transition-all duration-300 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100">
-                      <div className="mt-3 grid grid-cols-2 gap-8 border border-line bg-paper p-7 shadow-[0_24px_60px_-30px_rgba(30,27,24,0.35)]">
+                      <div className="mt-3 grid grid-cols-2 gap-8 border border-line bg-paper p-7 shadow-[0_24px_60px_-30px_rgba(33,27,26,0.35)]">
                         {item.children.length > 0 && (
                           <div>
                             <p className="eyebrow mb-3">Shop by style</p>
@@ -137,7 +167,7 @@ export function Header({ nav, announcement }: { nav: NavItem[]; announcement: st
             >
               <BagIcon className="size-6" />
               {ready && count > 0 && (
-                <span className="absolute right-0.5 top-0.5 grid size-[1.1rem] place-items-center rounded-full bg-brass text-[0.62rem] font-bold text-paper">
+                <span className="absolute right-0.5 top-0.5 grid size-[1.1rem] place-items-center rounded-full bg-brass-deep text-[0.62rem] font-bold text-paper">
                   {count}
                 </span>
               )}

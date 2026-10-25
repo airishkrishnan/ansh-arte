@@ -7,7 +7,7 @@ export const metadata: Metadata = {
   appleWebApp: { capable: true, title: "Ansh Arte", statusBarStyle: "default" },
 };
 
-export const viewport: Viewport = { themeColor: "#1e1b18" };
+export const viewport: Viewport = { themeColor: "#211b1a" };
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   return <AdminShell>{children}</AdminShell>;

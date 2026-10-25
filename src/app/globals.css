@@ -1,19 +1,24 @@
 @import "tailwindcss";
 
-/* Ansh Arte design tokens */
+/* Ansh Arte design tokens: "Cocoa Silk".
+   Brand palette: espresso #211b1a, cocoa #382a28, mocha #60433d,
+   clay rose #916b60, latte #c1a094, cream silk #e8d8ce.
+   Clay rose and latte are under 4.5:1 on the light grounds, so use them for
+   icons, borders and fills, never for small text. */
 @theme {
-  --color-ivory: #f7f3ec;
-  --color-paper: #fffdf9;
-  --color-sand: #efe8dc;
-  --color-line: #e3dacb;
-  --color-ink: #1e1b18;
-  --color-ink-soft: #4a443d;
-  --color-muted: #7d7c78;
-  --color-brass: #a8803e;
-  --color-brass-deep: #7f5f2a;
-  --color-brass-soft: #e9dcc3;
-  --color-silver: #9a9a95;
-  --color-temple: #6e1f1f;
+  --color-ivory: #f6efea; /* page: a lighter step of cream silk */
+  --color-paper: #fbf7f4; /* cards, inputs */
+  --color-sand: #e8d8ce; /* cream silk: panels, image placeholders */
+  --color-line: #dcc8bc;
+  --color-ink: #211b1a; /* espresso */
+  --color-ink-soft: #382a28; /* cocoa */
+  --color-muted: #60433d; /* mocha */
+  --color-brass: #916b60; /* clay rose: accents, icons */
+  --color-brass-deep: #60433d; /* mocha: small accent text, links */
+  --color-brass-soft: #e8d8ce; /* cream silk: accent text on dark */
+  --color-silver: #c1a094; /* latte */
+  --color-cocoa: #382a28;
+  --color-temple: #8a352c; /* errors and sold-out only */
   --color-success: #2f6b3f;
 
   --font-sans: var(--font-urbanist), ui-sans-serif, system-ui, sans-serif;

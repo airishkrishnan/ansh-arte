@@ -17,9 +17,9 @@ export function ProductArt({
   className?: string;
 }) {
   const silver = material === "german-silver";
-  const metal = dark ? (silver ? "#c9c8c2" : "#d2ae6c") : silver ? "#8f8f8a" : "#a8803e";
-  const glow = dark ? (silver ? "#3a3936" : "#3d3326") : silver ? "#ecebe6" : "#efe3cc";
-  const edge = dark ? "#1e1b18" : "#f4efe6";
+  const metal = dark ? (silver ? "#d8d0cb" : "#c1a094") : silver ? "#8d8582" : "#916b60";
+  const glow = dark ? (silver ? "#34302e" : "#3d2e2b") : silver ? "#ece6e2" : "#e8d8ce";
+  const edge = dark ? "#211b1a" : "#f6efea";
   const gid = `g-${material}-${dark ? "d" : "l"}`;
   const stroke = { fill: "none", stroke: metal, strokeWidth: 2.2, strokeLinecap: "round" as const };
 

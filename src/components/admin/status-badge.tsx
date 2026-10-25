@@ -1,7 +1,7 @@
 import { statusLabel, type OrderStatus } from "@/lib/types";
 
 const STYLES: Record<OrderStatus, string> = {
-  new: "bg-brass text-paper",
+  new: "bg-brass-deep text-paper",
   confirmed: "bg-brass-soft text-brass-deep",
   paid: "bg-[#dfeadf] text-success",
   packed: "bg-[#dfeadf] text-success",

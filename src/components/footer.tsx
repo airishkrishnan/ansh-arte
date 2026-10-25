@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { whatsappLink } from "@/lib/site";
 import type { Settings } from "@/lib/types";
-import { Logo, type NavItem } from "./header";
+import { Logo, Monogram, type NavItem } from "./header";
 import { InstagramIcon, WhatsAppIcon } from "./icons";
 
 export function Footer({ nav, settings }: { nav: NavItem[]; settings: Settings }) {
@@ -10,7 +10,10 @@ export function Footer({ nav, settings }: { nav: NavItem[]; settings: Settings }
     <footer className="mt-24 bg-ink text-paper/80">
       <div className="container-lux grid gap-12 py-16 md:grid-cols-[1.4fr_1fr_1fr_1fr]">
         <div className="space-y-5">
-          <Logo className="text-3xl text-paper" />
+          <div className="flex items-end gap-4">
+            <Monogram className="h-14 w-11 text-silver" letter="var(--color-brass-soft)" />
+            <Logo className="text-3xl text-paper" accent="text-silver" />
+          </div>
           <p className="max-w-xs text-sm leading-relaxed text-paper/60">
             Oxidised brass and German silver jewellery, handcrafted with an Indian heritage soul.
           </p>

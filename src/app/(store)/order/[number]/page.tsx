@@ -93,7 +93,7 @@ export default async function OrderPage({ params, searchParams }: Props) {
               <li key={s.status} className="text-center">
                 <div className={`h-1 ${done ? "bg-brass" : "bg-line"}`} />
                 <span
-                  className={`mx-auto -mt-2.5 grid size-4 place-items-center rounded-full ${done ? "bg-brass text-paper" : "border border-line bg-ivory"}`}
+                  className={`mx-auto -mt-2.5 grid size-4 place-items-center rounded-full ${done ? "bg-brass-deep text-paper" : "border border-line bg-ivory"}`}
                 >
                   {done && <CheckIcon className="size-2.5" />}
                 </span>
