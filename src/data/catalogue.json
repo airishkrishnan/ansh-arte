@@ -1,0 +1,64 @@
+{
+  "categories": [
+    {
+      "name": "Earrings",
+      "slug": "earrings",
+      "description": "Hoops, jhumkas, dangles and studs, handcrafted in oxidised brass and German silver.",
+      "styles": [
+        {
+          "name": "Hoops",
+          "slug": "hoops",
+          "description": "Clean circles and sculpted loops, from everyday minis to statement hoops.",
+          "collections": [
+            { "name": "Halo", "slug": "halo", "tagline": "Circles of light in antique brass" },
+            { "name": "Luna", "slug": "luna", "tagline": "Crescent curves inspired by the moon" },
+            { "name": "Eternal", "slug": "eternal", "tagline": "Unbroken loops for everyday grace" },
+            { "name": "Infinity", "slug": "infinity", "tagline": "Endless twists, endlessly wearable" }
+          ]
+        },
+        {
+          "name": "Jhumkas",
+          "slug": "jhumkas",
+          "description": "The bell-shaped icon of Indian jewellery, from delicate classics to grand temple pieces.",
+          "collections": [
+            { "name": "Classic Jhumkas", "slug": "classic-jhumkas", "tagline": "The timeless bell, handcrafted" },
+            { "name": "Maharani", "slug": "maharani", "tagline": "Regal statement jhumkas for festive days" },
+            { "name": "Temple Bells", "slug": "temple-bells", "tagline": "Temple motifs with gently chiming bells" }
+          ]
+        },
+        {
+          "name": "Dangles",
+          "slug": "dangles",
+          "description": "Drops that move with you, full of folk motifs and heirloom detail.",
+          "collections": [
+            { "name": "Mayuri", "slug": "mayuri", "tagline": "Peacock motifs in flowing silhouettes" },
+            { "name": "Tribal", "slug": "tribal", "tagline": "Bold, earthy forms from folk traditions" },
+            { "name": "Heritage", "slug": "heritage", "tagline": "Heirloom details, made for today" }
+          ]
+        },
+        {
+          "name": "Studs",
+          "slug": "studs",
+          "description": "Small, striking studs for every day and every outfit.",
+          "collections": [
+            { "name": "Bloom", "slug": "bloom", "tagline": "Petal studs that blossom softly" },
+            { "name": "Mandala", "slug": "mandala", "tagline": "Sacred geometry, small and striking" },
+            { "name": "Petite", "slug": "petite", "tagline": "Tiny studs for every single day" }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Rings",
+      "slug": "rings",
+      "description": "Adjustable rings in oxidised brass and German silver, from minimal bands to cocktail statements.",
+      "styles": [],
+      "collections": [
+        { "name": "Celestial", "slug": "celestial", "tagline": "Stars and moons for your fingers" },
+        { "name": "Flora", "slug": "flora", "tagline": "Leaves and blossoms, wrapped around" },
+        { "name": "Legacy", "slug": "legacy", "tagline": "Cocktail rings with old-world charm" },
+        { "name": "Nova", "slug": "nova", "tagline": "Minimal modern bands that shine" }
+      ]
+    }
+  ]
+}
