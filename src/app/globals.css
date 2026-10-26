@@ -130,6 +130,24 @@ body {
     background: var(--color-ink);
     color: var(--color-paper);
   }
+  /* Buttons for dark sections such as the home hero */
+  .btn-light {
+    background: var(--color-brass-soft);
+    color: var(--color-ink);
+  }
+  .btn-light:hover {
+    background: var(--color-paper);
+  }
+  .btn-outline-light {
+    border: 1px solid color-mix(in srgb, var(--color-brass-soft) 60%, transparent);
+    color: var(--color-brass-soft);
+  }
+  .btn-outline-light:hover {
+    border-color: var(--color-brass-soft);
+    background: var(--color-brass-soft);
+    color: var(--color-ink);
+  }
+
   .btn-whatsapp {
     background: #1f7a4d;
     color: #fff;
@@ -216,6 +234,19 @@ body {
 }
 .animate-rise {
   animation: rise 0.9s var(--ease-lux) both;
+}
+
+/* Slow push-in on the active banner photo */
+@keyframes hero-zoom {
+  from {
+    transform: scale(1.08);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+.hero-zoom {
+  animation: hero-zoom 7s ease-out both;
 }
 
 @media (prefers-reduced-motion: reduce) {

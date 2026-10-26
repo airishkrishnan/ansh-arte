@@ -3,7 +3,7 @@ import { cache } from "react";
 import { demo } from "./demo";
 import { DEFAULT_SETTINGS } from "./site";
 import { getServerSupabase, supabaseConfigured } from "./supabase/client";
-import type { Category, Collection, Material, Product, Settings } from "./types";
+import type { Category, Collection, Material, Product, Review, Settings } from "./types";
 
 export type Catalogue = {
   categories: Category[];
@@ -87,6 +87,19 @@ export const getProduct = cache(async (slug: string): Promise<Product | null> =>
     .eq("visible", true)
     .maybeSingle();
   return (data as Product) ?? null;
+});
+
+/** Approved reviews for a product, newest first. Empty until reviews-and-alerts.sql is run. */
+export const getReviews = cache(async (productId: string): Promise<Review[]> => {
+  if (!supabaseConfigured) return [];
+  const { data, error } = await getServerSupabase()
+    .from("reviews")
+    .select("*")
+    .eq("product_id", productId)
+    .eq("status", "approved")
+    .order("created_at", { ascending: false })
+    .limit(60);
+  return error ? [] : (data as Review[]);
 });
 
 // Helpers over the catalogue -------------------------------------------------

@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { useAccount } from "./account";
 import { useCart } from "./cart";
 import { BagIcon, ChevronIcon, CloseIcon, HeartIcon, MenuIcon, UserIcon } from "./icons";
+import { SearchButton } from "./search";
 
 export type NavItem = {
   name: string;
@@ -162,6 +163,7 @@ export function Header({ nav, announcement }: { nav: NavItem[]; announcement: st
             >
               Our craft
             </Link>
+            <SearchButton />
             <Link
               href="/account/wishlist"
               className="relative hidden p-2 md:block"

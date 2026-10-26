@@ -95,3 +95,26 @@ export const UserIcon = ({ className = "size-5" }: P) => (
     <path d="M5 20c.8-3.6 3.6-5.5 7-5.5s6.2 1.9 7 5.5" />
   </svg>
 );
+export const SearchIcon = ({ className = "size-5" }: P) => (
+  <svg viewBox="0 0 24 24" className={className} {...base}>
+    <circle cx="11" cy="11" r="6.5" />
+    <path d="M16 16l4.5 4.5" />
+  </svg>
+);
+export const StarIcon = ({ className = "size-4", filled = true }: P & { filled?: boolean }) => (
+  <svg viewBox="0 0 24 24" className={className} {...base} fill={filled ? "currentColor" : "none"}>
+    <path d="M12 3.5l2.6 5.3 5.9.9-4.25 4.1 1 5.8L12 16.9l-5.25 2.7 1-5.8L3.5 9.7l5.9-.9z" />
+  </svg>
+);
+export const CameraIcon = ({ className = "size-5" }: P) => (
+  <svg viewBox="0 0 24 24" className={className} {...base}>
+    <path d="M4 8h3l1.5-2h7L17 8h3v11H4z" />
+    <circle cx="12" cy="13" r="3.5" />
+  </svg>
+);
+export const BellIcon = ({ className = "size-5" }: P) => (
+  <svg viewBox="0 0 24 24" className={className} {...base}>
+    <path d="M6 16V11a6 6 0 0 1 12 0v5l1.5 2h-15z" />
+    <path d="M10 20.5a2 2 0 0 0 4 0" />
+  </svg>
+);

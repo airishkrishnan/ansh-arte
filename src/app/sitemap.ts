@@ -1,5 +1,6 @@
 import type { MetadataRoute } from "next";
 import { categoryHref, getCatalogue, getProducts } from "@/lib/data";
+import { liveFestive } from "@/lib/festive";
 import { SITE_URL } from "@/lib/site";
 
 export const dynamic = "force-dynamic";
@@ -13,8 +14,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     changeFrequency: "weekly",
     priority,
   });
+  const festive = liveFestive();
   return [
     page("/", 1),
+    ...(festive ? [page(`/festive/${festive.slug}`, 0.8)] : []),
     page("/collections", 0.8),
     ...catalogue.categories.map((c) => page(categoryHref(catalogue, c), c.parent_id ? 0.8 : 0.9)),
     ...catalogue.collections.map((c) => page(`/collections/${c.slug}`, 0.7)),

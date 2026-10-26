@@ -1,6 +1,9 @@
 import Link from "next/link";
+import { HeroSlider } from "@/components/hero-slider";
+import { ShopTheLook, type LookItem } from "@/components/shop-the-look";
 import { ArrowIcon, HandIcon, ShieldIcon, TruckIcon, WhatsAppIcon } from "@/components/icons";
 import { ProductArt } from "@/components/product-art";
+import { RecentlyViewed } from "@/components/recently-viewed";
 import { ProductCard } from "@/components/product-card";
 import {
   artKind,
@@ -13,15 +16,15 @@ import {
   topCategories,
 } from "@/lib/data";
 import { SITE_DESCRIPTION, SITE_NAME, SITE_URL, formatPrice } from "@/lib/site";
+import { festiveSlide, liveFestive } from "@/lib/festive";
+import { LOOK } from "@/lib/looks";
+import { samplePhoto } from "@/lib/samples";
+import { HERO_SLIDES } from "@/lib/slides";
 import type { Category } from "@/lib/types";
 
 export default async function HomePage() {
-  const [catalogue, settings, featured, latest] = await Promise.all([
-    getCatalogue(),
-    getSettings(),
-    getProducts({ featured: true, limit: 4 }),
-    getProducts({ sort: "new", limit: 8 }),
-  ]);
+  const [catalogue, settings, all] = await Promise.all([getCatalogue(), getSettings(), getProducts({ sort: "new" })]);
+  const latest = all.slice(0, 8);
 
   // Styles first (Hoops, Jhumkas…), then top categories without styles (Rings)
   const tiles: Category[] = topCategories(catalogue).flatMap((c) => {
@@ -30,7 +33,35 @@ export default async function HomePage() {
   });
   const spotlight = catalogue.collections.filter((c) => ["maharani", "mayuri", "halo", "celestial"].includes(c.slug));
   const showcase = (spotlight.length >= 3 ? spotlight : catalogue.collections).slice(0, 4);
-  const heroPicks = featured.length ? featured : latest.slice(0, 4);
+
+  // A live festive edit sits second, after the lead slide, in place of the gifting slide
+  const festive = liveFestive();
+  const [lead, ...rest] = HERO_SLIDES.filter((s) => !s.href.startsWith("/collections"));
+  const slides = festive ? [lead, festiveSlide(festive), ...rest] : HERO_SLIDES;
+
+  // Shop the look: newest in-stock piece for each dot, preferring the same metal
+  const used = new Set<string>();
+  const lookItems: LookItem[] = LOOK.spots.flatMap((spot) => {
+    const style = catalogue.categories.find((c) => c.slug === spot.style);
+    if (!style) return [];
+    const ids = [style.id, ...stylesOf(catalogue, style.id).map((s) => s.id)];
+    const pool = all.filter((p) => ids.includes(p.category_id) && p.stock > 0 && !used.has(p.id));
+    const p = pool.find((x) => !spot.material || x.material === spot.material) ?? pool[0];
+    if (!p) return [];
+    used.add(p.id);
+    const collection = collectionOf(catalogue, p)?.name;
+    return [
+      {
+        x: spot.x,
+        y: spot.y,
+        slug: p.slug,
+        name: p.name,
+        price: p.price,
+        image: p.images[0]?.thumb ?? p.images[0]?.url ?? samplePhoto(artKind(catalogue, p), p.material),
+        meta: [collection, style.name].filter(Boolean).join(" · "),
+      },
+    ];
+  });
 
   const orgJsonLd = {
     "@context": "https://schema.org",
@@ -53,64 +84,7 @@ export default async function HomePage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(orgJsonLd).replace(/</g, "\\u003c") }}
       />
 
-      {/* Hero */}
-      <section className="relative overflow-hidden">
-        <div className="container-lux grid items-center gap-10 pb-16 pt-10 md:grid-cols-[1.05fr_1fr] md:gap-16 md:pb-24 md:pt-16">
-          <div className="animate-rise space-y-7">
-            <p className="eyebrow">Oxidised brass · German silver</p>
-            <h1 className="heading-xl text-balance">
-              Heritage,
-              <br />
-              <em className="font-normal text-brass-deep">handcrafted</em> for you.
-            </h1>
-            <p className="max-w-md text-[1.05rem] leading-relaxed text-ink-soft">
-              Jhumkas, hoops and rings shaped by Indian craft traditions and finished by hand. Choose
-              your piece, confirm on WhatsApp, and pay simply by UPI.
-            </p>
-            <div className="flex flex-wrap gap-3">
-              <Link href="/earrings" className="btn btn-primary">
-                Shop earrings <ArrowIcon />
-              </Link>
-              <Link href="/collections" className="btn btn-outline">
-                Explore collections
-              </Link>
-            </div>
-          </div>
-          <div className="relative mx-auto w-full max-w-md md:max-w-none">
-            <div className="grid grid-cols-2 gap-3 md:gap-4">
-              {heroPicks.slice(0, 2).map((p, i) => (
-                <Link
-                  key={p.id}
-                  href={`/product/${p.slug}`}
-                  className={`group relative overflow-hidden rounded-t-full bg-sand ${i === 1 ? "mt-12" : ""}`}
-                >
-                  <div className="aspect-[3/4.4]">
-                    {p.images[0] ? (
-                      // eslint-disable-next-line @next/next/no-img-element -- hero product photo
-                      <img
-                        src={p.images[0].url}
-                        alt={p.images[0].alt || p.name}
-                        fetchPriority="high"
-                        className="size-full object-cover transition-transform duration-1000 group-hover:scale-105"
-                      />
-                    ) : (
-                      <ProductArt
-                        kind={artKind(catalogue, p)}
-                        material={p.material}
-                        className="size-full transition-transform duration-1000 group-hover:scale-105"
-                      />
-                    )}
-                  </div>
-                  <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-ink/60 to-transparent p-4 pt-12 text-paper">
-                    <p className="font-serif text-lg leading-tight">{p.name}</p>
-                    <p className="text-xs tracking-wide text-paper/80">{formatPrice(p.price)}</p>
-                  </div>
-                </Link>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
+      <HeroSlider slides={slides} />
 
       {/* Shop by style */}
       <section className="border-y border-line bg-paper py-16 md:py-20">
@@ -152,6 +126,9 @@ export default async function HomePage() {
         </div>
       </section>
 
+      {/* Only shows for returning shoppers */}
+      <RecentlyViewed className="container-lux pt-16 md:pt-24" />
+
       {/* New arrivals */}
       <section className="container-lux py-16 md:py-24">
         <div className="mb-10 flex items-end justify-between gap-6">
@@ -174,6 +151,17 @@ export default async function HomePage() {
           ))}
         </div>
       </section>
+
+      {lookItems.length > 0 && (
+        <ShopTheLook
+          image={LOOK.image}
+          alt={LOOK.alt}
+          eyebrow={LOOK.eyebrow}
+          title={LOOK.title}
+          text={LOOK.text}
+          items={lookItems}
+        />
+      )}
 
       {/* Collections */}
       <section className="bg-ink py-16 text-paper md:py-24">
