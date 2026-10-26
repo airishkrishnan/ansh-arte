@@ -6,6 +6,7 @@ import { Gallery } from "@/components/gallery";
 import { HandIcon, ShieldIcon, TruckIcon } from "@/components/icons";
 import { Breadcrumbs, JsonLd, breadcrumbJsonLd } from "@/components/listing";
 import { ProductCard } from "@/components/product-card";
+import { Reviews, Stars, averageRating } from "@/components/reviews";
 import {
   artKind,
   categoryHref,
@@ -14,6 +15,7 @@ import {
   getCatalogue,
   getProduct,
   getProducts,
+  getReviews,
   getSettings,
 } from "@/lib/data";
 import { SITE_NAME, SITE_URL, formatPrice } from "@/lib/site";
@@ -49,6 +51,8 @@ export default async function ProductPage({ params }: Props) {
   const [product, catalogue, settings] = await Promise.all([getProduct(slug), getCatalogue(), getSettings()]);
   if (!product) notFound();
 
+  const reviews = await getReviews(product.id);
+  const rating = averageRating(reviews);
   const kind = artKind(catalogue, product);
   const collection = collectionOf(catalogue, product);
   const path = categoryPath(catalogue, product.category_id);
@@ -63,6 +67,12 @@ export default async function ProductPage({ params }: Props) {
           .filter((p) => !related.some((r) => r.id === p.id))
           .slice(0, 4 - related.length)
       : [];
+  // Pairs well with: other styles in the same metal, same collection first
+  const shown = new Set([product.id, ...related.map((p) => p.id), ...more.map((p) => p.id)]);
+  const pairs = (await getProducts({ material: product.material, limit: 40 }))
+    .filter((p) => p.category_id !== product.category_id && !shown.has(p.id) && p.stock > 0)
+    .sort((a, b) => Number(b.collection_id === product.collection_id) - Number(a.collection_id === product.collection_id))
+    .slice(0, 4);
   const url = `${SITE_URL}/product/${product.slug}`;
   const crumbs = [
     { name: "Home", href: "/" },
@@ -81,6 +91,17 @@ export default async function ProductPage({ params }: Props) {
     brand: { "@type": "Brand", name: SITE_NAME },
     material: materialLabel(product.material),
     category: path.map((c) => c.name).join(" > "),
+    ...(reviews.length
+      ? {
+          aggregateRating: { "@type": "AggregateRating", ratingValue: rating.toFixed(1), reviewCount: reviews.length },
+          review: reviews.slice(0, 5).map((r) => ({
+            "@type": "Review",
+            author: { "@type": "Person", name: r.name },
+            reviewRating: { "@type": "Rating", ratingValue: r.rating },
+            reviewBody: r.body,
+          })),
+        }
+      : {}),
     offers: {
       "@type": "Offer",
       url,
@@ -133,6 +154,12 @@ export default async function ProductPage({ params }: Props) {
                 )}
               </p>
               <h1 className="heading-lg">{product.name}</h1>
+              {reviews.length > 0 && (
+                <a href="#reviews" className="flex items-center gap-2 text-xs text-ink-soft hover:text-ink">
+                  <Stars rating={rating} />
+                  {rating.toFixed(1)} · {reviews.length} {reviews.length === 1 ? "review" : "reviews"}
+                </a>
+              )}
               <div className="flex items-baseline gap-3">
                 <span className="font-serif text-3xl">{formatPrice(product.price)}</span>
                 {onSale && (
@@ -233,6 +260,22 @@ export default async function ProductPage({ params }: Props) {
             </div>
           </div>
         </div>
+
+        <Reviews reviews={reviews} productId={product.id} productName={product.name} />
+
+        {pairs.length > 0 && (
+          <section className="mt-20 md:mt-28">
+            <div className="mb-10 text-center">
+              <p className="eyebrow mb-3">Complete the look</p>
+              <h2 className="heading-lg">Pairs well with</h2>
+            </div>
+            <div className="grid grid-cols-2 gap-x-3 gap-y-10 md:grid-cols-4 md:gap-x-6">
+              {pairs.map((p) => (
+                <ProductCard key={p.id} product={p} kind={artKind(catalogue, p)} collection={collectionOf(catalogue, p)?.name} />
+              ))}
+            </div>
+          </section>
+        )}
 
         {related.length + more.length > 0 && (
           <section className="mt-20 md:mt-28">

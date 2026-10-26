@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { HeroSlider } from "@/components/hero-slider";
+import { ShopTheLook, type LookItem } from "@/components/shop-the-look";
 import { ArrowIcon, HandIcon, ShieldIcon, TruckIcon, WhatsAppIcon } from "@/components/icons";
 import { ProductArt } from "@/components/product-art";
 import { ProductCard } from "@/components/product-card";
@@ -14,15 +15,15 @@ import {
   topCategories,
 } from "@/lib/data";
 import { SITE_DESCRIPTION, SITE_NAME, SITE_URL, formatPrice } from "@/lib/site";
+import { festiveSlide, liveFestive } from "@/lib/festive";
+import { LOOK } from "@/lib/looks";
+import { samplePhoto } from "@/lib/samples";
 import { HERO_SLIDES } from "@/lib/slides";
 import type { Category } from "@/lib/types";
 
 export default async function HomePage() {
-  const [catalogue, settings, latest] = await Promise.all([
-    getCatalogue(),
-    getSettings(),
-    getProducts({ sort: "new", limit: 8 }),
-  ]);
+  const [catalogue, settings, all] = await Promise.all([getCatalogue(), getSettings(), getProducts({ sort: "new" })]);
+  const latest = all.slice(0, 8);
 
   // Styles first (Hoops, Jhumkas…), then top categories without styles (Rings)
   const tiles: Category[] = topCategories(catalogue).flatMap((c) => {
@@ -31,6 +32,34 @@ export default async function HomePage() {
   });
   const spotlight = catalogue.collections.filter((c) => ["maharani", "mayuri", "halo", "celestial"].includes(c.slug));
   const showcase = (spotlight.length >= 3 ? spotlight : catalogue.collections).slice(0, 4);
+
+  // Festive edit leads the banner while it is live
+  const festive = liveFestive();
+  const slides = festive ? [festiveSlide(festive), ...HERO_SLIDES.filter((s) => !s.href.startsWith("/collections"))] : HERO_SLIDES;
+
+  // Shop the look: newest in-stock piece for each dot, preferring the same metal
+  const used = new Set<string>();
+  const lookItems: LookItem[] = LOOK.spots.flatMap((spot) => {
+    const style = catalogue.categories.find((c) => c.slug === spot.style);
+    if (!style) return [];
+    const ids = [style.id, ...stylesOf(catalogue, style.id).map((s) => s.id)];
+    const pool = all.filter((p) => ids.includes(p.category_id) && p.stock > 0 && !used.has(p.id));
+    const p = pool.find((x) => !spot.material || x.material === spot.material) ?? pool[0];
+    if (!p) return [];
+    used.add(p.id);
+    const collection = collectionOf(catalogue, p)?.name;
+    return [
+      {
+        x: spot.x,
+        y: spot.y,
+        slug: p.slug,
+        name: p.name,
+        price: p.price,
+        image: p.images[0]?.thumb ?? p.images[0]?.url ?? samplePhoto(artKind(catalogue, p), p.material),
+        meta: [collection, style.name].filter(Boolean).join(" · "),
+      },
+    ];
+  });
 
   const orgJsonLd = {
     "@context": "https://schema.org",
@@ -53,7 +82,7 @@ export default async function HomePage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(orgJsonLd).replace(/</g, "\\u003c") }}
       />
 
-      <HeroSlider slides={HERO_SLIDES} />
+      <HeroSlider slides={slides} />
 
       {/* Shop by style */}
       <section className="border-y border-line bg-paper py-16 md:py-20">
@@ -117,6 +146,17 @@ export default async function HomePage() {
           ))}
         </div>
       </section>
+
+      {lookItems.length > 0 && (
+        <ShopTheLook
+          image={LOOK.image}
+          alt={LOOK.alt}
+          eyebrow={LOOK.eyebrow}
+          title={LOOK.title}
+          text={LOOK.text}
+          items={lookItems}
+        />
+      )}
 
       {/* Collections */}
       <section className="bg-ink py-16 text-paper md:py-24">
