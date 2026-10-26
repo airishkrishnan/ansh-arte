@@ -3,8 +3,9 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
+import { useAccount } from "./account";
 import { useCart } from "./cart";
-import { BagIcon, ChevronIcon, CloseIcon, MenuIcon } from "./icons";
+import { BagIcon, ChevronIcon, CloseIcon, HeartIcon, MenuIcon, UserIcon } from "./icons";
 import { SearchButton } from "./search";
 
 export type NavItem = {
@@ -54,6 +55,8 @@ export function Logo({ className = "", accent = "text-brass-deep" }: { className
 
 export function Header({ nav, announcement }: { nav: NavItem[]; announcement: string }) {
   const { count, setOpen, ready } = useCart();
+  const account = useAccount();
+  const signedIn = account.ready && !!account.user;
   const [menu, setMenu] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const pathname = usePathname();
@@ -153,14 +156,36 @@ export function Header({ nav, announcement }: { nav: NavItem[]; announcement: st
             <Logo className="text-[1.45rem] md:text-[1.85rem]" />
           </Link>
 
-          <div className="flex items-center justify-end gap-2 md:gap-4">
+          <div className="flex items-center justify-end gap-1 md:gap-3">
             <Link
               href="/about"
-              className="link-underline hidden text-[0.78rem] font-semibold uppercase tracking-[0.16em] lg:inline"
+              className="link-underline mr-2 hidden text-[0.78rem] font-semibold uppercase tracking-[0.16em] lg:inline"
             >
               Our craft
             </Link>
             <SearchButton />
+            <Link
+              href="/account/wishlist"
+              className="relative hidden p-2 md:block"
+              aria-label={`Wishlist, ${account.wishlist.length} saved`}
+            >
+              <HeartIcon className="size-6" />
+              {account.ready && account.wishlist.length > 0 && (
+                <span className="absolute right-0.5 top-0.5 grid size-[1.1rem] place-items-center rounded-full bg-brass-deep text-[0.62rem] font-bold text-paper">
+                  {account.wishlist.length}
+                </span>
+              )}
+            </Link>
+            {account.enabled && (
+              <Link
+                href={signedIn ? "/account" : "/account/login"}
+                className="relative p-2"
+                aria-label={signedIn ? "My account" : "Sign in"}
+              >
+                <UserIcon className="size-6" />
+                {signedIn && <span className="absolute bottom-1.5 right-1.5 size-2 rounded-full bg-success" />}
+              </Link>
+            )}
             <button
               type="button"
               onClick={() => setOpen(true)}
@@ -230,6 +255,14 @@ export function Header({ nav, announcement }: { nav: NavItem[]; announcement: st
               </Link>
               <Link href="/shipping-returns" className="block">
                 Shipping & returns
+              </Link>
+              {account.enabled && (
+                <Link href={signedIn ? "/account" : "/account/login"} className="block">
+                  {signedIn ? "My account & orders" : "Sign in / Create account"}
+                </Link>
+              )}
+              <Link href="/account/wishlist" className="block">
+                Wishlist{account.wishlist.length > 0 ? ` (${account.wishlist.length})` : ""}
               </Link>
               <Link href="/track" className="block">
                 Track your order

@@ -18,10 +18,32 @@ export function getBrowserSupabase() {
   return browserClient;
 }
 
+let customerClient: SupabaseClient | null = null;
+
+/**
+ * Client for customer accounts in the store. Kept apart from the admin client
+ * so a customer sign-in never touches the admin's session on the same phone.
+ */
+export function getCustomerSupabase() {
+  if (!supabaseConfigured) throw new Error("Supabase is not configured");
+  customerClient ??= createClient(url!, key!, {
+    auth: {
+      persistSession: true,
+      autoRefreshToken: true,
+      detectSessionInUrl: true,
+      flowType: "pkce",
+      storageKey: "ansh-arte-account",
+    },
+  });
+  return customerClient;
+}
+
 /** Stateless client for server-side reads with the public key. */
-export function getServerSupabase() {
+export function getServerSupabase(accessToken?: string) {
   if (!supabaseConfigured) throw new Error("Supabase is not configured");
   return createClient(url!, key!, {
     auth: { persistSession: false, autoRefreshToken: false },
+    // Acts as the signed-in customer when their token is passed
+    global: accessToken ? { headers: { Authorization: `Bearer ${accessToken}` } } : undefined,
   });
 }

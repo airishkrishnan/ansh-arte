@@ -84,6 +84,17 @@ export const InstagramIcon = ({ className = "size-5" }: P) => (
     <circle cx="17.2" cy="6.8" r="0.6" fill="currentColor" />
   </svg>
 );
+export const HeartIcon = ({ className = "size-5", filled = false }: P & { filled?: boolean }) => (
+  <svg viewBox="0 0 24 24" className={className} {...base} fill={filled ? "currentColor" : "none"}>
+    <path d="M12 20s-7.5-4.6-7.5-10.1A4.4 4.4 0 0 1 12 7.3a4.4 4.4 0 0 1 7.5 2.6C19.5 15.4 12 20 12 20z" />
+  </svg>
+);
+export const UserIcon = ({ className = "size-5" }: P) => (
+  <svg viewBox="0 0 24 24" className={className} {...base}>
+    <circle cx="12" cy="8.5" r="3.5" />
+    <path d="M5 20c.8-3.6 3.6-5.5 7-5.5s6.2 1.9 7 5.5" />
+  </svg>
+);
 export const SearchIcon = ({ className = "size-5" }: P) => (
   <svg viewBox="0 0 24 24" className={className} {...base}>
     <circle cx="11" cy="11" r="6.5" />

@@ -21,9 +21,14 @@ export type CartInput = { product_id: string; qty: number }[];
 // checkout flow can be tried out on a local preview.
 const demoOrders = new Map<string, PublicOrder & { key: string }>();
 
-export async function placeOrder(customer: CustomerInput, cart: CartInput) {
+/** `accessToken` links the order to the signed-in customer's account. */
+export async function placeOrder(customer: CustomerInput, cart: CartInput, accessToken?: string) {
   if (supabaseConfigured) {
-    const { data, error } = await getServerSupabase().rpc("place_order", { customer, cart });
+    let { data, error } = await getServerSupabase(accessToken).rpc("place_order", { customer, cart });
+    // An expired sign-in must never block an order: place it as a guest instead
+    if (error && accessToken && /jwt|token/i.test(error.message)) {
+      ({ data, error } = await getServerSupabase().rpc("place_order", { customer, cart }));
+    }
     if (error) throw new Error(error.message);
     return data as { number: string; key: string; total: number };
   }

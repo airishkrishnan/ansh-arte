@@ -16,7 +16,7 @@ Everything here is on free plans. Allow about 45 minutes the first time. Do the 
    insert into admins (email) values ('your-email@example.com');
    ```
 
-6. Stop strangers from creating accounts: **Authentication → Sign In / Providers**, turn off **Allow new users to sign up**.
+6. Leave **Authentication → Sign In / Providers → Allow new users to sign up** turned **on**, so customers can create accounts. Only emails in the `admins` table can open `/admin`, so customers can never get in there.
 7. Copy your keys from **Project Settings → API** (or **API Keys**):
    - **Project URL** → `NEXT_PUBLIC_SUPABASE_URL`
    - **Publishable key** (or the older **anon public** key) → `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`
@@ -46,15 +46,56 @@ Everything here is on free plans. Allow about 45 minutes the first time. Do the 
 
 Every time new code is merged into `main` on GitHub, Cloudflare rebuilds the site automatically.
 
-## 4. Keep the free database awake
+## 4. Customer accounts (sign in with an email code or Google)
+
+Customers can create an account to see all their orders, keep a wishlist and save addresses. Ordering as a guest still works. Allow about 30 minutes.
+
+**A. Update the database (2 minutes).** In Supabase, open **SQL Editor → New query**, paste all of [`supabase/schema.sql`](supabase/schema.sql) again and press **Run**. It is safe to run again: it only adds what is new and keeps your products and orders.
+
+**B. Tell Supabase your site address.** **Authentication → URL Configuration**:
+- **Site URL**: your site address, for example `https://ansh-arte.anshartee.workers.dev`
+- **Redirect URLs → Add URL**: the same address followed by `/**` (for example `https://ansh-arte.anshartee.workers.dev/**`)
+
+**C. Send sign-in emails for free with Brevo (10 minutes).** Supabase's own email only sends a couple of emails an hour, which is just for testing.
+1. Sign up at [brevo.com](https://www.brevo.com) (free: 300 emails a day).
+2. In Brevo, open **Senders, domains & dedicated IPs → Senders → Add a sender** and verify the email you want customers to see (for example your business Gmail).
+3. Open **SMTP & API → SMTP** and click **Generate a new SMTP key**. Keep the page open.
+4. In Supabase, open **Authentication → Emails → SMTP Settings**, turn on **Enable custom SMTP** and fill in:
+   - Sender email: the email you verified in step 2. Sender name: `Ansh Arte`
+   - Host: `smtp-relay.brevo.com`, Port: `587`
+   - Username: the **Login** shown on Brevo's SMTP page. Password: the SMTP key.
+5. In Supabase, open **Authentication → Rate Limits** and set **emails per hour** to `100`.
+
+**D. Put the 6-digit code in the emails.** In Supabase, open **Authentication → Emails → Templates**. In **both** the **Magic Link** and the **Confirm signup** templates, set the subject to `Your Ansh Arte sign-in code` and replace the message with:
+
+```html
+<h2>Your Ansh Arte sign-in code</h2>
+<p>Enter this code on the website:</p>
+<p style="font-size:28px;letter-spacing:6px"><strong>{{ .Token }}</strong></p>
+<p>Or <a href="{{ .ConfirmationURL }}">tap here to sign in</a> on this phone.</p>
+<p>If you didn't ask for this, you can ignore this email.</p>
+```
+
+Now try it: open your site, tap the person icon at the top, enter your email and type the code you receive.
+
+**E. Add "Continue with Google" (optional, free, 15 minutes).**
+1. Open [console.cloud.google.com](https://console.cloud.google.com), create a project called `Ansh Arte`.
+2. **APIs & Services → OAuth consent screen**: choose **External**, app name `Ansh Arte`, your email as support and developer contact. Save. Then **Publish app**.
+3. **APIs & Services → Credentials → Create credentials → OAuth client ID**: type **Web application**. Under **Authorized redirect URIs** add `https://<your-project>.supabase.co/auth/v1/callback` (Supabase shows this exact address on its Google page in the next step). Create, then copy the **Client ID** and **Client secret**.
+4. In Supabase, **Authentication → Sign In / Providers → Google**: turn it on, paste the Client ID and secret, save.
+5. In Cloudflare, add the build variable `NEXT_PUBLIC_GOOGLE_SIGNIN` with the value `on` and redeploy. The Google button appears on the sign-in page.
+
+**Good to know.** A customer's earlier guest orders appear in their account when they used the same email at checkout. Customers can delete their account themselves from **Profile & addresses**; their orders stay in your admin.
+
+## 5. Keep the free database awake
 
 Free Supabase projects pause after 7 days with no visits. In GitHub, open the repo → **Settings → Secrets and variables → Actions → Variables** and add `SITE_URL` with your site address. A small daily job then visits the store so it never pauses.
 
-## 5. Your own domain (optional, about ₹800–1,000 a year)
+## 6. Your own domain (optional, about ₹800–1,000 a year)
 
 Buy a domain (for example `anshharte.com` or `anshharte.in`) from any registrar, or Cloudflare Registrar for `.com`. In Cloudflare, add it under the Worker's **Settings → Domains & Routes → Add custom domain**, then change `NEXT_PUBLIC_SITE_URL` (both places) and `SITE_URL` to the new address and redeploy.
 
-## 6. Get found on Google (free)
+## 7. Get found on Google (free)
 
 1. [Google Search Console](https://search.google.com/search-console): add your site, verify it, and submit `https://your-site/sitemap.xml`.
 2. [Google Business Profile](https://business.google.com): create a profile for Ansh Arte with your WhatsApp number and website.

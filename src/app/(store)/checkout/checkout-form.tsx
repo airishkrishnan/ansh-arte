@@ -2,20 +2,15 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { useAccount } from "@/components/account";
 import { LineThumb } from "@/components/bag-drawer";
 import { useCart } from "@/components/cart";
 import { WhatsAppIcon } from "@/components/icons";
+import { STATES, lookupPin } from "@/lib/india";
 import { formatPrice } from "@/lib/site";
-
-const STATES = [
-  "Andaman and Nicobar Islands", "Andhra Pradesh", "Arunachal Pradesh", "Assam", "Bihar", "Chandigarh",
-  "Chhattisgarh", "Dadra and Nagar Haveli and Daman and Diu", "Delhi", "Goa", "Gujarat", "Haryana",
-  "Himachal Pradesh", "Jammu and Kashmir", "Jharkhand", "Karnataka", "Kerala", "Ladakh", "Lakshadweep",
-  "Madhya Pradesh", "Maharashtra", "Manipur", "Meghalaya", "Mizoram", "Nagaland", "Odisha", "Puducherry",
-  "Punjab", "Rajasthan", "Sikkim", "Tamil Nadu", "Telangana", "Tripura", "Uttar Pradesh", "Uttarakhand",
-  "West Bengal",
-];
+import { getCustomerSupabase } from "@/lib/supabase/client";
+import type { Address } from "@/lib/types";
 
 export function CheckoutForm({ shippingFee, freeShippingAbove }: { shippingFee: number; freeShippingAbove: number }) {
   const { lines, subtotal, ready, clear } = useCart();
@@ -25,26 +20,76 @@ export function CheckoutForm({ shippingFee, freeShippingAbove }: { shippingFee: 
   const [form, setForm] = useState({
     name: "", phone: "", email: "", address: "", city: "", state: "", pincode: "", notes: "", website: "",
   });
+  const account = useAccount();
+  const signedIn = account.ready && !!account.user;
+  const [addresses, setAddresses] = useState<Address[]>([]);
+  const [picked, setPicked] = useState<string>("new");
+  const [saveAddress, setSaveAddress] = useState(true);
+  const filled = useRef(false);
+
+  const pickAddress = (a: Address) => {
+    setPicked(a.id);
+    setForm((f) => ({ ...f, name: a.name, phone: a.phone, address: a.address, city: a.city, state: a.state, pincode: a.pincode }));
+  };
+  const newAddress = () => {
+    setPicked("new");
+    setForm((f) => ({ ...f, address: "", city: "", state: "", pincode: "" }));
+  };
+
+  // Signed-in customers get their details and default address filled in
+  useEffect(() => {
+    if (!signedIn || filled.current) return;
+    filled.current = true;
+    const { profile, user } = account;
+    setForm((f) => ({
+      ...f,
+      name: f.name || profile.name,
+      phone: f.phone || profile.phone,
+      email: f.email || user?.email || "",
+    }));
+    getCustomerSupabase()
+      .from("addresses")
+      .select("*")
+      .order("is_default", { ascending: false })
+      .order("created_at", { ascending: false })
+      .then(({ data }) => {
+        const list = (data ?? []) as Address[];
+        setAddresses(list);
+        if (list[0]) pickAddress(list[0]);
+      });
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- fill once, when sign-in is known
+  }, [signedIn]);
+
   const set = (k: keyof typeof form) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) =>
     setForm((f) => ({ ...f, [k]: e.target.value }));
 
   const shipping = subtotal === 0 || subtotal >= freeShippingAbove ? 0 : shippingFee;
 
-  // Fill city and state from the PIN code (free India Post lookup)
+  // Fill city and state from the PIN code
   const onPin = async (pin: string) => {
     setForm((f) => ({ ...f, pincode: pin }));
-    if (!/^\d{6}$/.test(pin)) return;
+    const found = await lookupPin(pin);
+    if (found) setForm((f) => ({ ...f, city: f.city || found.city, state: found.state || f.state }));
+  };
+
+  // Save the new address and fill in a blank profile, so next time is one tap
+  const rememberDetails = async () => {
     try {
-      const res = await fetch(`https://api.postalpincode.in/pincode/${pin}`);
-      const data = await res.json();
-      const po = data?.[0]?.PostOffice?.[0];
-      if (po) {
-        setForm((f) => ({
-          ...f,
-          city: f.city || po.District,
-          state: STATES.find((s) => s.toLowerCase() === String(po.State).toLowerCase()) ?? f.state,
-        }));
+      const jobs: PromiseLike<unknown>[] = [];
+      if (picked === "new" && saveAddress) {
+        const { name, phone, address, city, state, pincode } = form;
+        jobs.push(
+          getCustomerSupabase()
+            .from("addresses")
+            .insert({ name, phone, address, city, state, pincode, is_default: addresses.length === 0 }),
+        );
       }
+      if (!account.profile.name || !account.profile.phone) {
+        jobs.push(
+          account.saveProfile({ name: account.profile.name || form.name, phone: account.profile.phone || form.phone }),
+        );
+      }
+      await Promise.all(jobs);
     } catch {}
   };
 
@@ -54,9 +99,10 @@ export function CheckoutForm({ shippingFee, freeShippingAbove }: { shippingFee: 
     setBusy(true);
     try {
       const { website, ...customer } = form;
+      const token = await account.token();
       const res = await fetch("/api/orders", {
         method: "POST",
-        headers: { "content-type": "application/json" },
+        headers: { "content-type": "application/json", ...(token ? { authorization: `Bearer ${token}` } : {}) },
         body: JSON.stringify({
           customer,
           website,
@@ -65,6 +111,7 @@ export function CheckoutForm({ shippingFee, freeShippingAbove }: { shippingFee: 
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "Could not place the order");
+      if (token) await rememberDetails();
       clear();
       router.push(`/order/${data.number}?k=${data.key}&new=1`);
     } catch (err) {
@@ -87,6 +134,15 @@ export function CheckoutForm({ shippingFee, freeShippingAbove }: { shippingFee: 
   return (
     <form onSubmit={submit} className="grid gap-10 lg:grid-cols-[1.3fr_1fr] lg:gap-16">
       <div className="space-y-8">
+        {account.enabled && account.ready && !signedIn && (
+          <p className="border border-line bg-paper px-4 py-3 text-sm text-ink-soft">
+            Have an account?{" "}
+            <Link href="/account/login?next=/checkout" className="font-semibold text-brass-deep underline underline-offset-4">
+              Sign in
+            </Link>{" "}
+            for faster checkout and to follow this order in My account. Or just continue as a guest.
+          </p>
+        )}
         <fieldset className="space-y-4">
           <legend className="eyebrow mb-4">Contact</legend>
           <div>
@@ -118,6 +174,32 @@ export function CheckoutForm({ shippingFee, freeShippingAbove }: { shippingFee: 
 
         <fieldset className="space-y-4">
           <legend className="eyebrow mb-4">Delivery address</legend>
+          {addresses.length > 0 && (
+            <div className="grid gap-2 sm:grid-cols-2">
+              {addresses.map((a) => (
+                <button
+                  key={a.id}
+                  type="button"
+                  onClick={() => pickAddress(a)}
+                  className={`border p-3 text-left text-sm transition-colors ${picked === a.id ? "border-ink bg-paper" : "border-line hover:border-ink-soft"}`}
+                  aria-pressed={picked === a.id}
+                >
+                  <span className="block font-semibold">{a.name}</span>
+                  <span className="line-clamp-2 text-ink-soft">
+                    {a.address}, {a.city} {a.pincode}
+                  </span>
+                </button>
+              ))}
+              <button
+                type="button"
+                onClick={newAddress}
+                className={`border border-dashed p-3 text-left text-sm font-semibold ${picked === "new" ? "border-ink bg-paper" : "border-line hover:border-ink-soft"}`}
+                aria-pressed={picked === "new"}
+              >
+                + Deliver to a new address
+              </button>
+            </div>
+          )}
           <div>
             <label className="label" htmlFor="address">House, street, area</label>
             <textarea
@@ -162,6 +244,12 @@ export function CheckoutForm({ shippingFee, freeShippingAbove }: { shippingFee: 
             <label className="label" htmlFor="notes">Note for us (optional)</label>
             <input id="notes" className="field" placeholder="Gift wrap, delivery time…" value={form.notes} onChange={set("notes")} />
           </div>
+          {signedIn && picked === "new" && (
+            <label className="flex items-center gap-3 text-sm text-ink-soft">
+              <input type="checkbox" className="size-4 accent-[var(--color-ink)]" checked={saveAddress} onChange={(e) => setSaveAddress(e.target.checked)} />
+              Save this address to my account
+            </label>
+          )}
           <input
             type="text"
             name="website"

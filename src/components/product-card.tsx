@@ -2,6 +2,7 @@ import Link from "next/link";
 import { formatPrice } from "@/lib/site";
 import { materialLabel, type Product } from "@/lib/types";
 import { ProductImage } from "./product-image";
+import { WishlistButton } from "./wishlist-button";
 
 export function ProductCard({
   product,
@@ -19,6 +20,7 @@ export function ProductCard({
   const [first, second] = product.images;
 
   return (
+    <div className="relative">
     <Link href={`/product/${product.slug}`} className="group block" prefetch={false}>
       <div className="relative">
         <ProductImage
@@ -68,5 +70,9 @@ export function ProductCard({
         </p>
       </div>
     </Link>
+      <div className="absolute right-2 top-2">
+        <WishlistButton productId={product.id} name={product.name} />
+      </div>
+    </div>
   );
 }

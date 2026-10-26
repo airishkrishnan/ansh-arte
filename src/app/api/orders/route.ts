@@ -41,7 +41,8 @@ export async function POST(req: Request) {
   if (cart.length === 0) return NextResponse.json({ error: "Your bag is empty." }, { status: 400 });
 
   try {
-    const order = await placeOrder(customer, cart);
+    const token = req.headers.get("authorization")?.match(/^Bearer (\S{20,4096})$/)?.[1];
+    const order = await placeOrder(customer, cart, token);
     await notifyNewOrder({
       number: order.number,
       total: order.total,
