@@ -33,9 +33,10 @@ export default async function HomePage() {
   const spotlight = catalogue.collections.filter((c) => ["maharani", "mayuri", "halo", "celestial"].includes(c.slug));
   const showcase = (spotlight.length >= 3 ? spotlight : catalogue.collections).slice(0, 4);
 
-  // Festive edit leads the banner while it is live
+  // A live festive edit sits second, after the lead slide, in place of the gifting slide
   const festive = liveFestive();
-  const slides = festive ? [festiveSlide(festive), ...HERO_SLIDES.filter((s) => !s.href.startsWith("/collections"))] : HERO_SLIDES;
+  const [lead, ...rest] = HERO_SLIDES.filter((s) => !s.href.startsWith("/collections"));
+  const slides = festive ? [lead, festiveSlide(festive), ...rest] : HERO_SLIDES;
 
   // Shop the look: newest in-stock piece for each dot, preferring the same metal
   const used = new Set<string>();
