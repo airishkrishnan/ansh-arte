@@ -54,24 +54,24 @@ export default async function HomePage() {
       />
 
       {/* Hero */}
-      <section className="relative overflow-hidden">
-        <div className="container-lux grid items-center gap-10 pb-16 pt-10 md:grid-cols-[1.05fr_1fr] md:gap-16 md:pb-24 md:pt-16">
+      <section className="hero-dark relative overflow-hidden text-brass-soft">
+        <div className="container-lux relative grid items-center gap-10 pb-16 pt-12 md:grid-cols-[1.05fr_1fr] md:gap-16 md:pb-24 md:pt-20">
           <div className="animate-rise space-y-7">
-            <p className="eyebrow">Oxidised brass · German silver</p>
+            <p className="eyebrow !text-silver">Oxidised brass · German silver</p>
             <h1 className="heading-xl text-balance">
               Heritage,
               <br />
-              <em className="font-normal text-brass-deep">handcrafted</em> for you.
+              <em className="font-normal text-silver">handcrafted</em> for you.
             </h1>
-            <p className="max-w-md text-[1.05rem] leading-relaxed text-ink-soft">
+            <p className="max-w-md text-[1.05rem] leading-relaxed text-brass-soft/80">
               Jhumkas, hoops and rings shaped by Indian craft traditions and finished by hand. Choose
               your piece, confirm on WhatsApp, and pay simply by UPI.
             </p>
             <div className="flex flex-wrap gap-3">
-              <Link href="/earrings" className="btn btn-primary">
+              <Link href="/earrings" className="btn btn-light">
                 Shop earrings <ArrowIcon />
               </Link>
-              <Link href="/collections" className="btn btn-outline">
+              <Link href="/collections" className="btn btn-outline-light">
                 Explore collections
               </Link>
             </div>
@@ -82,7 +82,7 @@ export default async function HomePage() {
                 <Link
                   key={p.id}
                   href={`/product/${p.slug}`}
-                  className={`group relative overflow-hidden rounded-t-full bg-sand ${i === 1 ? "mt-12" : ""}`}
+                  className={`group relative overflow-hidden rounded-t-full bg-cocoa ring-1 ring-silver/25 ${i === 1 ? "mt-12" : ""}`}
                 >
                   <div className="aspect-[3/4.4]">
                     {p.images[0] ? (
@@ -97,11 +97,12 @@ export default async function HomePage() {
                       <ProductArt
                         kind={artKind(catalogue, p)}
                         material={p.material}
+                        dark
                         className="size-full transition-transform duration-1000 group-hover:scale-105"
                       />
                     )}
                   </div>
-                  <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-ink/60 to-transparent p-4 pt-12 text-paper">
+                  <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-ink/80 to-transparent p-4 pt-12 text-paper">
                     <p className="font-serif text-lg leading-tight">{p.name}</p>
                     <p className="text-xs tracking-wide text-paper/80">{formatPrice(p.price)}</p>
                   </div>
