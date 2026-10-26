@@ -1,9 +1,11 @@
+import { samplePhoto } from "@/lib/samples";
 import type { Material } from "@/lib/types";
 
 export type ArtKind = "hoops" | "jhumkas" | "dangles" | "studs" | "rings";
 
 /**
- * A quiet line illustration used until a real product photo is uploaded.
+ * Stands in until a real product photo is uploaded: a sample photo while
+ * SHOW_SAMPLE_PHOTOS is on, otherwise a quiet line illustration.
  */
 export function ProductArt({
   kind,
@@ -16,6 +18,12 @@ export function ProductArt({
   dark?: boolean;
   className?: string;
 }) {
+  const sample = samplePhoto(kind, material);
+  if (sample) {
+    // eslint-disable-next-line @next/next/no-img-element -- static sample photo
+    return <img src={sample} alt="" aria-hidden="true" loading="lazy" decoding="async" className={`object-cover ${className}`} />;
+  }
+
   const silver = material === "german-silver";
   const metal = dark ? (silver ? "#d8d0cb" : "#c1a094") : silver ? "#8d8582" : "#916b60";
   const glow = dark ? (silver ? "#34302e" : "#3d2e2b") : silver ? "#ece6e2" : "#e8d8ce";
