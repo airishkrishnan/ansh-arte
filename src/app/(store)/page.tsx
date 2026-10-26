@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { HeroSlider } from "@/components/hero-slider";
 import { ArrowIcon, HandIcon, ShieldIcon, TruckIcon, WhatsAppIcon } from "@/components/icons";
 import { ProductArt } from "@/components/product-art";
 import { ProductCard } from "@/components/product-card";
@@ -13,13 +14,13 @@ import {
   topCategories,
 } from "@/lib/data";
 import { SITE_DESCRIPTION, SITE_NAME, SITE_URL, formatPrice } from "@/lib/site";
+import { HERO_SLIDES } from "@/lib/slides";
 import type { Category } from "@/lib/types";
 
 export default async function HomePage() {
-  const [catalogue, settings, featured, latest] = await Promise.all([
+  const [catalogue, settings, latest] = await Promise.all([
     getCatalogue(),
     getSettings(),
-    getProducts({ featured: true, limit: 4 }),
     getProducts({ sort: "new", limit: 8 }),
   ]);
 
@@ -30,7 +31,6 @@ export default async function HomePage() {
   });
   const spotlight = catalogue.collections.filter((c) => ["maharani", "mayuri", "halo", "celestial"].includes(c.slug));
   const showcase = (spotlight.length >= 3 ? spotlight : catalogue.collections).slice(0, 4);
-  const heroPicks = featured.length ? featured : latest.slice(0, 4);
 
   const orgJsonLd = {
     "@context": "https://schema.org",
@@ -53,65 +53,7 @@ export default async function HomePage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(orgJsonLd).replace(/</g, "\\u003c") }}
       />
 
-      {/* Hero */}
-      <section className="hero-dark relative overflow-hidden text-brass-soft">
-        <div className="container-lux relative grid items-center gap-10 pb-16 pt-12 md:grid-cols-[1.05fr_1fr] md:gap-16 md:pb-24 md:pt-20">
-          <div className="animate-rise space-y-7">
-            <p className="eyebrow !text-silver">Oxidised brass · German silver</p>
-            <h1 className="heading-xl text-balance">
-              Heritage,
-              <br />
-              <em className="font-normal text-silver">handcrafted</em> for you.
-            </h1>
-            <p className="max-w-md text-[1.05rem] leading-relaxed text-brass-soft/80">
-              Jhumkas, hoops and rings shaped by Indian craft traditions and finished by hand. Choose
-              your piece, confirm on WhatsApp, and pay simply by UPI.
-            </p>
-            <div className="flex flex-wrap gap-3">
-              <Link href="/earrings" className="btn btn-light">
-                Shop earrings <ArrowIcon />
-              </Link>
-              <Link href="/collections" className="btn btn-outline-light">
-                Explore collections
-              </Link>
-            </div>
-          </div>
-          <div className="relative mx-auto w-full max-w-md md:max-w-none">
-            <div className="grid grid-cols-2 gap-3 md:gap-4">
-              {heroPicks.slice(0, 2).map((p, i) => (
-                <Link
-                  key={p.id}
-                  href={`/product/${p.slug}`}
-                  className={`group relative overflow-hidden rounded-t-full bg-cocoa ring-1 ring-silver/25 ${i === 1 ? "mt-12" : ""}`}
-                >
-                  <div className="aspect-[3/4.4]">
-                    {p.images[0] ? (
-                      // eslint-disable-next-line @next/next/no-img-element -- hero product photo
-                      <img
-                        src={p.images[0].url}
-                        alt={p.images[0].alt || p.name}
-                        fetchPriority="high"
-                        className="size-full object-cover transition-transform duration-1000 group-hover:scale-105"
-                      />
-                    ) : (
-                      <ProductArt
-                        kind={artKind(catalogue, p)}
-                        material={p.material}
-                        dark
-                        className="size-full transition-transform duration-1000 group-hover:scale-105"
-                      />
-                    )}
-                  </div>
-                  <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-ink/80 to-transparent p-4 pt-12 text-paper">
-                    <p className="font-serif text-lg leading-tight">{p.name}</p>
-                    <p className="text-xs tracking-wide text-paper/80">{formatPrice(p.price)}</p>
-                  </div>
-                </Link>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
+      <HeroSlider slides={HERO_SLIDES} />
 
       {/* Shop by style */}
       <section className="border-y border-line bg-paper py-16 md:py-20">

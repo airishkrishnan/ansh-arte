@@ -148,14 +148,6 @@ body {
     color: var(--color-ink);
   }
 
-  /* Espresso banner with a soft cocoa glow, like light falling on a jewellery tray */
-  .hero-dark {
-    background:
-      radial-gradient(60rem 36rem at 12% -10%, color-mix(in srgb, var(--color-muted) 55%, transparent), transparent 70%),
-      radial-gradient(40rem 30rem at 95% 110%, color-mix(in srgb, var(--color-cocoa) 90%, transparent), transparent 70%),
-      var(--color-ink);
-  }
-
   .btn-whatsapp {
     background: #1f7a4d;
     color: #fff;
@@ -241,6 +233,19 @@ body {
 }
 .animate-rise {
   animation: rise 0.9s var(--ease-lux) both;
+}
+
+/* Slow push-in on the active banner photo */
+@keyframes hero-zoom {
+  from {
+    transform: scale(1.08);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+.hero-zoom {
+  animation: hero-zoom 7s ease-out both;
 }
 
 @media (prefers-reduced-motion: reduce) {

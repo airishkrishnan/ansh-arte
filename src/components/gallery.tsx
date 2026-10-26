@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef, useState } from "react";
+import { samplePhoto } from "@/lib/samples";
 import type { Material, ProductImage } from "@/lib/types";
 import { ProductArt } from "./product-art";
 
@@ -22,8 +23,13 @@ export function Gallery({
 
   if (images.length === 0) {
     return (
-      <div className="bg-sand">
+      <div className="relative bg-sand">
         <ProductArt kind={kind} material={material} className="aspect-[4/5] w-full" />
+        {samplePhoto(kind, material) && (
+          <span className="absolute bottom-3 left-3 bg-paper/85 px-2 py-1 text-[0.65rem] font-semibold uppercase tracking-[0.14em] text-ink-soft">
+            Sample photo
+          </span>
+        )}
       </div>
     );
   }
