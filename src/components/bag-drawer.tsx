@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useEffect } from "react";
 import { formatPrice } from "@/lib/site";
 import { useCart } from "./cart";
-import { CloseIcon, MinusIcon, PlusIcon } from "./icons";
+import { CloseIcon, MinusIcon, PlusIcon, TruckIcon } from "./icons";
 import { ProductArt } from "./product-art";
 
 export function LineThumb({ image, kind, material }: { image: string; kind: string; material: "oxidised-brass" | "german-silver" }) {
@@ -100,20 +100,35 @@ export function BagDrawer({ freeShippingAbove }: { freeShippingAbove: number }) 
           </div>
         ) : (
           <>
-            <div className="border-b border-line px-5 py-3 text-xs text-ink-soft">
-              {left > 0 ? (
-                <>
-                  Add <strong className="text-ink">{formatPrice(left)}</strong> more for free shipping
-                </>
-              ) : (
-                <span className="text-success">You have free shipping</span>
-              )}
-              <div className="mt-2 h-0.5 bg-line">
+            <div className="border-b border-line bg-sand/50 px-5 py-4">
+              <div className="flex items-center gap-3 text-sm">
+                <TruckIcon className={`size-5 shrink-0 ${left > 0 ? "text-brass-deep" : "text-success"}`} />
+                {left > 0 ? (
+                  <p className="text-ink-soft">
+                    You&apos;re <strong className="text-ink">{formatPrice(left)}</strong> away from free shipping
+                  </p>
+                ) : (
+                  <p className="font-semibold text-success">You&apos;ve unlocked free shipping</p>
+                )}
+              </div>
+              <div
+                className="mt-3 h-1.5 overflow-hidden rounded-full bg-line"
+                role="progressbar"
+                aria-label="Progress to free shipping"
+                aria-valuemin={0}
+                aria-valuemax={freeShippingAbove}
+                aria-valuenow={Math.min(subtotal, freeShippingAbove)}
+              >
                 <div
-                  className="h-full bg-brass transition-all duration-500"
+                  className={`h-full rounded-full transition-all duration-700 ease-[var(--ease-lux)] ${left > 0 ? "bg-brass-deep" : "bg-success"}`}
                   style={{ width: `${Math.min((subtotal / freeShippingAbove) * 100, 100)}%` }}
                 />
               </div>
+              {left > 0 && (
+                <p className="mt-2 text-[0.7rem] uppercase tracking-[0.14em] text-muted">
+                  Free shipping on orders above {formatPrice(freeShippingAbove)}
+                </p>
+              )}
             </div>
             <ul className="flex-1 divide-y divide-line overflow-y-auto px-5">
               {lines.map((l) => (

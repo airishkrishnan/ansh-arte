@@ -144,3 +144,24 @@ export type PublicOrder = Pick<
   | "history"
   | "created_at"
 >;
+
+export type Review = {
+  id: string;
+  product_id: string;
+  name: string;
+  city: string;
+  rating: number;
+  body: string;
+  photos: string[];
+  status: "pending" | "approved" | "hidden";
+  created_at: string;
+};
+
+export type StockAlert = {
+  id: string;
+  product_id: string;
+  name: string;
+  phone: string;
+  notified_at: string | null;
+  created_at: string;
+};

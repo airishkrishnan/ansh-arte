@@ -4,7 +4,7 @@ import { getBrowserSupabase } from "@/lib/supabase/client";
 // and saves a large WebP plus a small thumbnail. Keeps storage and page
 // weight tiny, so the Supabase free tier lasts.
 
-async function toCanvas(file: File, width: number, height: number, crop: boolean) {
+export async function toCanvas(file: File, width: number, height: number, crop: boolean) {
   const bitmap = await createImageBitmap(file, { imageOrientation: "from-image" });
   let sx = 0,
     sy = 0,
@@ -32,7 +32,7 @@ async function toCanvas(file: File, width: number, height: number, crop: boolean
   return canvas;
 }
 
-const toBlob = (c: HTMLCanvasElement, q: number) =>
+export const toBlob = (c: HTMLCanvasElement, q: number) =>
   new Promise<Blob>((resolve, reject) =>
     c.toBlob((b) => (b ? resolve(b) : reject(new Error("Could not process photo"))), "image/webp", q),
   );

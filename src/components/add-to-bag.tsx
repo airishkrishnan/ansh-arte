@@ -6,6 +6,7 @@ import type { Product } from "@/lib/types";
 import { QtyStepper } from "./bag-drawer";
 import { useCart } from "./cart";
 import { CheckIcon, WhatsAppIcon } from "./icons";
+import { NotifyMe } from "./notify-me";
 
 export function AddToBag({
   product,
@@ -61,9 +62,7 @@ export function AddToBag({
       )}
       <div className="grid gap-3">
         {soldOut ? (
-          <button type="button" className="btn btn-primary w-full" disabled>
-            Sold out
-          </button>
+          <NotifyMe productId={product.id} />
         ) : (
           <button type="button" onClick={onAdd} className="btn btn-primary w-full">
             {added ? (

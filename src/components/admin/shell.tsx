@@ -18,6 +18,7 @@ export const useAdmin = () => {
 const TABS = [
   { href: "/admin/orders", label: "Orders", icon: "M5 4h14v16H5zM9 8h6M9 12h6M9 16h4" },
   { href: "/admin/products", label: "Products", icon: "M12 3l8 4.5v9L12 21l-8-4.5v-9zM12 12l8-4.5M12 12v9M12 12L4 7.5" },
+  { href: "/admin/inbox", label: "Inbox", icon: "M4 13l2.5-8h11L20 13v6H4zM4 13h5l1 2h4l1-2h5" },
   { href: "/admin/catalogue", label: "Catalogue", icon: "M4 5h7v7H4zM13 5h7v7h-7zM4 14h7v6H4zM13 14h7v6h-7z" },
   { href: "/admin/settings", label: "Settings", icon: "M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM19 12l2-1-1-3-2 .2-1.3-1.3.2-2-3-1-1 2h-1.8l-1-2-3 1 .2 2L6.9 7.2 5 7 4 10l2 1v1.8l-2 1 1 3 2-.2 1.3 1.3-.2 2 3 1 1-2h1.8l1 2 3-1-.2-2 1.3-1.3 2 .2 1-3-2-1z" },
 ];
@@ -104,7 +105,7 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
           </div>
         </aside>
         {children}
-        <nav className="fixed inset-x-0 bottom-0 z-40 grid grid-cols-4 border-t border-line bg-paper pb-[env(safe-area-inset-bottom)] md:hidden">
+        <nav className="fixed inset-x-0 bottom-0 z-40 grid grid-cols-5 border-t border-line bg-paper pb-[env(safe-area-inset-bottom)] md:hidden">
           {TABS.map((t) => {
             const on = pathname.startsWith(t.href);
             return (

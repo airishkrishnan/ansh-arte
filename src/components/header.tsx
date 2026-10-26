@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useCart } from "./cart";
 import { BagIcon, ChevronIcon, CloseIcon, MenuIcon } from "./icons";
+import { SearchButton } from "./search";
 
 export type NavItem = {
   name: string;
@@ -152,13 +153,14 @@ export function Header({ nav, announcement }: { nav: NavItem[]; announcement: st
             <Logo className="text-[1.45rem] md:text-[1.85rem]" />
           </Link>
 
-          <div className="flex items-center justify-end gap-5">
+          <div className="flex items-center justify-end gap-2 md:gap-4">
             <Link
               href="/about"
               className="link-underline hidden text-[0.78rem] font-semibold uppercase tracking-[0.16em] lg:inline"
             >
               Our craft
             </Link>
+            <SearchButton />
             <button
               type="button"
               onClick={() => setOpen(true)}
