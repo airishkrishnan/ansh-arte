@@ -130,6 +130,32 @@ body {
     background: var(--color-ink);
     color: var(--color-paper);
   }
+  /* Buttons for dark sections such as the home hero */
+  .btn-light {
+    background: var(--color-brass-soft);
+    color: var(--color-ink);
+  }
+  .btn-light:hover {
+    background: var(--color-paper);
+  }
+  .btn-outline-light {
+    border: 1px solid color-mix(in srgb, var(--color-brass-soft) 60%, transparent);
+    color: var(--color-brass-soft);
+  }
+  .btn-outline-light:hover {
+    border-color: var(--color-brass-soft);
+    background: var(--color-brass-soft);
+    color: var(--color-ink);
+  }
+
+  /* Espresso banner with a soft cocoa glow, like light falling on a jewellery tray */
+  .hero-dark {
+    background:
+      radial-gradient(60rem 36rem at 12% -10%, color-mix(in srgb, var(--color-muted) 55%, transparent), transparent 70%),
+      radial-gradient(40rem 30rem at 95% 110%, color-mix(in srgb, var(--color-cocoa) 90%, transparent), transparent 70%),
+      var(--color-ink);
+  }
+
   .btn-whatsapp {
     background: #1f7a4d;
     color: #fff;
