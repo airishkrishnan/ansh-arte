@@ -2,7 +2,7 @@ import type { Slide } from "./slides";
 
 /**
  * Festive edits switch on and off by date (India time). While one is live it
- * gets its own page at /festive/<slug> and leads the home page banner.
+ * gets its own page at /festive/<slug> and a slide in the home page banner.
  * Add or change a season by editing this list; dates are inclusive.
  * To preview an edit before it starts, open /festive/<slug>?preview=1.
  */
@@ -27,8 +27,8 @@ export const FESTIVE: Festive[] = [
     story:
       "Lamps, marigolds and a little something that shines. Handpicked oxidised pieces to wear through the festival, and gifts your loved ones will keep for years.",
     slide: {
-      image: "/samples/banner-festive.webp",
-      alt: "Oxidised earrings and a silver ring in a velvet box beside a lit diya and marigolds",
+      image: "/samples/banner-diwali.webp",
+      alt: "A woman in a maroon silk saree wearing a temple jhumka, with lit diyas glowing behind her",
       eyebrow: "The Diwali edit",
       title: "Light up the festival.",
       accent: "Light up",
