@@ -6,6 +6,7 @@ import { Gallery } from "@/components/gallery";
 import { HandIcon, ShieldIcon, TruckIcon } from "@/components/icons";
 import { Breadcrumbs, JsonLd, breadcrumbJsonLd } from "@/components/listing";
 import { ProductCard } from "@/components/product-card";
+import { RecentlyViewed, TrackView } from "@/components/recently-viewed";
 import { Reviews, Stars, averageRating } from "@/components/reviews";
 import {
   artKind,
@@ -292,6 +293,9 @@ export default async function ProductPage({ params }: Props) {
             </div>
           </section>
         )}
+
+        <RecentlyViewed exclude={product.slug} eyebrow="Still thinking?" className="mt-20 md:mt-28" />
+        <TrackView slug={product.slug} />
       </div>
     </>
   );

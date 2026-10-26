@@ -3,6 +3,7 @@ import { HeroSlider } from "@/components/hero-slider";
 import { ShopTheLook, type LookItem } from "@/components/shop-the-look";
 import { ArrowIcon, HandIcon, ShieldIcon, TruckIcon, WhatsAppIcon } from "@/components/icons";
 import { ProductArt } from "@/components/product-art";
+import { RecentlyViewed } from "@/components/recently-viewed";
 import { ProductCard } from "@/components/product-card";
 import {
   artKind,
@@ -124,6 +125,9 @@ export default async function HomePage() {
           </div>
         </div>
       </section>
+
+      {/* Only shows for returning shoppers */}
+      <RecentlyViewed className="container-lux pt-16 md:pt-24" />
 
       {/* New arrivals */}
       <section className="container-lux py-16 md:py-24">
