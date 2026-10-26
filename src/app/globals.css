@@ -188,7 +188,8 @@ body {
   .chip:hover {
     border-color: var(--color-ink);
   }
-  .chip[aria-current="true"] {
+  .chip[aria-current="true"],
+  .chip[aria-current="page"] {
     background: var(--color-ink);
     border-color: var(--color-ink);
     color: var(--color-paper);

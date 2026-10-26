@@ -1,3 +1,4 @@
+import { AccountProvider } from "@/components/account";
 import { BagDrawer } from "@/components/bag-drawer";
 import { CartProvider } from "@/components/cart";
 import { Footer } from "@/components/footer";
@@ -32,6 +33,7 @@ export default async function StoreLayout({ children }: { children: React.ReactN
   }));
 
   return (
+    <AccountProvider>
     <CartProvider>
       <Header nav={nav} announcement={settings.announcement} />
       <main>{children}</main>
@@ -39,5 +41,6 @@ export default async function StoreLayout({ children }: { children: React.ReactN
       <BagDrawer freeShippingAbove={settings.free_shipping_above} />
       <WhatsAppFloat number={settings.whatsapp_number} />
     </CartProvider>
+    </AccountProvider>
   );
 }

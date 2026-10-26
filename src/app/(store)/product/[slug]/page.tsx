@@ -6,6 +6,7 @@ import { Gallery } from "@/components/gallery";
 import { HandIcon, ShieldIcon, TruckIcon } from "@/components/icons";
 import { Breadcrumbs, JsonLd, breadcrumbJsonLd } from "@/components/listing";
 import { ProductCard } from "@/components/product-card";
+import { WishlistButton } from "@/components/wishlist-button";
 import {
   artKind,
   categoryHref,
@@ -158,7 +159,10 @@ export default async function ProductPage({ params }: Props) {
               )}
             </div>
 
-            <AddToBag product={product} kind={kind} whatsapp={settings.whatsapp_number} productUrl={url} />
+            <div className="space-y-3">
+              <AddToBag product={product} kind={kind} whatsapp={settings.whatsapp_number} productUrl={url} />
+              <WishlistButton productId={product.id} name={product.name} variant="full" />
+            </div>
 
             <ul className="grid grid-cols-3 gap-3 border-y border-line py-5 text-center text-[0.7rem] uppercase tracking-[0.12em] text-ink-soft">
               <li className="space-y-2">

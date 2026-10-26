@@ -129,6 +129,10 @@ create table if not exists public.orders (
 );
 create index if not exists orders_status on public.orders (status, created_at desc);
 
+-- Orders placed while signed in belong to that customer account
+alter table public.orders add column if not exists user_id uuid references auth.users(id) on delete set null;
+create index if not exists orders_user on public.orders (user_id, created_at desc);
+
 -- Keep updated_at fresh and log every status change
 create or replace function public.touch_order()
 returns trigger
@@ -223,9 +227,10 @@ begin
   select * into cfg from settings where id = 1;
   ship := case when sub >= cfg.free_shipping_above then 0 else cfg.shipping_fee end;
 
-  insert into orders (customer_name, phone, email, address, city, state, pincode, notes,
+  insert into orders (user_id, customer_name, phone, email, address, city, state, pincode, notes,
                       items, subtotal, shipping, total, history)
   values (
+    auth.uid(),
     left(trim(customer ->> 'name'), 80),
     left(trim(customer ->> 'phone'), 15),
     left(coalesce(trim(customer ->> 'email'), ''), 120),
@@ -333,3 +338,104 @@ as $$
   limit 1;
 $$;
 grant execute on function public.find_order(text, text) to anon, authenticated;
+
+-- ---------------------------------------------------------------------------
+-- Customer accounts: profile, saved addresses, wishlist, "My orders"
+-- Customers sign in with an emailed code or Google. Each customer can only
+-- see and change their own rows.
+-- ---------------------------------------------------------------------------
+create table if not exists public.profiles (
+  id uuid primary key references auth.users(id) on delete cascade,
+  name text not null default '' check (length(name) <= 80),
+  phone text not null default '' check (length(phone) <= 15),
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+
+create table if not exists public.addresses (
+  id uuid primary key default gen_random_uuid(),
+  user_id uuid not null default auth.uid() references auth.users(id) on delete cascade,
+  name text not null check (length(name) between 1 and 80),
+  phone text not null check (phone ~ '^[0-9+ ]{10,15}$'),
+  address text not null check (length(address) between 1 and 300),
+  city text not null default '' check (length(city) <= 60),
+  state text not null default '' check (length(state) <= 60),
+  pincode text not null check (pincode ~ '^[0-9]{6}$'),
+  is_default boolean not null default false,
+  created_at timestamptz not null default now()
+);
+create index if not exists addresses_user on public.addresses (user_id);
+
+create table if not exists public.wishlist (
+  user_id uuid not null default auth.uid() references auth.users(id) on delete cascade,
+  product_id uuid not null references public.products(id) on delete cascade,
+  created_at timestamptz not null default now(),
+  primary key (user_id, product_id)
+);
+
+drop trigger if exists profiles_touch on public.profiles;
+create trigger profiles_touch before update on public.profiles
+for each row execute function public.touch_product();
+
+alter table public.profiles enable row level security;
+alter table public.addresses enable row level security;
+alter table public.wishlist enable row level security;
+
+drop policy if exists "own profile" on public.profiles;
+create policy "own profile" on public.profiles for all
+  using (id = auth.uid()) with check (id = auth.uid());
+drop policy if exists "admin read profiles" on public.profiles;
+create policy "admin read profiles" on public.profiles for select using (public.is_admin());
+
+drop policy if exists "own addresses" on public.addresses;
+create policy "own addresses" on public.addresses for all
+  using (user_id = auth.uid()) with check (user_id = auth.uid());
+
+drop policy if exists "own wishlist" on public.wishlist;
+create policy "own wishlist" on public.wishlist for all
+  using (user_id = auth.uid()) with check (user_id = auth.uid());
+
+-- "My orders". Also picks up orders placed earlier as a guest with the same
+-- email (the email is verified by sign-in, so this is safe). Returns each
+-- order's private key so the account page can link to the order page.
+create or replace function public.my_orders()
+returns jsonb
+language plpgsql
+security definer
+set search_path = public
+as $$
+declare
+  uid uuid := auth.uid();
+  mail text := lower(coalesce(auth.jwt() ->> 'email', ''));
+begin
+  if uid is null then
+    return '[]'::jsonb;
+  end if;
+  if mail <> '' then
+    update orders set user_id = uid
+     where user_id is null and lower(email) = mail;
+  end if;
+  return coalesce((
+    select jsonb_agg(jsonb_build_object(
+      'number', number, 'key', access_key, 'status', status, 'total', total,
+      'items', items, 'courier', courier, 'tracking_number', tracking_number,
+      'tracking_url', tracking_url, 'created_at', created_at)
+      order by created_at desc)
+    from orders where user_id = uid
+  ), '[]'::jsonb);
+end;
+$$;
+grant execute on function public.my_orders() to authenticated;
+
+-- Lets a customer permanently delete their account. Their orders stay for the
+-- shop's records but are no longer linked to the account.
+create or replace function public.delete_my_account()
+returns void
+language sql
+security definer
+set search_path = public
+as $$
+  delete from auth.users where id = auth.uid() and not public.is_admin();
+$$;
+revoke execute on function public.delete_my_account() from anon, public;
+grant execute on function public.delete_my_account() to authenticated;

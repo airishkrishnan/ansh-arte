@@ -37,6 +37,7 @@ export type ProductQuery = {
   sort?: "new" | "price-asc" | "price-desc";
   limit?: number;
   excludeId?: string;
+  ids?: string[];
 };
 
 const sortProducts = (list: Product[], sort: ProductQuery["sort"]) => {
@@ -56,6 +57,7 @@ export async function getProducts(q: ProductQuery = {}): Promise<Product[]> {
     if (q.material) list = list.filter((p) => p.material === q.material);
     if (q.featured) list = list.filter((p) => p.featured);
     if (q.excludeId) list = list.filter((p) => p.id !== q.excludeId);
+    if (q.ids) list = list.filter((p) => q.ids!.includes(p.id));
     list = sortProducts(list, q.sort);
     return q.limit ? list.slice(0, q.limit) : list;
   }
@@ -65,6 +67,7 @@ export async function getProducts(q: ProductQuery = {}): Promise<Product[]> {
   if (q.material) req = req.eq("material", q.material);
   if (q.featured) req = req.eq("featured", true);
   if (q.excludeId) req = req.neq("id", q.excludeId);
+  if (q.ids) req = req.in("id", q.ids);
   if (q.sort === "price-asc") req = req.order("price", { ascending: true });
   else if (q.sort === "price-desc") req = req.order("price", { ascending: false });
   else req = req.order("created_at", { ascending: false });

@@ -144,3 +144,20 @@ export type PublicOrder = Pick<
   | "history"
   | "created_at"
 >;
+
+export type Address = {
+  id: string;
+  name: string;
+  phone: string;
+  address: string;
+  city: string;
+  state: string;
+  pincode: string;
+  is_default: boolean;
+};
+
+/** An order as shown in the customer's account. `key` opens its order page. */
+export type AccountOrder = Pick<
+  Order,
+  "number" | "status" | "total" | "items" | "courier" | "tracking_number" | "tracking_url" | "created_at"
+> & { key: string };
