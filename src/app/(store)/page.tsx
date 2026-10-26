@@ -33,7 +33,7 @@ export default async function HomePage() {
   const spotlight = catalogue.collections.filter((c) => ["maharani", "mayuri", "halo", "celestial"].includes(c.slug));
   const showcase = (spotlight.length >= 3 ? spotlight : catalogue.collections).slice(0, 4);
 
-  // A live festive edit sits second, after the temple edit, in place of the gifting slide
+  // A live festive edit sits second, after the lead slide, in place of the gifting slide
   const festive = liveFestive();
   const [lead, ...rest] = HERO_SLIDES.filter((s) => !s.href.startsWith("/collections"));
   const slides = festive ? [lead, festiveSlide(festive), ...rest] : HERO_SLIDES;

@@ -16,15 +16,6 @@ export type Slide = {
 
 export const HERO_SLIDES: Slide[] = [
   {
-    image: "/samples/banner-temple.webp",
-    alt: "Oxidised brass temple jhumkas hanging on a dark wooden stand",
-    eyebrow: "The temple edit",
-    title: "Heritage, handcrafted for you.",
-    accent: "handcrafted",
-    text: "Oxidised brass jhumkas inspired by South Indian temple art, finished by hand.",
-    href: "/earrings?material=oxidised-brass",
-  },
-  {
     image: "/samples/banner-silver.webp",
     alt: "A woman wearing a long oxidised German silver jhumka earring",
     eyebrow: "German silver",
@@ -32,6 +23,15 @@ export const HERO_SLIDES: Slide[] = [
     accent: "tells a story",
     text: "Statement jhumkas and chandbalis in oxidised German silver, made to be noticed.",
     href: "/earrings?material=german-silver",
+  },
+  {
+    image: "/samples/banner-temple.webp",
+    alt: "Oxidised brass temple jhumkas hanging on a dark wooden stand",
+    eyebrow: "The temple edit",
+    title: "Heritage, handcrafted for you.",
+    accent: "handcrafted",
+    text: "Oxidised brass jhumkas inspired by South Indian temple art, finished by hand.",
+    href: "/earrings?material=oxidised-brass",
   },
   {
     image: "/samples/banner-festive.webp",
