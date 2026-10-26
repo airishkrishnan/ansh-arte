@@ -6,6 +6,7 @@ import { formatPrice } from "@/lib/site";
 import { useCart } from "./cart";
 import { CloseIcon, MinusIcon, PlusIcon, TruckIcon } from "./icons";
 import { ProductArt } from "./product-art";
+import { RecentlyViewed } from "./recently-viewed";
 
 export function LineThumb({ image, kind, material }: { image: string; kind: string; material: "oxidised-brass" | "german-silver" }) {
   return (
@@ -97,6 +98,11 @@ export function BagDrawer({ freeShippingAbove }: { freeShippingAbove: number }) 
             <Link href="/earrings" className="btn btn-primary" onClick={() => setOpen(false)}>
               Shop earrings
             </Link>
+            <RecentlyViewed
+              compact
+              onNavigate={() => setOpen(false)}
+              className="mt-6 w-full border-t border-line pt-6 text-left"
+            />
           </div>
         ) : (
           <>
