@@ -96,7 +96,7 @@ export default function ProductsPage() {
                   </Link>
                   <button
                     onClick={() => toggle(p)}
-                    className={`relative h-6 w-11 shrink-0 rounded-full transition-colors ${p.visible ? "bg-success" : "bg-line"}`}
+                    className={`relative h-6 w-11 shrink-0 rounded-full transition-colors ${p.visible ? "bg-brass-deep" : "bg-line"}`}
                     aria-label={p.visible ? "Hide from store" : "Show in store"}
                     title={p.visible ? "Visible in store" : "Hidden"}
                   >

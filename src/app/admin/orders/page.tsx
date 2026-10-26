@@ -111,7 +111,7 @@ function Orders() {
         }
       />
       <div className="space-y-4 p-4 md:p-8">
-        <div className="grid grid-cols-3 gap-2">
+        <div className="grid grid-cols-3 divide-x divide-brass-soft/15 bg-ink text-brass-soft">
           <Stat label="Orders today" value={String(stats.today)} />
           <Stat label="Today" value={formatPrice(stats.todayTotal)} />
           <Stat label="Paid this month" value={formatPrice(stats.month)} />
@@ -165,9 +165,9 @@ function Orders() {
 
 function Stat({ label, value }: { label: string; value: string }) {
   return (
-    <div className="border border-line bg-paper p-3">
-      <p className="text-[0.62rem] uppercase tracking-[0.14em] text-muted">{label}</p>
-      <p className="mt-1 font-serif text-xl">{value}</p>
+    <div className="p-3 md:p-5">
+      <p className="text-[0.62rem] uppercase tracking-[0.14em] text-silver">{label}</p>
+      <p className="mt-1 font-serif text-xl text-paper md:text-3xl">{value}</p>
     </div>
   );
 }

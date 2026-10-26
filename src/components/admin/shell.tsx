@@ -5,7 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { createContext, useContext, useEffect, useState } from "react";
 import { getBrowserSupabase, supabaseConfigured } from "@/lib/supabase/client";
-import { Logo } from "../header";
+import { Logo, Monogram } from "../header";
 
 type AdminCtx = { session: Session; signOut: () => Promise<void> };
 const Ctx = createContext<AdminCtx | null>(null);
@@ -78,42 +78,50 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
   return (
     <Ctx.Provider value={{ session, signOut }}>
       <div className="min-h-dvh bg-ivory pb-24 md:pb-0 md:pl-56">
-        <aside className="fixed inset-y-0 left-0 hidden w-56 flex-col border-r border-line bg-paper p-5 md:flex">
-          <Link href="/admin/orders">
-            <Logo className="text-xl" />
+        <aside className="fixed inset-y-0 left-0 hidden w-56 flex-col bg-ink p-5 text-brass-soft md:flex">
+          <Link href="/admin/orders" className="flex items-center gap-3">
+            <Monogram className="h-10 w-8 shrink-0" arch="var(--color-silver)" letter="var(--color-brass-soft)" />
+            <span>
+              <Logo className="block text-lg" accent="text-silver" />
+              <span className="mt-1.5 block text-[0.6rem] uppercase tracking-[0.3em] text-silver">Admin studio</span>
+            </span>
           </Link>
-          <p className="mt-1 text-[0.65rem] uppercase tracking-[0.2em] text-muted">Admin</p>
-          <nav className="mt-8 space-y-1">
+          <nav className="mt-10 space-y-1">
             {TABS.map((t) => (
               <Link
                 key={t.href}
                 href={t.href}
-                className={`flex items-center gap-3 px-3 py-2.5 text-sm ${pathname.startsWith(t.href) ? "bg-ink text-paper" : "hover:bg-sand"}`}
+                className={`flex items-center gap-3 border-l-2 px-3 py-2.5 text-sm transition-colors ${
+                  pathname.startsWith(t.href)
+                    ? "border-silver bg-brass-soft/10 text-paper"
+                    : "border-transparent text-brass-soft/70 hover:bg-brass-soft/5 hover:text-paper"
+                }`}
               >
                 <TabIcon d={t.icon} />
                 {t.label}
               </Link>
             ))}
           </nav>
-          <div className="mt-auto space-y-2 text-xs text-muted">
-            <Link href="/" target="_blank" className="block hover:text-ink">
+          <div className="mt-auto space-y-2 border-t border-brass-soft/15 pt-4 text-xs text-brass-soft/60">
+            <Link href="/" target="_blank" className="block hover:text-paper">
               View store ↗
             </Link>
-            <button onClick={signOut} className="hover:text-ink">
+            <button onClick={signOut} className="hover:text-paper">
               Sign out
             </button>
           </div>
         </aside>
         {children}
-        <nav className="fixed inset-x-0 bottom-0 z-40 grid grid-cols-5 border-t border-line bg-paper pb-[env(safe-area-inset-bottom)] md:hidden">
+        <nav className="fixed inset-x-0 bottom-0 z-40 grid grid-cols-5 bg-ink pb-[env(safe-area-inset-bottom)] md:hidden">
           {TABS.map((t) => {
             const on = pathname.startsWith(t.href);
             return (
               <Link
                 key={t.href}
                 href={t.href}
-                className={`flex flex-col items-center gap-1 py-2.5 text-[0.68rem] font-semibold ${on ? "text-ink" : "text-muted"}`}
+                className={`relative flex flex-col items-center gap-1 py-2.5 text-[0.68rem] font-semibold ${on ? "text-paper" : "text-brass-soft/55"}`}
               >
+                {on && <span className="absolute inset-x-5 top-0 h-0.5 bg-silver" />}
                 <TabIcon d={t.icon} />
                 {t.label}
               </Link>
@@ -135,10 +143,21 @@ function TabIcon({ d }: { d: string }) {
 
 function Centered({ children }: { children: React.ReactNode }) {
   return (
-    <div className="grid min-h-dvh place-items-center bg-ivory px-6">
-      <div className="w-full max-w-sm text-center">
-        <Logo className="mb-10 block text-2xl" />
-        {children}
+    <div className="grid min-h-dvh bg-ivory md:grid-cols-[1.1fr_1fr]">
+      <div className="relative isolate flex min-h-[38svh] flex-col justify-end overflow-hidden bg-ink p-6 text-brass-soft md:min-h-dvh md:p-12">
+        {/* eslint-disable-next-line @next/next/no-img-element -- decorative banner */}
+        <img
+          src="/samples/banner-silver.webp"
+          alt=""
+          className="absolute inset-0 -z-10 size-full object-cover object-[70%_center] opacity-70"
+        />
+        <div className="absolute inset-0 -z-10 bg-gradient-to-t from-ink via-ink/60 to-ink/10 md:bg-gradient-to-r md:from-ink/90 md:via-ink/50" />
+        <Monogram className="mb-5 h-14 w-11 md:h-20 md:w-16" arch="var(--color-silver)" letter="var(--color-brass-soft)" />
+        <Logo className="block text-2xl md:text-3xl" accent="text-silver" />
+        <p className="mt-3 text-[0.65rem] uppercase tracking-[0.3em] text-silver">Admin studio</p>
+      </div>
+      <div className="grid place-items-center px-6 py-10">
+        <div className="w-full max-w-sm text-center">{children}</div>
       </div>
     </div>
   );
@@ -162,7 +181,10 @@ function Login() {
           setBusy(false);
         }}
       >
-        <h1 className="heading-md text-center">Admin sign in</h1>
+        <div className="mb-6 text-center">
+          <p className="eyebrow mb-3">Welcome back</p>
+          <h1 className="heading-md">Sign in to your studio</h1>
+        </div>
         <div>
           <label className="label" htmlFor="em">Email</label>
           <input id="em" type="email" autoComplete="email" className="field" required value={email} onChange={(e) => setEmail(e.target.value)} />
@@ -184,7 +206,12 @@ function Login() {
 export function AdminHeader({ title, action }: { title: string; action?: React.ReactNode }) {
   return (
     <header className="sticky top-0 z-30 flex h-14 items-center justify-between gap-3 border-b border-line bg-ivory/95 px-4 backdrop-blur md:h-16 md:px-8">
-      <h1 className="truncate font-serif text-2xl">{title}</h1>
+      <div className="flex min-w-0 items-center gap-3">
+        <Link href="/admin/orders" className="md:hidden" aria-label="Admin home">
+          <Monogram className="h-8 w-6" arch="var(--color-brass)" letter="var(--color-ink)" />
+        </Link>
+        <h1 className="truncate font-serif text-2xl">{title}</h1>
+      </div>
       {action}
     </header>
   );
