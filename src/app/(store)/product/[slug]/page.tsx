@@ -272,7 +272,7 @@ export default async function ProductPage({ params }: Props) {
 
         {pairs.length > 0 && (
           <section className="mt-20 md:mt-28">
-            <div className="mb-10 text-center">
+            <div className="mb-10 text-center" data-reveal>
               <p className="eyebrow mb-3">Complete the look</p>
               <h2 className="heading-lg">Pairs well with</h2>
             </div>
@@ -286,7 +286,9 @@ export default async function ProductPage({ params }: Props) {
 
         {related.length + more.length > 0 && (
           <section className="mt-20 md:mt-28">
-            <h2 className="heading-lg mb-10 text-center">You may also love</h2>
+            <h2 className="heading-lg mb-10 text-center" data-reveal>
+              You may also love
+            </h2>
             <div className="grid grid-cols-2 gap-x-3 gap-y-10 md:grid-cols-4 md:gap-x-6">
               {[...related, ...more].map((p) => (
                 <ProductCard

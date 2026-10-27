@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import { categoryBanner } from "@/lib/banners";
 import { JsonLd, Listing, breadcrumbJsonLd, parseMaterial, parseSort } from "@/components/listing";
 import { categoryHref, categoryPath, collectionsUnder, getCatalogue, getProducts } from "@/lib/data";
 import { OG_IMAGE, SITE_URL } from "@/lib/site";
@@ -55,12 +56,6 @@ export default async function CollectionPage({ params, searchParams }: Props) {
   return (
     <>
       <JsonLd data={breadcrumbJsonLd(crumbs, SITE_URL)} />
-      {collection.banner_url && (
-        <div className="relative h-[42vh] min-h-64 overflow-hidden bg-sand md:h-[56vh]">
-          {/* eslint-disable-next-line @next/next/no-img-element -- collection banner */}
-          <img src={collection.banner_url} alt={collection.name} className="size-full object-cover" fetchPriority="high" />
-        </div>
-      )}
       <Listing
         catalogue={catalogue}
         crumbs={crumbs}
@@ -74,6 +69,7 @@ export default async function CollectionPage({ params, searchParams }: Props) {
         }))}
         products={products}
         basePath={`/collections/${collection.slug}`}
+        banner={collection.banner_url ?? categoryBanner(path[0]?.slug ?? "")}
         material={material}
         sort={sort}
       />

@@ -21,7 +21,7 @@ export function ProductImage({
 }) {
   const src = image ? (thumb ? (image.thumb ?? image.url) : image.url) : null;
   return (
-    <div className={`relative aspect-[4/5] overflow-hidden bg-sand ${className}`}>
+    <div className={`${src ? "shimmer " : ""}relative aspect-[4/5] overflow-hidden bg-sand ${className}`}>
       {src ? (
         // eslint-disable-next-line @next/next/no-img-element -- photos are pre-compressed WebP from Supabase Storage
         <img
@@ -30,6 +30,7 @@ export function ProductImage({
           loading={priority ? "eager" : "lazy"}
           fetchPriority={priority ? "high" : "auto"}
           decoding="async"
+          data-fade
           className="absolute inset-0 size-full object-cover"
         />
       ) : (
