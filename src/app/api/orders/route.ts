@@ -1,5 +1,7 @@
 import { NextResponse } from "next/server";
-import { notifyNewOrder, placeOrder, type CartInput, type CustomerInput } from "@/lib/orders";
+import { getSettings } from "@/lib/data";
+import { sendOrderEmail } from "@/lib/email";
+import { getPublicOrder, notifyNewOrder, placeOrder, type CartInput, type CustomerInput } from "@/lib/orders";
 
 const str = (v: unknown, max: number) => (typeof v === "string" ? v.trim().slice(0, max) : "");
 
@@ -43,15 +45,27 @@ export async function POST(req: Request) {
   try {
     const token = req.headers.get("authorization")?.match(/^Bearer (\S{20,4096})$/)?.[1];
     const order = await placeOrder(customer, cart, token);
-    await notifyNewOrder({
-      number: order.number,
-      total: order.total,
-      name: customer.name,
-      items: cart.reduce((n, l) => n + l.qty, 0),
-    });
+    await Promise.all([
+      notifyNewOrder({
+        number: order.number,
+        total: order.total,
+        name: customer.name,
+        items: cart.reduce((n, l) => n + l.qty, 0),
+      }),
+      emailReceipt(order.number, order.key, customer.email ?? ""),
+    ]);
     return NextResponse.json(order);
   } catch (e) {
     const message = e instanceof Error ? e.message : "Something went wrong";
     return NextResponse.json({ error: message }, { status: 409 });
   }
+}
+
+/** Order-received email for customers who gave an email. Never throws. */
+async function emailReceipt(number: string, key: string, email: string) {
+  if (!email) return;
+  try {
+    const [placed, settings] = await Promise.all([getPublicOrder(number, key), getSettings()]);
+    if (placed) await sendOrderEmail({ ...placed, email, key }, "new", settings);
+  } catch {}
 }

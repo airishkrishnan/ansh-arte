@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { JsonLd, Listing, breadcrumbJsonLd, parseMaterial, parseSort } from "@/components/listing";
 import { categoryHref, categoryPath, collectionsUnder, getCatalogue, getProducts } from "@/lib/data";
-import { SITE_URL } from "@/lib/site";
+import { OG_IMAGE, SITE_URL } from "@/lib/site";
 
 type Props = {
   params: Promise<{ slug: string }>;
@@ -31,7 +31,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       title,
       description,
       url: `/collections/${collection.slug}`,
-      images: collection.banner_url ? [collection.banner_url] : undefined,
+      images: [collection.banner_url ?? OG_IMAGE],
     },
   };
 }

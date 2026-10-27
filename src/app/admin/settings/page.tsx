@@ -91,6 +91,38 @@ export default function SettingsPage() {
           </div>
         </section>
 
+        <section className="space-y-4 border border-line bg-paper p-4">
+          <div className="space-y-1">
+            <p className="eyebrow">Business details</p>
+            <p className="text-xs text-muted">
+              Indian e-commerce rules ask online shops to show these. They appear in the footer, on Contact us and on
+              the policy pages.
+            </p>
+          </div>
+          <div>
+            <label className="label" htmlFor="ln">Business or owner&apos;s legal name</label>
+            <input id="ln" className="field" value={s.legal_name} onChange={(e) => set("legal_name", e.target.value)} placeholder="As on your PAN or GST" />
+          </div>
+          <div>
+            <label className="label" htmlFor="ba">Business address</label>
+            <textarea id="ba" className="field min-h-20" value={s.business_address} onChange={(e) => set("business_address", e.target.value)} placeholder="Street, city, state, PIN code" />
+          </div>
+          <div className="grid grid-cols-2 gap-3">
+            <div>
+              <label className="label" htmlFor="se">Customer care email</label>
+              <input id="se" className="field" type="email" value={s.support_email} onChange={(e) => set("support_email", e.target.value.trim())} />
+            </div>
+            <div>
+              <label className="label" htmlFor="go">Grievance officer name</label>
+              <input id="go" className="field" value={s.grievance_officer} onChange={(e) => set("grievance_officer", e.target.value)} />
+            </div>
+          </div>
+          <div>
+            <label className="label" htmlFor="gst">GSTIN (if registered)</label>
+            <input id="gst" className="field" value={s.gstin} onChange={(e) => set("gstin", e.target.value.trim().toUpperCase())} placeholder="Leave empty if not registered" />
+          </div>
+        </section>
+
         <div className="space-y-2">
           <button className="btn btn-primary w-full" disabled={busy}>{busy ? "Saving…" : "Save settings"}</button>
           {msg && <p className="text-center text-sm">{msg}</p>}

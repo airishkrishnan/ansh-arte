@@ -1,6 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Cormorant_Garamond, Urbanist } from "next/font/google";
-import { SITE_DESCRIPTION, SITE_NAME, SITE_TAGLINE, SITE_URL } from "@/lib/site";
+import { OG_IMAGE, SITE_DESCRIPTION, SITE_NAME, SITE_TAGLINE, SITE_URL } from "@/lib/site";
 import "./globals.css";
 
 // Urbanist is a free geometric sans very close to Gilroy. To switch to a
@@ -34,10 +34,15 @@ export const metadata: Metadata = {
     url: "/",
     title: `${SITE_NAME} | ${SITE_TAGLINE}`,
     description: SITE_DESCRIPTION,
+    images: [OG_IMAGE],
   },
-  twitter: { card: "summary_large_image" },
+  twitter: { card: "summary_large_image", images: [OG_IMAGE.url] },
   alternates: { canonical: "/" },
   formatDetection: { telephone: false },
+  // Google Search Console "HTML tag" verification code
+  verification: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION
+    ? { google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION }
+    : undefined,
 };
 
 export const viewport: Viewport = {

@@ -48,6 +48,7 @@ export default function OrderDetail() {
   const [ship, setShip] = useState({ courier: COURIERS[0].name, tracking_number: "", tracking_url: "" });
   const [paymentRef, setPaymentRef] = useState("");
   const [notes, setNotes] = useState("");
+  const [emailed, setEmailed] = useState("");
 
   const load = useCallback(async () => {
     const sb = getBrowserSupabase();
@@ -77,7 +78,29 @@ export default function OrderDetail() {
     setBusy(false);
     if (error) return setError(error.message);
     setOrder(data as Order);
-    if (patch.status) setJustChanged(true);
+    if (patch.status) {
+      setJustChanged(true);
+      setEmailed("");
+      emailCustomer().then(setEmailed);
+    }
+  };
+
+  // Emails the customer about the new status, when they gave an email
+  const emailCustomer = async () => {
+    try {
+      const { data } = await getBrowserSupabase().auth.getSession();
+      const token = data.session?.access_token;
+      if (!token) return "";
+      const res = await fetch("/api/orders/email", {
+        method: "POST",
+        headers: { "content-type": "application/json", authorization: `Bearer ${token}` },
+        body: JSON.stringify({ id }),
+      });
+      const out = await res.json();
+      return out.sent ? (out.to as string) : "";
+    } catch {
+      return "";
+    }
   };
 
   if (!order) {
@@ -119,6 +142,7 @@ export default function OrderDetail() {
             <a href={wa} target="_blank" rel="noopener" className="btn btn-whatsapp w-full" onClick={() => setJustChanged(false)}>
               <WhatsAppIcon className="size-4" /> Send update on WhatsApp
             </a>
+            {emailed && <p className="text-xs text-ink-soft">Also emailed to {emailed} ✓</p>}
           </div>
         )}
 

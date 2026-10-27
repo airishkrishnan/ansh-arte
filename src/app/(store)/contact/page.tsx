@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import Link from "next/link";
+import { BusinessDetails, prettyPhone } from "@/components/business-details";
 import { WhatsAppIcon } from "@/components/icons";
 import { ProsePage } from "@/components/prose-page";
 import { getSettings } from "@/lib/data";
@@ -12,7 +14,7 @@ export const metadata: Metadata = {
 
 export default async function ContactPage() {
   const s = await getSettings();
-  const pretty = s.whatsapp_number.replace(/^91(\d{5})(\d{5})$/, "+91 $1 $2");
+  const pretty = prettyPhone(s.whatsapp_number);
   return (
     <ProsePage
       eyebrow="We're here"
@@ -31,6 +33,16 @@ export default async function ContactPage() {
           </a>
         )}
       </div>
+      {s.support_email && (
+        <p className="text-center">
+          Prefer email? Write to <a href={`mailto:${s.support_email}`}>{s.support_email}</a>.
+        </p>
+      )}
+      <h2>Business details</h2>
+      <BusinessDetails settings={s} />
+      <p>
+        For complaints, see the grievance officer details in our <Link href="/terms">terms of use</Link>.
+      </p>
     </ProsePage>
   );
 }

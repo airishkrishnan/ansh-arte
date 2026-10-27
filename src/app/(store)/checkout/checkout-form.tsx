@@ -7,6 +7,7 @@ import { useAccount } from "@/components/account";
 import { LineThumb } from "@/components/bag-drawer";
 import { useCart } from "@/components/cart";
 import { WhatsAppIcon } from "@/components/icons";
+import { trackPurchase } from "@/lib/analytics";
 import { STATES, lookupPin } from "@/lib/india";
 import { formatPrice } from "@/lib/site";
 import { getCustomerSupabase } from "@/lib/supabase/client";
@@ -112,6 +113,7 @@ export function CheckoutForm({ shippingFee, freeShippingAbove }: { shippingFee: 
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "Could not place the order");
       if (token) await rememberDetails();
+      trackPurchase(data.number, data.total, shipping, lines);
       clear();
       router.push(`/order/${data.number}?k=${data.key}&new=1`);
     } catch (err) {
@@ -166,7 +168,7 @@ export function CheckoutForm({ shippingFee, freeShippingAbove }: { shippingFee: 
               />
             </div>
             <div>
-              <label className="label" htmlFor="email">Email (optional)</label>
+              <label className="label" htmlFor="email">Email (optional, for order updates)</label>
               <input id="email" className="field" type="email" autoComplete="email" value={form.email} onChange={set("email")} />
             </div>
           </div>
@@ -303,6 +305,12 @@ export function CheckoutForm({ shippingFee, freeShippingAbove }: { shippingFee: 
           <li>2. We confirm availability in the chat.</li>
           <li>3. You pay by UPI (GPay, PhonePe, Paytm) and we ship.</li>
         </ol>
+        <p className="text-xs leading-relaxed text-muted">
+          By placing your order you agree to our{" "}
+          <Link href="/terms" className="underline underline-offset-2">terms</Link>,{" "}
+          <Link href="/refund-policy" className="underline underline-offset-2">refund policy</Link> and{" "}
+          <Link href="/privacy-policy" className="underline underline-offset-2">privacy policy</Link>.
+        </p>
       </aside>
     </form>
   );

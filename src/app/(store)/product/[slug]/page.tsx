@@ -20,7 +20,7 @@ import {
   getReviews,
   getSettings,
 } from "@/lib/data";
-import { SITE_NAME, SITE_URL, formatPrice } from "@/lib/site";
+import { OG_IMAGE, SITE_NAME, SITE_URL, formatPrice } from "@/lib/site";
 import { materialLabel } from "@/lib/types";
 
 type Props = { params: Promise<{ slug: string }> };
@@ -43,7 +43,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       title: `${product.name} · ${formatPrice(product.price)}`,
       description,
       url,
-      images: product.images.slice(0, 1).map((i) => ({ url: i.url, alt: i.alt || product.name })),
+      images: product.images.length
+        ? product.images.slice(0, 1).map((i) => ({ url: i.url, alt: i.alt || product.name }))
+        : [OG_IMAGE],
     },
   };
 }
