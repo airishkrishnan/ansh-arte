@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { ProsePage } from "@/components/prose-page";
 import { getSettings } from "@/lib/data";
 import { formatPrice } from "@/lib/site";
@@ -38,6 +39,9 @@ export default async function ShippingPage() {
       </ul>
       <h2>Cancellations</h2>
       <p>You can cancel any time before your order is shipped. If you have already paid, we refund the full amount by UPI.</p>
+      <p>
+        Full details are in our <Link href="/refund-policy">returns, refunds & cancellations policy</Link>.
+      </p>
     </ProsePage>
   );
 }

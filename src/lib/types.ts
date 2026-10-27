@@ -62,6 +62,12 @@ export type Settings = {
   free_shipping_above: number;
   announcement: string;
   instagram: string;
+  /** Business details shown in the footer, contact and policy pages */
+  legal_name: string;
+  business_address: string;
+  support_email: string;
+  grievance_officer: string;
+  gstin: string;
 };
 
 export type OrderStatus =

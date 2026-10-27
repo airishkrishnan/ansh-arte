@@ -1,6 +1,7 @@
 "use client";
 
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
+import { trackAddToCart } from "@/lib/analytics";
 import type { Material } from "@/lib/types";
 
 export type CartLine = {
@@ -64,6 +65,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       }
       return [...prev, { ...line, qty: Math.min(qty, Math.max(line.stock, 1), 10) }];
     });
+    trackAddToCart(line, qty);
     setOpen(true);
   }, []);
 

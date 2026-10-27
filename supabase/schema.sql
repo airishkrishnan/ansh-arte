@@ -95,6 +95,13 @@ create table if not exists public.settings (
 );
 insert into public.settings (id) values (1) on conflict (id) do nothing;
 
+-- Business details for the footer, contact and policy pages
+alter table public.settings add column if not exists legal_name text not null default '';
+alter table public.settings add column if not exists business_address text not null default '';
+alter table public.settings add column if not exists support_email text not null default '';
+alter table public.settings add column if not exists grievance_officer text not null default '';
+alter table public.settings add column if not exists gstin text not null default '';
+
 -- ---------------------------------------------------------------------------
 -- Orders
 -- ---------------------------------------------------------------------------

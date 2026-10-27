@@ -95,11 +95,42 @@ Free Supabase projects pause after 7 days with no visits. In GitHub, open the re
 
 Buy a domain (for example `anshharte.com` or `anshharte.in`) from any registrar, or Cloudflare Registrar for `.com`. In Cloudflare, add it under the Worker's **Settings → Domains & Routes → Add custom domain**, then change `NEXT_PUBLIC_SITE_URL` (both places) and `SITE_URL` to the new address and redeploy.
 
-## 7. Get found on Google (free)
+## 7. Get found on Google, and count your visitors (free, 20 minutes)
 
-1. [Google Search Console](https://search.google.com/search-console): add your site, verify it, and submit `https://your-site/sitemap.xml`.
-2. [Google Business Profile](https://business.google.com): create a profile for Ansh Arte with your WhatsApp number and website.
-3. [Google Merchant Center](https://merchants.google.com): add your site for free product listings in the Google Shopping tab. Product pages already include the price, stock and photo data Google needs.
+**A. Google Analytics (see visitors, add-to-bags and orders).**
+1. Open [analytics.google.com](https://analytics.google.com), create an account and a property called `Ansh Arte` (time zone India, currency Indian rupee), then add a **Web** data stream with your site address.
+2. Copy the **Measurement ID** (it looks like `G-XXXXXXXXXX`).
+3. In Cloudflare, add the build variable `NEXT_PUBLIC_GA_ID` with that ID and redeploy. Orders show up under **Reports → Monetisation**.
+
+Prefer something without cookies? Cloudflare's own **Web Analytics** is free too: in Cloudflare open **Analytics & Logs → Web Analytics → Add a site**, copy the token from the snippet it shows and add it as the build variable `NEXT_PUBLIC_CF_ANALYTICS_TOKEN`. You can use either or both.
+
+**B. Google Search Console (get your pages on Google).**
+1. Open [Google Search Console](https://search.google.com/search-console) and add a **URL prefix** property with your site address.
+2. Choose **HTML tag** and copy only the code inside `content="..."`.
+3. In Cloudflare, add the build variable `NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION` with that code, redeploy, then press **Verify**.
+4. Open **Sitemaps** and submit `sitemap.xml`.
+
+**C. More places to be found.**
+1. [Google Business Profile](https://business.google.com): create a profile for Ansh Arte with your WhatsApp number and website.
+2. [Google Merchant Center](https://merchants.google.com): add your site for free product listings in the Google Shopping tab. Product pages already include the price, stock and photo data Google needs. Merchant Center also checks that your refund policy and contact details are on the site, which they now are.
+
+## 8. Order emails to customers (free, 10 minutes)
+
+Customers who type their email at checkout get an email when they order, and again when you confirm, mark paid, ship, deliver or cancel the order. It uses the same Brevo account as the sign-in codes (step 4C).
+
+1. In Brevo, open **SMTP & API → API Keys → Generate a new API key**. Name it `ansh-arte-orders` and copy it.
+2. In Cloudflare, open the Worker's **Settings → Variables and Secrets** and add two **secrets**:
+   - `BREVO_API_KEY`: the key you just copied
+   - `ORDER_EMAIL_FROM`: the sender email you verified in Brevo (step 4C)
+3. Redeploy. Place a test order with your own email to check it arrives. In the admin, after you change an order, you'll see "Also emailed to …" under the WhatsApp button.
+
+## 9. Your business details and policy pages (5 minutes)
+
+Indian e-commerce rules ask online shops to show who the seller is, an address, a customer care contact and a grievance officer, plus privacy, terms and refund policies. The policy pages are ready at `/privacy-policy`, `/terms` and `/refund-policy`, and linked in the footer and at checkout.
+
+1. In Supabase, open **SQL Editor → New query**, paste all of [`supabase/schema.sql`](supabase/schema.sql) again and press **Run** (safe to repeat).
+2. In your admin, open **Settings → Business details** and fill in your legal name, business address, customer care email and grievance officer (usually you). Add your GSTIN if you have one.
+3. Read the three policy pages once. If anything should be different for your shop, the text is in `src/app/(store)/privacy-policy`, `terms` and `refund-policy`.
 
 ## Daily use
 

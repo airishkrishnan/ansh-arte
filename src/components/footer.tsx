@@ -96,11 +96,41 @@ export function Footer({ nav, settings }: { nav: NavItem[]; settings: Settings }
               </Link>
             </li>
           </ul>
+          <p className="eyebrow mb-4 mt-8 text-brass-soft">Policies</p>
+          <ul className="space-y-2.5 text-sm">
+            <li>
+              <Link href="/refund-policy" className="hover:text-paper">
+                Returns & refunds
+              </Link>
+            </li>
+            <li>
+              <Link href="/privacy-policy" className="hover:text-paper">
+                Privacy policy
+              </Link>
+            </li>
+            <li>
+              <Link href="/terms" className="hover:text-paper">
+                Terms of use
+              </Link>
+            </li>
+          </ul>
         </div>
       </div>
       <div className="border-t border-paper/10">
         <div className="container-lux flex flex-col gap-2 py-6 text-xs text-paper/50 md:flex-row md:justify-between">
-          <p>© {year} Ansh Arte. Handcrafted in India.</p>
+          <div className="space-y-1">
+            <p>© {year} Ansh Arte. Handcrafted in India.</p>
+            {(settings.legal_name || settings.business_address) && (
+              <p>{[settings.legal_name, settings.business_address.replace(/\s*\n\s*/g, ", ")].filter(Boolean).join(" · ")}</p>
+            )}
+            {(settings.support_email || settings.gstin) && (
+              <p>
+                {settings.support_email && <a href={`mailto:${settings.support_email}`} className="hover:text-paper">{settings.support_email}</a>}
+                {settings.support_email && settings.gstin && " · "}
+                {settings.gstin && `GSTIN ${settings.gstin}`}
+              </p>
+            )}
+          </div>
           <p>Orders confirmed on WhatsApp · Payments by UPI</p>
         </div>
       </div>

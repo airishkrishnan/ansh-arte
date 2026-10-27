@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { JsonLd, Listing, breadcrumbJsonLd, parseMaterial, parseSort } from "@/components/listing";
 import { getCatalogue, getProducts, stylesOf, topCategories } from "@/lib/data";
-import { SITE_URL } from "@/lib/site";
+import { OG_IMAGE, SITE_URL } from "@/lib/site";
 
 type Props = {
   params: Promise<{ category: string; style: string }>;
@@ -26,7 +26,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     title,
     description: style.description,
     alternates: { canonical: url },
-    openGraph: { title, description: style.description, url },
+    openGraph: { title, description: style.description, url, images: [style.image_url ?? OG_IMAGE] },
   };
 }
 
