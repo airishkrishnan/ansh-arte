@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
+import { SampleData } from "@/components/admin/sample-data";
 import { useAdmin } from "@/components/admin/shell";
 import { Card, Icon, OrderPills, ago, dayFmt, type IconName } from "@/components/admin/ui";
 import { Monogram } from "@/components/header";
@@ -203,6 +204,8 @@ export default function AdminHome() {
           <h2 className="text-xl font-semibold md:text-2xl">
             <span className="text-muted">{greeting}</span> Here&rsquo;s your activity
           </h2>
+
+          {orders !== null && <SampleData productCount={products.length} onlyWhenEmpty />}
 
           <div className="grid grid-cols-2 gap-3 md:grid-cols-3">
             <Todo href="/admin/orders?tab=new" label="Confirm orders" count={counts.new} icon="orders" />
