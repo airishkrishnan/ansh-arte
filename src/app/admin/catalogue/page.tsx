@@ -40,13 +40,14 @@ export default function CataloguePage() {
     <>
       <AdminHeader
         title="Catalogue"
+        back="/admin/products"
         action={
-          <button className="btn btn-primary !min-h-9 !px-4" onClick={() => setEditing({ kind: "category", item: { parent_id: null } })}>
+          <button className="btn btn-primary !min-h-11 !px-5" onClick={() => setEditing({ kind: "category", item: { parent_id: null } })}>
             + Category
           </button>
         }
       />
-      <div className="mx-auto max-w-2xl space-y-6 p-4 md:p-8">
+      <div className="mx-auto max-w-3xl space-y-5 px-4 pb-8 pt-2 md:px-8 md:pt-4">
         <p className="text-sm text-ink-soft">
           Categories (Earrings, Rings, Bangles…) can have styles (Hoops, Jhumkas…). Collections sit inside a style, or
           directly in a category that has no styles.
@@ -55,7 +56,7 @@ export default function CataloguePage() {
         {tops.map((top) => {
           const styles = categories.filter((c) => c.parent_id === top.id);
           return (
-            <section key={top.id} className="border border-line bg-paper">
+            <section key={top.id} className="overflow-hidden rounded-[1.75rem] border border-line bg-paper">
               <div className="flex items-center justify-between border-b border-line bg-sand/60 pr-2">
                 <div className="flex-1">
                   <Row name={top.name} sub={`/${top.slug}`} hidden={!top.visible} onClick={() => setEditing({ kind: "category", item: top })} />
@@ -171,7 +172,7 @@ function Editor({ editing, onClose, onSaved }: { editing: Editing; onClose: () =
       <form
         onSubmit={save}
         onClick={(e) => e.stopPropagation()}
-        className="max-h-[92dvh] w-full space-y-4 overflow-y-auto bg-ivory p-5 pb-[max(1.25rem,env(safe-area-inset-bottom))] md:max-w-lg"
+        className="max-h-[92dvh] w-full space-y-4 overflow-y-auto rounded-t-[2rem] bg-ivory p-5 pb-[max(1.25rem,env(safe-area-inset-bottom))] md:max-w-lg md:rounded-[2rem]"
       >
         <div className="flex items-center justify-between">
           <h2 className="font-serif text-2xl">{title}</h2>

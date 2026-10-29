@@ -221,6 +221,23 @@ body {
   }
 }
 
+/* Admin: softer, rounder controls in the Shopify style */
+.admin-ui .btn {
+  border-radius: 999px;
+  text-transform: none;
+  letter-spacing: 0;
+  font-size: 0.95rem;
+}
+.admin-ui .field {
+  border-radius: 1rem;
+}
+.admin-ui .label {
+  text-transform: none;
+  letter-spacing: 0;
+  font-size: 0.85rem;
+  color: var(--color-muted);
+}
+
 /* Gentle reveal for sections */
 @keyframes rise {
   from {
@@ -247,6 +264,70 @@ body {
 }
 .hero-zoom {
   animation: hero-zoom 7s ease-out both;
+}
+
+/* Sections and cards fade up as they scroll into view (see components/motion.tsx).
+   Only active once JavaScript has run, so nothing is ever hidden without it. */
+@media (prefers-reduced-motion: no-preference) {
+  .motion-on [data-reveal]:not([data-shown]) {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  .motion-on [data-reveal] {
+    transition:
+      opacity 0.9s var(--ease-lux),
+      transform 0.9s var(--ease-lux);
+  }
+  .motion-on .grid > [data-reveal]:nth-child(4n + 2) {
+    transition-delay: 0.07s;
+  }
+  .motion-on .grid > [data-reveal]:nth-child(4n + 3) {
+    transition-delay: 0.14s;
+  }
+  .motion-on .grid > [data-reveal]:nth-child(4n + 4) {
+    transition-delay: 0.21s;
+  }
+  /* Photos fade in once loaded instead of popping in. The transition sits in a
+     layer so an image's own transition-[opacity,transform] class can extend it. */
+  .motion-on img[data-fade]:not([data-loaded]) {
+    opacity: 0;
+  }
+  @layer components {
+    img[data-fade] {
+      transition: opacity 0.6s ease;
+    }
+  }
+}
+
+@keyframes fade {
+  from {
+    opacity: 0;
+  }
+}
+
+/* Soft moving sheen on photo placeholders while they load */
+@keyframes shimmer {
+  from {
+    background-position: 100% 0;
+  }
+  to {
+    background-position: -100% 0;
+  }
+}
+.shimmer {
+  background-image: linear-gradient(
+    100deg,
+    transparent 30%,
+    color-mix(in srgb, var(--color-paper) 55%, transparent) 50%,
+    transparent 70%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.6s linear infinite;
+}
+.shimmer:has(> img[data-loaded]),
+.shimmer:has(> * > img[data-loaded]) {
+  animation: none;
+  background-image: none;
 }
 
 @media (prefers-reduced-motion: reduce) {

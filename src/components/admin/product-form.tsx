@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useRef, useState } from "react";
 import { prepareProductPhoto, uploadImage } from "@/lib/admin/image";
@@ -129,29 +128,22 @@ export function ProductForm({ initial }: { initial?: Product }) {
 
   return (
     <>
-      <AdminHeader
-        title={p.id ? "Edit product" : "New product"}
-        action={
-          <Link href="/admin/products" className="text-xs font-semibold uppercase tracking-[0.14em] text-muted">
-            Close
-          </Link>
-        }
-      />
-      <form onSubmit={save} className="mx-auto max-w-2xl space-y-6 p-4 pb-32 md:p-8">
+      <AdminHeader title={p.id ? "Edit product" : "New product"} back="/admin/products" />
+      <form onSubmit={save} className="mx-auto max-w-3xl space-y-6 px-4 pb-32 pt-2 md:px-8 md:pt-4">
         {/* Photos */}
-        <section className="space-y-3">
+        <section className="space-y-3 rounded-[1.75rem] border border-line bg-paper p-4 md:p-6">
           <p className="label">Photos ({p.images.length}/8) · first photo is the cover</p>
           <div className="grid grid-cols-3 gap-2 sm:grid-cols-4">
             {p.images.map((img: ProductImage, i) => (
               <div key={img.url} className="relative">
                 {/* eslint-disable-next-line @next/next/no-img-element -- upload preview */}
-                <img src={img.thumb ?? img.url} alt="" className="aspect-[4/5] w-full object-cover" />
+                <img src={img.thumb ?? img.url} alt="" className="aspect-[4/5] w-full rounded-2xl object-cover" />
                 {i === 0 && (
-                  <span className="absolute left-1 top-1 bg-ink px-1.5 py-0.5 text-[0.58rem] font-bold uppercase tracking-wider text-paper">
+                  <span className="absolute left-1.5 top-1.5 rounded-full bg-ink px-2 py-0.5 text-[0.58rem] font-bold uppercase tracking-wider text-paper">
                     Cover
                   </span>
                 )}
-                <div className="absolute inset-x-0 bottom-0 flex justify-between bg-ink/60 text-paper">
+                <div className="absolute inset-x-1 bottom-1 flex justify-between rounded-full bg-ink/65 text-paper backdrop-blur">
                   <button type="button" className="px-2 py-1 text-sm disabled:opacity-30" disabled={i === 0} onClick={() => move(i, -1)} aria-label="Move left">←</button>
                   <button
                     type="button"
@@ -166,7 +158,7 @@ export function ProductForm({ initial }: { initial?: Product }) {
               </div>
             ))}
             {Array.from({ length: uploading }).map((_, i) => (
-              <div key={`u${i}`} className="grid aspect-[4/5] animate-pulse place-items-center bg-sand text-xs text-muted">
+              <div key={`u${i}`} className="grid aspect-[4/5] animate-pulse place-items-center rounded-2xl bg-sand text-xs text-muted">
                 Uploading…
               </div>
             ))}
@@ -186,7 +178,7 @@ export function ProductForm({ initial }: { initial?: Product }) {
           <p className="text-xs text-muted">Photos are cropped to portrait 4:5 and compressed automatically. Use a plain background and daylight.</p>
         </section>
 
-        <section className="space-y-4">
+        <section className="space-y-4 rounded-[1.75rem] border border-line bg-paper p-4 md:p-6">
           <div>
             <label className="label" htmlFor="name">Product name</label>
             <input
@@ -218,7 +210,7 @@ export function ProductForm({ initial }: { initial?: Product }) {
           </div>
         </section>
 
-        <section className="grid grid-cols-2 gap-3">
+        <section className="grid grid-cols-2 gap-3 rounded-[1.75rem] border border-line bg-paper p-4 md:p-6">
           <div className="col-span-2">
             <label className="label" htmlFor="cat">Category</label>
             <select
@@ -298,7 +290,7 @@ export function ProductForm({ initial }: { initial?: Product }) {
           </div>
         </section>
 
-        <section className="space-y-4">
+        <section className="space-y-4 rounded-[1.75rem] border border-line bg-paper p-4 md:p-6">
           <div>
             <label className="label" htmlFor="desc">Description</label>
             <textarea id="desc" className="field min-h-28" value={p.description} onChange={(e) => set("description", e.target.value)} placeholder="What makes this piece special, how to style it…" />
@@ -313,7 +305,7 @@ export function ProductForm({ initial }: { initial?: Product }) {
           </div>
         </section>
 
-        {error && <p className="border border-temple/30 bg-temple/5 p-3 text-sm text-temple">{error}</p>}
+        {error && <p className="rounded-2xl border border-temple/30 bg-temple/5 p-3 text-sm text-temple">{error}</p>}
 
         {p.id && (
           <div className="flex flex-wrap gap-4 text-sm">
@@ -323,8 +315,8 @@ export function ProductForm({ initial }: { initial?: Product }) {
           </div>
         )}
 
-        <div className="fixed inset-x-0 bottom-[3.75rem] z-30 border-t border-line bg-ivory/95 p-3 backdrop-blur md:bottom-0 md:left-56">
-          <div className="mx-auto max-w-2xl">
+        <div className="fixed inset-x-0 bottom-0 z-30 border-t border-line bg-ivory/90 px-4 pb-[max(env(safe-area-inset-bottom),0.75rem)] pt-3 backdrop-blur-xl md:left-64">
+          <div className="mx-auto max-w-3xl">
             <button className="btn btn-primary w-full" disabled={busy || uploading > 0}>
               {uploading > 0 ? "Uploading photos…" : busy ? "Saving…" : saved ? "Saved ✓" : p.id ? "Save changes" : "Add product"}
             </button>

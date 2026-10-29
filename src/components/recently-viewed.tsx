@@ -66,7 +66,7 @@ export function RecentlyViewed({
   if (!items.length) return null;
 
   return (
-    <section className={className} aria-label={title}>
+    <section className={className} aria-label={title} data-reveal={compact ? undefined : true}>
       <div className={`flex items-end justify-between gap-4 ${compact ? "mb-3" : "mb-8"}`}>
         <div>
           {!compact && <p className="eyebrow mb-3">{eyebrow}</p>}
@@ -88,14 +88,15 @@ export function RecentlyViewed({
         {items.map((i) => (
           <li key={i.slug} className={`shrink-0 snap-start ${compact ? "w-28" : "w-36 md:w-44"}`}>
             <Link href={`/product/${i.slug}`} onClick={onNavigate} className="group block" prefetch={false}>
-              <div className="aspect-[4/5] overflow-hidden bg-sand">
+              <div className={`aspect-[4/5] overflow-hidden bg-sand ${i.image ? "shimmer" : ""}`}>
                 {i.image && (
                   // eslint-disable-next-line @next/next/no-img-element -- small thumbnail
                   <img
                     src={i.image}
                     alt={i.name}
                     loading="lazy"
-                    className="size-full object-cover transition-transform duration-700 group-hover:scale-[1.03]"
+                    data-fade
+                    className="size-full object-cover transition-[opacity,transform] duration-700 group-hover:scale-[1.03]"
                   />
                 )}
               </div>

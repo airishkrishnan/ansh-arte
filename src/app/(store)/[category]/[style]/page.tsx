@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import { styleBanner } from "@/lib/banners";
 import { JsonLd, Listing, breadcrumbJsonLd, parseMaterial, parseSort } from "@/components/listing";
 import { getCatalogue, getProducts, stylesOf, topCategories } from "@/lib/data";
 import { OG_IMAGE, SITE_URL } from "@/lib/site";
@@ -65,6 +66,7 @@ export default async function StylePage({ params, searchParams }: Props) {
         chips={chips}
         products={products}
         basePath={base}
+        banner={styleBanner(style, category.slug)}
         material={material}
         sort={sort}
       />

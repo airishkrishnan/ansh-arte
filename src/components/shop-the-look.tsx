@@ -36,7 +36,7 @@ export function ShopTheLook({
   return (
     <section className="py-16 md:py-24">
       <div className="container-lux grid grid-cols-1 items-center gap-10 md:grid-cols-[minmax(0,1.15fr)_minmax(0,1fr)] md:gap-16">
-        <div className="relative overflow-hidden bg-sand">
+        <div className="relative overflow-hidden bg-sand" data-reveal>
           {/* eslint-disable-next-line @next/next/no-img-element -- styled look photo */}
           <img src={image} alt={alt} loading="lazy" className="aspect-square w-full object-cover" />
           {items.map((it, i) => (
@@ -61,7 +61,7 @@ export function ShopTheLook({
           ))}
         </div>
 
-        <div>
+        <div data-reveal>
           <p className="eyebrow mb-3">{eyebrow}</p>
           <h2 className="heading-lg">{title}</h2>
           <p className="mt-4 max-w-md text-ink-soft">{text}</p>

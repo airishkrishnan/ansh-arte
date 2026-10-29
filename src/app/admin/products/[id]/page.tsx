@@ -20,11 +20,11 @@ export default function EditProductPage() {
       .then(({ data }) => setProduct((data as Product) ?? null));
   }, [id]);
 
-  if (product === undefined) return <AdminHeader title="Edit product" />;
+  if (product === undefined) return <AdminHeader title="Edit product" back="/admin/products" />;
   if (product === null) {
     return (
       <>
-        <AdminHeader title="Not found" />
+        <AdminHeader title="Not found" back="/admin/products" />
         <p className="p-8 text-center text-sm text-muted">This product no longer exists.</p>
       </>
     );

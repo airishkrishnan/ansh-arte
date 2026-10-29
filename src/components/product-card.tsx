@@ -20,7 +20,7 @@ export function ProductCard({
   const [first, second] = product.images;
 
   return (
-    <div className="relative">
+    <div className="relative" data-reveal>
     <Link href={`/product/${product.slug}`} className="group block" prefetch={false}>
       <div className="relative">
         <ProductImage

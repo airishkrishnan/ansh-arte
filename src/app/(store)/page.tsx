@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { HeroSlider } from "@/components/hero-slider";
 import { ShopTheLook, type LookItem } from "@/components/shop-the-look";
-import { ArrowIcon, HandIcon, ShieldIcon, TruckIcon, WhatsAppIcon } from "@/components/icons";
+import { ArrowIcon } from "@/components/icons";
 import { ProductArt } from "@/components/product-art";
 import { RecentlyViewed } from "@/components/recently-viewed";
 import { ProductCard } from "@/components/product-card";
@@ -15,7 +15,7 @@ import {
   stylesOf,
   topCategories,
 } from "@/lib/data";
-import { SITE_DESCRIPTION, SITE_NAME, SITE_URL, formatPrice } from "@/lib/site";
+import { SITE_DESCRIPTION, SITE_NAME, SITE_URL } from "@/lib/site";
 import { festiveSlide, liveFestive } from "@/lib/festive";
 import { LOOK } from "@/lib/looks";
 import { samplePhoto } from "@/lib/samples";
@@ -89,7 +89,7 @@ export default async function HomePage() {
       {/* Shop by style */}
       <section className="border-y border-line bg-paper py-16 md:py-20">
         <div className="container-lux">
-          <div className="mb-10 flex items-end justify-between gap-6">
+          <div className="mb-10 flex items-end justify-between gap-6" data-reveal>
             <div>
               <p className="eyebrow mb-3">Shop by style</p>
               <h2 className="heading-lg">Find your silhouette</h2>
@@ -101,12 +101,13 @@ export default async function HomePage() {
                 key={t.id}
                 href={categoryHref(catalogue, t)}
                 className="group w-[42%] shrink-0 snap-start text-center md:w-auto"
+                data-reveal
               >
                 <div className="overflow-hidden rounded-t-full border border-line bg-ivory">
-                  <div className="aspect-[3/4]">
+                  <div className={`aspect-[3/4] ${t.image_url ? "shimmer" : ""}`}>
                     {t.image_url ? (
                       // eslint-disable-next-line @next/next/no-img-element -- category image
-                      <img src={t.image_url} alt={t.name} loading="lazy" className="size-full object-cover" />
+                      <img src={t.image_url} alt={t.name} loading="lazy" data-fade className="size-full object-cover" />
                     ) : (
                       <ProductArt
                         kind={t.slug}
@@ -131,7 +132,7 @@ export default async function HomePage() {
 
       {/* New arrivals */}
       <section className="container-lux py-16 md:py-24">
-        <div className="mb-10 flex items-end justify-between gap-6">
+        <div className="mb-10 flex items-end justify-between gap-6" data-reveal>
           <div>
             <p className="eyebrow mb-3">Just in</p>
             <h2 className="heading-lg">New arrivals</h2>
@@ -166,7 +167,7 @@ export default async function HomePage() {
       {/* Collections */}
       <section className="bg-ink py-16 text-paper md:py-24">
         <div className="container-lux">
-          <div className="mb-12 max-w-xl">
+          <div className="mb-12 max-w-xl" data-reveal>
             <p className="eyebrow mb-3 text-brass-soft">Collections</p>
             <h2 className="heading-lg">Stories you can wear</h2>
             <p className="mt-4 text-paper/70">
@@ -182,11 +183,12 @@ export default async function HomePage() {
                   key={c.id}
                   href={`/collections/${c.slug}`}
                   className="group relative block overflow-hidden border border-paper/10"
+                  data-reveal
                 >
                   <div className="aspect-[4/5] bg-cocoa">
                     {c.banner_url ? (
                       // eslint-disable-next-line @next/next/no-img-element -- collection banner
-                      <img src={c.banner_url} alt={c.name} loading="lazy" className="size-full object-cover opacity-80" />
+                      <img src={c.banner_url} alt={c.name} loading="lazy" data-fade className="size-full object-cover opacity-80" />
                     ) : (
                       <ProductArt
                         kind={cat?.slug ?? "rings"}
@@ -220,7 +222,7 @@ export default async function HomePage() {
 
       {/* Materials */}
       <section className="container-lux py-16 md:py-24" id="materials">
-        <div className="mb-12 text-center">
+        <div className="mb-12 text-center" data-reveal>
           <p className="eyebrow mb-3">Our materials</p>
           <h2 className="heading-lg">Two metals, one soul</h2>
         </div>
@@ -239,7 +241,7 @@ export default async function HomePage() {
               m: "german-silver" as const,
             },
           ].map((x) => (
-            <Link key={x.title} href={x.href} className="group grid grid-cols-[40%_1fr] items-center gap-6 border border-line bg-paper p-4 md:p-6">
+            <Link key={x.title} href={x.href} className="group grid grid-cols-[40%_1fr] items-center gap-6 border border-line bg-paper p-4 md:p-6" data-reveal>
               <div className="overflow-hidden rounded-t-full">
                 <ProductArt kind="jhumkas" material={x.m} className="aspect-[4/5] w-full transition-transform duration-700 group-hover:scale-105" />
               </div>
@@ -258,7 +260,7 @@ export default async function HomePage() {
       {/* How to order */}
       <section className="border-y border-line bg-paper py-16 md:py-20">
         <div className="container-lux">
-          <div className="mb-12 text-center">
+          <div className="mb-12 text-center" data-reveal>
             <p className="eyebrow mb-3">Simple & personal</p>
             <h2 className="heading-lg">How ordering works</h2>
           </div>
@@ -268,7 +270,7 @@ export default async function HomePage() {
               ["Confirm on WhatsApp", "Your order arrives in our WhatsApp with one tap. We confirm availability personally."],
               ["Pay by UPI & relax", "Pay with GPay, PhonePe or any UPI app. Track your parcel right here."],
             ].map(([t, d], i) => (
-              <li key={t} className="text-center">
+              <li key={t} className="text-center" data-reveal>
                 <span className="mx-auto grid size-14 place-items-center rounded-full border border-brass font-serif text-2xl text-brass-deep">
                   {i + 1}
                 </span>
@@ -280,26 +282,6 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* Trust row */}
-      <section className="container-lux py-14">
-        <ul className="grid grid-cols-2 gap-8 text-center md:grid-cols-4">
-          {[
-            [HandIcon, "Handcrafted", "Finished by hand"],
-            [WhatsAppIcon, "Personal service", "Real people on WhatsApp"],
-            [ShieldIcon, "Secure UPI", "Pay with any UPI app"],
-            [TruckIcon, "Pan-India shipping", `Free above ${formatPrice(settings.free_shipping_above)}`],
-          ].map(([Icon, t, d]) => {
-            const I = Icon as typeof HandIcon;
-            return (
-              <li key={t as string} className="space-y-2">
-                <I className="mx-auto size-7 text-brass" />
-                <p className="text-sm font-semibold uppercase tracking-[0.14em]">{t as string}</p>
-                <p className="text-sm text-muted">{d as string}</p>
-              </li>
-            );
-          })}
-        </ul>
-      </section>
     </>
   );
 }
