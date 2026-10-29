@@ -221,6 +221,23 @@ body {
   }
 }
 
+/* Admin: softer, rounder controls in the Shopify style */
+.admin-ui .btn {
+  border-radius: 999px;
+  text-transform: none;
+  letter-spacing: 0;
+  font-size: 0.95rem;
+}
+.admin-ui .field {
+  border-radius: 1rem;
+}
+.admin-ui .label {
+  text-transform: none;
+  letter-spacing: 0;
+  font-size: 0.85rem;
+  color: var(--color-muted);
+}
+
 /* Gentle reveal for sections */
 @keyframes rise {
   from {

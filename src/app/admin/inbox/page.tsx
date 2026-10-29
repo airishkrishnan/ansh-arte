@@ -52,8 +52,8 @@ export default function InboxPage() {
 
   return (
     <>
-      <AdminHeader title="Inbox" />
-      <div className="space-y-4 p-4 md:p-8">
+      <AdminHeader title="Reviews and alerts" />
+      <div className="mx-auto max-w-5xl space-y-5 px-4 pb-8 pt-2 md:px-8 md:pt-4">
         <div className="grid grid-cols-2 gap-2">
           <button type="button" className="chip justify-center" aria-current={tab === "reviews"} onClick={() => setTab("reviews")}>
             Reviews
@@ -78,7 +78,7 @@ export default function InboxPage() {
             ) : (
               <ul className="space-y-3">
                 {reviews.map((r) => (
-                  <li key={r.id} className="space-y-3 border border-line bg-paper p-4">
+                  <li key={r.id} className="space-y-3 rounded-[1.75rem] border border-line bg-paper p-4 md:p-5">
                     <div className="flex items-start justify-between gap-3">
                       <div className="min-w-0">
                         <p className="text-brass" aria-label={`${r.rating} stars`}>
@@ -136,7 +136,7 @@ export default function InboxPage() {
             <p className="text-xs text-muted">
               Restock the piece in Products first, then tap Message to send a ready-made WhatsApp from your phone.
             </p>
-            <ul className="divide-y divide-line border border-line bg-paper">
+            <ul className="divide-y divide-line overflow-hidden rounded-[1.75rem] border border-line bg-paper">
               {alerts.map((a) => {
                 const p = a.products;
                 const back = (p?.stock ?? 0) > 0;

@@ -6,8 +6,10 @@ import { usePathname } from "next/navigation";
 import { createContext, useContext, useEffect, useState } from "react";
 import { getBrowserSupabase, supabaseConfigured } from "@/lib/supabase/client";
 import { Logo, Monogram } from "../header";
+import { AdminSearch } from "./search";
+import { Icon, RoundButton, type IconName } from "./ui";
 
-type AdminCtx = { session: Session; signOut: () => Promise<void> };
+type AdminCtx = { session: Session; signOut: () => Promise<void>; openSearch: () => void };
 const Ctx = createContext<AdminCtx | null>(null);
 export const useAdmin = () => {
   const c = useContext(Ctx);
@@ -15,17 +17,44 @@ export const useAdmin = () => {
   return c;
 };
 
-const TABS = [
-  { href: "/admin/orders", label: "Orders", icon: "M5 4h14v16H5zM9 8h6M9 12h6M9 16h4" },
-  { href: "/admin/products", label: "Products", icon: "M12 3l8 4.5v9L12 21l-8-4.5v-9zM12 12l8-4.5M12 12v9M12 12L4 7.5" },
-  { href: "/admin/inbox", label: "Inbox", icon: "M4 13l2.5-8h11L20 13v6H4zM4 13h5l1 2h4l1-2h5" },
-  { href: "/admin/catalogue", label: "Catalogue", icon: "M4 5h7v7H4zM13 5h7v7h-7zM4 14h7v6H4zM13 14h7v6h-7z" },
-  { href: "/admin/settings", label: "Settings", icon: "M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM19 12l2-1-1-3-2 .2-1.3-1.3.2-2-3-1-1 2h-1.8l-1-2-3 1 .2 2L6.9 7.2 5 7 4 10l2 1v1.8l-2 1 1 3 2-.2 1.3 1.3-.2 2 3 1 1-2h1.8l1 2 3-1-.2-2 1.3-1.3 2 .2 1-3-2-1z" },
+type NavEntry = { href: string; label: string; icon: IconName; children?: { href: string; label: string }[] };
+
+const NAV: NavEntry[] = [
+  { href: "/admin", label: "Home", icon: "home" },
+  {
+    href: "/admin/orders",
+    label: "Orders",
+    icon: "orders",
+    children: [
+      { href: "/admin/orders?tab=new", label: "To confirm" },
+      { href: "/admin/orders?tab=confirmed", label: "Awaiting payment" },
+      { href: "/admin/orders?tab=paid", label: "To pack and ship" },
+      { href: "/admin/orders?tab=all", label: "All orders" },
+    ],
+  },
+  {
+    href: "/admin/products",
+    label: "Products",
+    icon: "products",
+    children: [
+      { href: "/admin/products/new", label: "Add product" },
+      { href: "/admin/catalogue", label: "Categories and collections" },
+    ],
+  },
+  { href: "/admin/customers", label: "Customers", icon: "customers" },
+  { href: "/admin/inbox", label: "Reviews and alerts", icon: "inbox" },
+  { href: "/admin/settings", label: "Settings", icon: "settings" },
 ];
+
+const isOn = (pathname: string, href: string) => (href === "/admin" ? pathname === "/admin" : pathname.startsWith(href));
+const groupOn = (pathname: string, e: NavEntry) =>
+  isOn(pathname, e.href) || !!e.children?.some((c) => !c.href.includes("?") && pathname.startsWith(c.href));
 
 export function AdminShell({ children }: { children: React.ReactNode }) {
   const [session, setSession] = useState<Session | null>(null);
   const [state, setState] = useState<"loading" | "signed-out" | "not-admin" | "ok">("loading");
+  const [menu, setMenu] = useState(false);
+  const [search, setSearch] = useState(false);
   const pathname = usePathname();
 
   useEffect(() => {
@@ -43,6 +72,14 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
     });
     return () => sub.subscription.unsubscribe();
   }, []);
+
+  // Close the menu and search whenever the page changes
+  const [lastPath, setLastPath] = useState(pathname);
+  if (lastPath !== pathname) {
+    setLastPath(pathname);
+    setMenu(false);
+    setSearch(false);
+  }
 
   if (!supabaseConfigured) {
     return (
@@ -74,70 +111,185 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
   const signOut = async () => {
     await getBrowserSupabase().auth.signOut();
   };
+  // The product editor has its own save bar along the bottom
+  const editing = /^\/admin\/products\/[^/]+$/.test(pathname);
 
   return (
-    <Ctx.Provider value={{ session, signOut }}>
-      <div className="min-h-dvh bg-ivory pb-24 md:pb-0 md:pl-56">
-        <aside className="fixed inset-y-0 left-0 hidden w-56 flex-col bg-ink p-5 text-brass-soft md:flex">
-          <Link href="/admin/orders" className="flex items-center gap-3">
+    <Ctx.Provider value={{ session, signOut, openSearch: () => setSearch(true) }}>
+      <div className={`admin-ui min-h-dvh bg-ivory md:pb-0 md:pl-64 print:bg-white print:p-0 ${editing ? "" : "pb-28"}`}>
+        <aside className="fixed inset-y-0 left-0 z-40 hidden w-64 flex-col overflow-y-auto bg-ink px-3 py-5 text-paper md:flex print:hidden">
+          <Link href="/admin" className="mb-6 flex items-center gap-3 px-3">
             <Monogram className="h-10 w-8 shrink-0" arch="var(--color-silver)" letter="var(--color-brass-soft)" />
             <span>
               <Logo className="block text-lg" accent="text-silver" />
-              <span className="mt-1.5 block text-[0.6rem] uppercase tracking-[0.3em] text-silver">Admin studio</span>
+              <span className="mt-1 block text-[0.6rem] uppercase tracking-[0.3em] text-silver">Admin studio</span>
             </span>
           </Link>
-          <nav className="mt-10 space-y-1">
-            {TABS.map((t) => (
-              <Link
-                key={t.href}
-                href={t.href}
-                className={`flex items-center gap-3 border-l-2 px-3 py-2.5 text-sm transition-colors ${
-                  pathname.startsWith(t.href)
-                    ? "border-silver bg-brass-soft/10 text-paper"
-                    : "border-transparent text-brass-soft/70 hover:bg-brass-soft/5 hover:text-paper"
-                }`}
-              >
-                <TabIcon d={t.icon} />
-                {t.label}
-              </Link>
-            ))}
-          </nav>
-          <div className="mt-auto space-y-2 border-t border-brass-soft/15 pt-4 text-xs text-brass-soft/60">
-            <Link href="/" target="_blank" className="block hover:text-paper">
-              View store ↗
+          <button
+            type="button"
+            onClick={() => setSearch(true)}
+            className="mx-1 mb-4 flex items-center gap-3 rounded-full bg-paper/10 px-4 py-2.5 text-sm text-paper/60 hover:bg-paper/15"
+          >
+            <Icon name="search" className="size-4" /> Search
+          </button>
+          <NavTree pathname={pathname} />
+          <div className="mt-auto space-y-0.5 border-t border-paper/10 pt-3 text-sm">
+            <Link href="/" target="_blank" className="flex items-center gap-3 rounded-xl px-3 py-2 text-paper/70 hover:bg-paper/5 hover:text-paper">
+              <Icon name="store" className="size-[1.1rem]" /> View store
             </Link>
-            <button onClick={signOut} className="hover:text-paper">
-              Sign out
+            <button onClick={signOut} className="flex w-full items-center gap-3 rounded-xl px-3 py-2 text-paper/70 hover:bg-paper/5 hover:text-paper">
+              <Icon name="logout" className="size-[1.1rem]" /> Sign out
             </button>
           </div>
         </aside>
+
         {children}
-        <nav className="fixed inset-x-0 bottom-0 z-40 grid grid-cols-5 bg-ink pb-[env(safe-area-inset-bottom)] md:hidden">
-          {TABS.map((t) => {
-            const on = pathname.startsWith(t.href);
-            return (
-              <Link
-                key={t.href}
-                href={t.href}
-                className={`relative flex flex-col items-center gap-1 py-2.5 text-[0.68rem] font-semibold ${on ? "text-paper" : "text-brass-soft/55"}`}
-              >
-                {on && <span className="absolute inset-x-5 top-0 h-0.5 bg-silver" />}
-                <TabIcon d={t.icon} />
-                {t.label}
-              </Link>
-            );
-          })}
-        </nav>
+
+        {!editing && !menu && <BottomBar pathname={pathname} onSearch={() => setSearch(true)} onMenu={() => setMenu(true)} />}
+        {menu && <MobileMenu pathname={pathname} email={session.user.email ?? ""} onClose={() => setMenu(false)} signOut={signOut} />}
+        {search && <AdminSearch onClose={() => setSearch(false)} />}
       </div>
     </Ctx.Provider>
   );
 }
 
-function TabIcon({ d }: { d: string }) {
+/** Shopify-style floating bar on phones: search, the four main tabs, and the store. */
+function BottomBar({ pathname, onSearch, onMenu }: { pathname: string; onSearch: () => void; onMenu: () => void }) {
+  const tabs = NAV.slice(0, 3);
+  const glass = "border border-line/70 bg-paper/85 shadow-[0_8px_30px_rgba(33,27,26,0.14)] backdrop-blur-xl";
   return (
-    <svg viewBox="0 0 24 24" className="size-5" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round" aria-hidden="true">
-      <path d={d} />
-    </svg>
+    <nav className="fixed inset-x-0 bottom-0 z-40 flex items-center justify-center gap-2 px-3 pb-[max(env(safe-area-inset-bottom),0.9rem)] md:hidden print:hidden" aria-label="Admin">
+      <button type="button" onClick={onSearch} className={`grid size-14 shrink-0 place-items-center rounded-full text-ink ${glass}`} aria-label="Search">
+        <Icon name="search" className="size-6" />
+      </button>
+      <div className={`flex items-center gap-0.5 rounded-full p-1 ${glass}`}>
+        {tabs.map((t) => {
+          const on = groupOn(pathname, t);
+          return (
+            <Link
+              key={t.href}
+              href={t.href}
+              aria-label={t.label}
+              aria-current={on ? "page" : undefined}
+              className={`grid h-12 w-[3.6rem] place-items-center rounded-full transition-colors ${on ? "bg-ink text-paper" : "text-ink-soft"}`}
+            >
+              <Icon name={t.icon} className="size-6" />
+            </Link>
+          );
+        })}
+        <button type="button" onClick={onMenu} className="grid h-12 w-[3.6rem] place-items-center rounded-full text-ink-soft" aria-label="Menu">
+          <Icon name="menu" className="size-6" />
+        </button>
+      </div>
+      <Link href="/" target="_blank" className={`grid size-14 shrink-0 place-items-center rounded-full ${glass}`} aria-label="View store">
+        <Monogram className="h-8 w-6" arch="var(--color-brass)" letter="var(--color-ink)" />
+      </Link>
+    </nav>
+  );
+}
+
+/** The full navigation list, with expandable groups. Used by the sidebar and the phone menu. */
+function NavTree({ pathname, large = false }: { pathname: string; large?: boolean }) {
+  const [open, setOpen] = useState<string | null>(() => NAV.find((e) => e.children && groupOn(pathname, e))?.href ?? null);
+  const row = large ? "gap-4 px-4 py-3.5 text-[1.15rem]" : "gap-3 px-3 py-2.5 text-[0.92rem]";
+  return (
+    <ul className="space-y-0.5">
+      {NAV.map((e) => {
+        const on = groupOn(pathname, e);
+        const expanded = open === e.href;
+        return (
+          <li key={e.href}>
+            <div className={`flex items-center rounded-2xl ${on ? "bg-paper/10" : ""}`}>
+              <Link href={e.href} className={`flex flex-1 items-center ${row} ${on ? "font-semibold text-paper" : "text-paper/80 hover:text-paper"}`}>
+                <Icon name={e.icon} className={large ? "size-6 text-paper/70" : "size-[1.15rem] text-paper/70"} />
+                {e.label}
+              </Link>
+              {e.children && (
+                <button
+                  type="button"
+                  onClick={() => setOpen(expanded ? null : e.href)}
+                  className="grid size-11 place-items-center text-paper/70 hover:text-paper"
+                  aria-label={`${expanded ? "Hide" : "Show"} ${e.label} pages`}
+                  aria-expanded={expanded}
+                >
+                  <Icon name="down" className={`size-5 transition-transform ${expanded ? "rotate-180" : ""}`} />
+                </button>
+              )}
+            </div>
+            {e.children && expanded && (
+              <ul className={large ? "py-1 pl-14" : "py-1 pl-10"}>
+                {e.children.map((c) => (
+                  <li key={c.href}>
+                    <Link
+                      href={c.href}
+                      className={`block rounded-xl py-2 ${large ? "text-[1.05rem]" : "text-sm"} ${
+                        !c.href.includes("?") && pathname.startsWith(c.href) ? "font-semibold text-paper" : "text-paper/70 hover:text-paper"
+                      }`}
+                    >
+                      {c.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </li>
+        );
+      })}
+    </ul>
+  );
+}
+
+function MobileMenu({ pathname, email, onClose, signOut }: { pathname: string; email: string; onClose: () => void; signOut: () => void }) {
+  useEffect(() => {
+    const html = document.documentElement;
+    html.style.overflow = "hidden";
+    const onKey = (e: KeyboardEvent) => e.key === "Escape" && onClose();
+    window.addEventListener("keydown", onKey);
+    return () => {
+      html.style.overflow = "";
+      window.removeEventListener("keydown", onKey);
+    };
+  }, [onClose]);
+
+  return (
+    <div className="fixed inset-0 z-50 overflow-y-auto bg-ink text-paper animate-[fade_0.2s_ease] md:hidden" role="dialog" aria-modal="true" aria-label="Menu">
+      <div className="px-3 pb-36 pt-[max(env(safe-area-inset-top),1.25rem)]">
+        <div className="mb-6 flex items-center gap-3 px-4">
+          <Monogram className="h-11 w-9 shrink-0" arch="var(--color-silver)" letter="var(--color-brass-soft)" />
+          <div className="min-w-0">
+            <Logo className="block text-xl" accent="text-silver" />
+            <p className="mt-0.5 truncate text-xs text-paper/50">{email}</p>
+          </div>
+        </div>
+        <NavTree pathname={pathname} large />
+        <p className="mt-8 px-4 text-sm font-semibold text-paper/50">Your store</p>
+        <ul className="mt-2 space-y-0.5">
+          <li>
+            <Link href="/" target="_blank" className="flex items-center gap-4 rounded-2xl px-4 py-3.5 text-[1.15rem] text-paper/80">
+              <span className="grid size-7 place-items-center rounded-lg bg-paper/15"><Icon name="store" className="size-4" /></span>
+              View online store
+            </Link>
+          </li>
+          <li>
+            <button type="button" onClick={signOut} className="flex w-full items-center gap-4 rounded-2xl px-4 py-3.5 text-[1.15rem] text-paper/80">
+              <span className="grid size-7 place-items-center rounded-lg bg-paper/15"><Icon name="logout" className="size-4" /></span>
+              Sign out
+            </button>
+          </li>
+        </ul>
+      </div>
+      <div className="fixed inset-x-0 bottom-0 flex items-center justify-center gap-3 pb-[max(env(safe-area-inset-bottom),0.9rem)]">
+        <Link href="/admin/settings" className="grid size-14 place-items-center rounded-full border border-paper/15 bg-ink-soft" aria-label="Settings">
+          <Icon name="settings" className="size-6" />
+        </Link>
+        <Link href="/admin/products/new" className="flex h-14 items-center gap-2.5 rounded-full bg-gradient-to-r from-brass to-brass-deep px-7 text-[1.05rem] font-semibold text-paper shadow-[0_8px_24px_rgba(0,0,0,0.35)]">
+          <Icon name="plusCircle" className="size-6" /> Add product
+        </Link>
+        <button type="button" onClick={onClose} className="grid size-14 place-items-center rounded-full border border-paper/15 bg-ink-soft" aria-label="Close menu">
+          <Icon name="close" className="size-6" />
+        </button>
+      </div>
+    </div>
   );
 }
 
@@ -202,17 +354,22 @@ function Login() {
   );
 }
 
-/** Page header used by every admin screen. */
-export function AdminHeader({ title, action }: { title: string; action?: React.ReactNode }) {
+/** Page header used by every admin screen: a big title, with an optional back button and actions. */
+export function AdminHeader({ title, action, back }: { title: string; action?: React.ReactNode; back?: string }) {
   return (
-    <header className="sticky top-0 z-30 flex h-14 items-center justify-between gap-3 border-b border-line bg-ivory/95 px-4 backdrop-blur md:h-16 md:px-8">
-      <div className="flex min-w-0 items-center gap-3">
-        <Link href="/admin/orders" className="md:hidden" aria-label="Admin home">
-          <Monogram className="h-8 w-6" arch="var(--color-brass)" letter="var(--color-ink)" />
-        </Link>
-        <h1 className="truncate font-serif text-2xl">{title}</h1>
+    <header className="sticky top-0 z-30 bg-ivory/90 px-4 pb-3 pt-[max(env(safe-area-inset-top),0.75rem)] backdrop-blur-xl md:px-8 md:pt-6">
+      <div className="mx-auto flex max-w-5xl items-center justify-between gap-3">
+        <div className="flex min-w-0 items-center gap-3">
+          {back && <RoundButton icon="back" label="Back" href={back} />}
+          <h1 className="truncate font-serif text-[2rem] font-medium leading-tight md:text-[2.4rem]">{title}</h1>
+        </div>
+        {action}
       </div>
-      {action}
     </header>
   );
+}
+
+/** Width and spacing for the body of an admin page. */
+export function AdminPage({ children, narrow = false }: { children: React.ReactNode; narrow?: boolean }) {
+  return <div className={`mx-auto space-y-5 px-4 pb-8 pt-2 md:px-8 md:pt-4 ${narrow ? "max-w-3xl" : "max-w-5xl"}`}>{children}</div>;
 }

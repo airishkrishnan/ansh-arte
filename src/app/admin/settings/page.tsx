@@ -42,8 +42,8 @@ export default function SettingsPage() {
   return (
     <>
       <AdminHeader title="Settings" />
-      <form onSubmit={save} className="mx-auto max-w-2xl space-y-6 p-4 md:p-8">
-        <section className="space-y-4 border border-line bg-paper p-4">
+      <form onSubmit={save} className="mx-auto max-w-3xl space-y-5 px-4 pb-8 pt-2 md:px-8 md:pt-4">
+        <section className="space-y-4 rounded-[1.75rem] border border-line bg-paper p-4 md:p-6">
           <p className="eyebrow">Orders & payment</p>
           <div>
             <label className="label" htmlFor="wa">WhatsApp number for orders (with 91)</label>
@@ -65,7 +65,7 @@ export default function SettingsPage() {
           </div>
         </section>
 
-        <section className="space-y-4 border border-line bg-paper p-4">
+        <section className="space-y-4 rounded-[1.75rem] border border-line bg-paper p-4 md:p-6">
           <p className="eyebrow">Shipping</p>
           <div className="grid grid-cols-2 gap-3">
             <div>
@@ -79,7 +79,7 @@ export default function SettingsPage() {
           </div>
         </section>
 
-        <section className="space-y-4 border border-line bg-paper p-4">
+        <section className="space-y-4 rounded-[1.75rem] border border-line bg-paper p-4 md:p-6">
           <p className="eyebrow">Store</p>
           <div>
             <label className="label" htmlFor="an">Announcement bar</label>
@@ -91,7 +91,7 @@ export default function SettingsPage() {
           </div>
         </section>
 
-        <section className="space-y-4 border border-line bg-paper p-4">
+        <section className="space-y-4 rounded-[1.75rem] border border-line bg-paper p-4 md:p-6">
           <div className="space-y-1">
             <p className="eyebrow">Business details</p>
             <p className="text-xs text-muted">
@@ -128,7 +128,7 @@ export default function SettingsPage() {
           {msg && <p className="text-center text-sm">{msg}</p>}
         </div>
 
-        <section className="space-y-3 border border-line bg-paper p-4 text-sm leading-relaxed">
+        <section className="space-y-3 rounded-[1.75rem] border border-line bg-paper p-4 md:p-6 text-sm leading-relaxed">
           <p className="eyebrow">New-order notifications</p>
           <p>
             Get a phone notification for every order with the free <strong>ntfy</strong> app:
