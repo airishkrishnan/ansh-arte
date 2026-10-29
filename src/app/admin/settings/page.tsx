@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { SampleData } from "@/components/admin/sample-data";
 import { AdminHeader, useAdmin } from "@/components/admin/shell";
 import { DEFAULT_SETTINGS } from "@/lib/site";
 import { getBrowserSupabase } from "@/lib/supabase/client";
@@ -141,6 +142,11 @@ export default function SettingsPage() {
           <p className="text-ink-soft">
             Add this admin to your home screen (browser menu → Add to Home screen) so it opens like an app.
           </p>
+        </section>
+
+        <section className="space-y-3">
+          <p className="eyebrow px-1">Sample data</p>
+          <SampleData />
         </section>
 
         <div className="flex items-center justify-between text-sm text-muted">
