@@ -43,19 +43,19 @@ export function ProductCard({
         )}
         <div className="absolute left-2 top-2 flex flex-col gap-1">
           {soldOut && (
-            <span className="bg-paper/90 px-2 py-1 text-[0.62rem] font-semibold uppercase tracking-[0.16em] text-ink-soft">
+            <span className="bg-paper/90 px-2 py-1 text-[0.72rem] font-semibold uppercase tracking-[0.16em] text-ink-soft">
               Sold out
             </span>
           )}
           {!soldOut && onSale && (
-            <span className="bg-temple px-2 py-1 text-[0.62rem] font-semibold uppercase tracking-[0.16em] text-paper">
+            <span className="bg-temple px-2 py-1 text-[0.72rem] font-semibold uppercase tracking-[0.16em] text-paper">
               Sale
             </span>
           )}
         </div>
       </div>
       <div className="mt-3 space-y-1 px-0.5">
-        <p className="text-[0.65rem] font-semibold uppercase tracking-[0.18em] text-muted">
+        <p className="text-[0.72rem] font-semibold uppercase tracking-[0.1em] text-muted">
           {collection ? `${collection} · ` : ""}
           {materialLabel(product.material)}
         </p>

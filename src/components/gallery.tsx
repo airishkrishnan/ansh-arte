@@ -137,13 +137,13 @@ export function Gallery({
           </>
         )}
 
-        <span className="pointer-events-none absolute right-3 top-3 inline-flex items-center gap-1.5 rounded-full bg-paper/85 px-2.5 py-1 text-[0.62rem] font-semibold uppercase tracking-[0.14em] text-ink-soft">
+        <span className="pointer-events-none absolute right-3 top-3 inline-flex items-center gap-1.5 rounded-full bg-paper/85 px-2.5 py-1 text-[0.72rem] font-semibold uppercase tracking-[0.14em] text-ink-soft">
           <ExpandIcon />
           <span className="md:hidden">Tap to zoom</span>
           <span className="hidden md:inline">Click to enlarge</span>
         </span>
         {sample && (
-          <span className="pointer-events-none absolute bottom-3 left-3 bg-paper/85 px-2 py-1 text-[0.65rem] font-semibold uppercase tracking-[0.14em] text-ink-soft">
+          <span className="pointer-events-none absolute bottom-3 left-3 bg-paper/85 px-2 py-1 text-[0.72rem] font-semibold uppercase tracking-[0.14em] text-ink-soft">
             Sample photo
           </span>
         )}
@@ -331,7 +331,7 @@ function Viewer({
             ))}
           </div>
         )}
-        <p className="text-[0.68rem] uppercase tracking-[0.16em] text-paper/50">
+        <p className="text-[0.72rem] uppercase tracking-[0.16em] text-paper/50">
           <span className="md:hidden">
             {zoom ? "Drag to look around · tap to zoom out" : many ? "Tap to zoom · swipe for more" : "Tap to zoom"}
           </span>

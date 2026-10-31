@@ -142,7 +142,7 @@ export function ReviewForm({ productId, productName }: { productId: string; prod
           ))}
           {photos.length < 3 && (
             <label className="grid size-20 cursor-pointer place-items-center border border-dashed border-line text-muted hover:border-ink hover:text-ink">
-              <span className="flex flex-col items-center gap-1 text-[0.65rem] font-semibold uppercase tracking-[0.1em]">
+              <span className="flex flex-col items-center gap-1 text-[0.72rem] font-semibold uppercase tracking-[0.1em]">
                 <CameraIcon />
                 {uploading ? "Adding…" : "Add"}
               </span>

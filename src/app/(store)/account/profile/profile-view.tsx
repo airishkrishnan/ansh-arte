@@ -157,7 +157,7 @@ function Addresses() {
               <div className="flex items-start justify-between gap-3">
                 <p className="font-semibold">{a.name}</p>
                 {a.is_default && (
-                  <span className="bg-brass-soft px-2 py-0.5 text-[0.62rem] font-semibold uppercase tracking-[0.14em] text-brass-deep">
+                  <span className="bg-brass-soft px-2 py-0.5 text-[0.72rem] font-semibold uppercase tracking-[0.14em] text-brass-deep">
                     Default
                   </span>
                 )}

@@ -55,7 +55,7 @@ export default async function CollectionsPage() {
                           </div>
                           <h3 className="mt-4 font-serif text-2xl">{c.name}</h3>
                           <p className="mt-1 text-sm text-ink-soft">{c.tagline}</p>
-                          <span className="mt-2 inline-flex items-center gap-2 text-[0.68rem] font-semibold uppercase tracking-[0.18em] text-brass-deep">
+                          <span className="mt-2 inline-flex items-center gap-2 text-[0.72rem] font-semibold uppercase tracking-[0.18em] text-brass-deep">
                             Explore <ArrowIcon className="size-3.5" />
                           </span>
                         </Link>
