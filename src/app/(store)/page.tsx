@@ -118,7 +118,7 @@ export default async function HomePage() {
                   </div>
                 </div>
                 <p className="mt-4 font-serif text-2xl">{t.name}</p>
-                <p className="mt-1 text-[0.68rem] font-semibold uppercase tracking-[0.2em] text-muted group-hover:text-brass-deep">
+                <p className="mt-1 text-[0.72rem] font-semibold uppercase tracking-[0.2em] text-muted group-hover:text-brass-deep">
                   Shop now
                 </p>
               </Link>
@@ -198,13 +198,13 @@ export default async function HomePage() {
                       />
                     )}
                   </div>
-                  <div className="absolute inset-0 flex flex-col justify-end bg-gradient-to-t from-ink via-ink/20 to-transparent p-4 md:p-6">
-                    <p className="text-[0.65rem] font-semibold uppercase tracking-[0.22em] text-brass-soft">
+                  <div className="absolute inset-0 flex flex-col justify-end bg-gradient-to-t from-ink via-ink/55 to-transparent p-4 md:p-6">
+                    <p className="text-[0.72rem] font-semibold uppercase tracking-[0.22em] text-brass-soft">
                       {cat?.name}
                     </p>
                     <h3 className="mt-1 font-serif text-2xl md:text-3xl">{c.name}</h3>
                     <p className="mt-1 hidden text-sm text-paper/70 sm:block">{c.tagline}</p>
-                    <span className="mt-3 inline-flex items-center gap-2 text-[0.65rem] font-semibold uppercase tracking-[0.18em] text-brass-soft md:text-xs">
+                    <span className="mt-3 inline-flex items-center gap-2 text-[0.72rem] font-semibold uppercase tracking-[0.18em] text-brass-soft md:text-xs">
                       Discover <ArrowIcon />
                     </span>
                   </div>

@@ -46,6 +46,17 @@ body {
   text-rendering: optimizeLegibility;
 }
 
+/* Even line breaks: balanced headings, no one-word last lines in body copy */
+h1,
+h2,
+h3 {
+  text-wrap: balance;
+}
+p,
+li {
+  text-wrap: pretty;
+}
+
 ::selection {
   background: var(--color-brass-soft);
   color: var(--color-ink);

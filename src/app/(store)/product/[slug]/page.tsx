@@ -169,7 +169,7 @@ export default async function ProductPage({ params }: Props) {
                 {onSale && (
                   <>
                     <span className="text-lg text-muted line-through">{formatPrice(product.compare_at_price!)}</span>
-                    <span className="bg-temple px-2 py-0.5 text-[0.65rem] font-semibold uppercase tracking-[0.14em] text-paper">
+                    <span className="bg-temple px-2 py-0.5 text-[0.72rem] font-semibold uppercase tracking-[0.14em] text-paper">
                       Save {formatPrice(product.compare_at_price! - product.price)}
                     </span>
                   </>
