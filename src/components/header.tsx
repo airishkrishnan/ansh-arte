@@ -44,6 +44,16 @@ export function Header({ nav, announcement }: { nav: NavItem[]; announcement: st
   // eslint-disable-next-line react-hooks/set-state-in-effect -- close the menu after navigating
   useEffect(() => setMenu(false), [pathname]);
 
+  // Over a full-bleed banner (marked with data-hero) the header starts see-through
+  // and turns solid once the page scrolls. The home page has one, so start there
+  // on the server to avoid a flash; then check the page itself.
+  const [overHero, setOverHero] = useState(pathname === "/");
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- read the page after navigating
+    setOverHero(!!document.querySelector("[data-hero]"));
+  }, [pathname]);
+  const clear = overHero && !scrolled;
+
   useEffect(() => {
     const on = () => setScrolled(window.scrollY > 8);
     on();
@@ -66,8 +76,14 @@ export function Header({ nav, announcement }: { nav: NavItem[]; announcement: st
         </div>
       )}
       <header
-        className={`sticky top-0 z-40 border-b transition-colors duration-300 ${
-          scrolled ? "border-line bg-ivory/90 backdrop-blur-md" : "border-transparent bg-ivory"
+        className={`sticky top-0 z-40 border-b transition-[background-color,border-color,color] duration-500 ${
+          overHero ? "-mb-16 md:-mb-20" : ""
+        } ${
+          clear
+            ? "border-transparent bg-gradient-to-b from-ink/45 to-transparent bg-no-repeat text-paper"
+            : scrolled
+              ? "border-line bg-ivory/90 text-ink backdrop-blur-md"
+              : "border-transparent bg-ivory text-ink"
         }`}
       >
         <div className="container-lux grid h-16 grid-cols-[1fr_auto_1fr] items-center md:h-20">
@@ -91,7 +107,7 @@ export function Header({ nav, announcement }: { nav: NavItem[]; announcement: st
                   </Link>
                   {(item.children.length > 0 || item.collections.length > 0) && (
                     <div className="invisible absolute left-0 top-full z-50 w-[34rem] translate-y-2 opacity-0 transition-all duration-300 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100">
-                      <div className="mt-3 grid grid-cols-2 gap-8 border border-line bg-paper p-7 shadow-[0_24px_60px_-30px_rgba(33,27,26,0.35)]">
+                      <div className="mt-3 grid grid-cols-2 gap-8 border border-line bg-paper p-7 text-ink shadow-[0_24px_60px_-30px_rgba(33,27,26,0.35)]">
                         {item.children.length > 0 && (
                           <div>
                             <p className="eyebrow mb-3">Shop by style</p>
@@ -133,7 +149,7 @@ export function Header({ nav, announcement }: { nav: NavItem[]; announcement: st
           </div>
 
           <Link href="/" aria-label="Ansh Arte home" className="block justify-self-center">
-            <BrandMonogram className="h-14 w-auto md:h-16" />
+            <BrandMonogram className="h-14 w-auto md:h-16" tone={clear ? "silver-dark" : "silver"} />
           </Link>
 
           <div className="flex items-center justify-end gap-1 md:gap-3">

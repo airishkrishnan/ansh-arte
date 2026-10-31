@@ -40,6 +40,7 @@ export function HeroSlider({ slides }: { slides: Slide[] }) {
 
   return (
     <section
+      data-hero
       className="relative isolate overflow-hidden bg-ink text-brass-soft"
       aria-roledescription="carousel"
       aria-label="Featured collections"
