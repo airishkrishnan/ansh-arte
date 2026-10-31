@@ -42,7 +42,7 @@ Everything here is on free plans. Allow about 45 minutes the first time. Do the 
    - `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`
    - `NEXT_PUBLIC_SITE_URL` (your site address, for example `https://ansh-arte.<your-name>.workers.dev`, no slash at the end)
 5. Deploy. After the first deploy, open the Worker's **Settings → Variables and Secrets** and add the same three values again, plus `NTFY_TOPIC` as a **secret**. Redeploy once.
-6. Open your site. Then open `/admin` on your phone, sign in, and use the browser menu → **Add to Home screen** so the admin opens like an app.
+6. Open your site. To get the admin as its own app (rose-coloured icon, called "Ansh Admin"), open `/admin` on your phone, sign in, and use the browser menu → **Add to Home screen** (on iPhone: Safari → Share → **Add to Home Screen**). To add the shop itself, do the same from the home page; it gets the dark "Ansh Arte" icon. The two apps open separately.
 
 Every time new code is merged into `main` on GitHub, Cloudflare rebuilds the site automatically.
 
