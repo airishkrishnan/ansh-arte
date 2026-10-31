@@ -1,28 +1,31 @@
 @import "tailwindcss";
 
-/* Ansh Arte design tokens: "Cocoa Silk".
-   Brand palette: espresso #211b1a, cocoa #382a28, mocha #60433d,
-   clay rose #916b60, latte #c1a094, cream silk #e8d8ce.
-   Clay rose and latte are under 4.5:1 on the light grounds, so use them for
-   icons, borders and fills, never for small text. */
+/* Ansh Arte design tokens, from the Brand Book (v1.0, October 2026).
+   Palette: Kohl #211b1a, Cocoa #382a28, Clove #60433d, Rosewood #916b60,
+   Sandalwood #c1a094, Muslin #e8d8ce. Mix: Muslin 40%, Kohl 25%, Cocoa, Clove and
+   Sandalwood 10% each, Rosewood 5% (buttons, festive cues, price tags).
+   Text pairs: Kohl, Cocoa or Clove on Muslin; Muslin or Sandalwood on Kohl.
+   Rosewood is a fill with white text. Silver is for the logo only (components/brand.tsx).
+   Type: Cormorant Garamond for display, Jost for text. */
 @theme {
-  --color-ivory: #f6efea; /* page: a lighter step of cream silk */
+  --color-ivory: #f4ece6; /* page: Muslin, lifted so product photos stay true */
   --color-paper: #fbf7f4; /* cards, inputs */
-  --color-sand: #e8d8ce; /* cream silk: panels, image placeholders */
+  --color-sand: #e8d8ce; /* Muslin: panels, image placeholders */
   --color-line: #dcc8bc;
-  --color-ink: #211b1a; /* espresso */
-  --color-ink-soft: #382a28; /* cocoa */
-  --color-muted: #60433d; /* mocha */
-  --color-brass: #916b60; /* clay rose: accents, icons */
-  --color-brass-deep: #60433d; /* mocha: small accent text, links */
-  --color-brass-soft: #e8d8ce; /* cream silk: accent text on dark */
-  --color-silver: #c1a094; /* latte */
+  --color-ink: #211b1a; /* Kohl */
+  --color-ink-soft: #382a28; /* Cocoa */
+  --color-muted: #60433d; /* Clove */
+  --color-brass: #916b60; /* Rosewood: accents, icons */
+  --color-brass-deep: #60433d; /* Clove: small accent text, links */
+  --color-brass-soft: #e8d8ce; /* Muslin: accent text on dark */
+  --color-silver: #c1a094; /* Sandalwood */
   --color-cocoa: #382a28;
+  --color-rosewood: #916b60; /* buttons and festive fills, always with white text */
   --color-temple: #8a352c; /* errors and sold-out only */
   --color-success: #2f6b3f;
 
-  --font-sans: var(--font-urbanist), ui-sans-serif, system-ui, sans-serif;
-  --font-serif: var(--font-cormorant), ui-serif, Georgia, serif;
+  --font-sans: var(--font-jost), Arial, ui-sans-serif, system-ui, sans-serif;
+  --font-serif: var(--font-cormorant), Georgia, ui-serif, serif;
 
   --ease-lux: cubic-bezier(0.22, 1, 0.36, 1);
 }
@@ -38,7 +41,7 @@ body {
   background: var(--color-ivory);
   color: var(--color-ink);
   font-family: var(--font-sans);
-  font-weight: 450;
+  font-weight: 400;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
 }
@@ -63,9 +66,9 @@ body {
 
   .eyebrow {
     font-size: 0.7rem;
-    letter-spacing: 0.24em;
+    letter-spacing: 0.25em;
     text-transform: uppercase;
-    font-weight: 600;
+    font-weight: 500;
     color: var(--color-brass-deep);
   }
 
@@ -89,6 +92,15 @@ body {
     font-size: clamp(1.5rem, 3vw, 2rem);
   }
 
+  /* Brand Book subhead: Cormorant Italic */
+  .subhead {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-weight: 400;
+    line-height: 1.2;
+    font-size: clamp(1.25rem, 2.6vw, 1.75rem);
+  }
+
   .btn {
     display: inline-flex;
     align-items: center;
@@ -97,7 +109,7 @@ body {
     min-height: 3rem;
     padding: 0 1.75rem;
     font-size: 0.78rem;
-    font-weight: 600;
+    font-weight: 500;
     letter-spacing: 0.16em;
     text-transform: uppercase;
     transition:
@@ -115,9 +127,10 @@ body {
     opacity: 0.5;
     cursor: not-allowed;
   }
+  /* Brand Book: Rosewood buttons with white text (4.7:1) */
   .btn-primary {
-    background: var(--color-ink);
-    color: var(--color-paper);
+    background: var(--color-rosewood);
+    color: #fff;
   }
   .btn-primary:hover {
     background: var(--color-brass-deep);
@@ -187,7 +200,7 @@ body {
     font-size: 0.72rem;
     letter-spacing: 0.14em;
     text-transform: uppercase;
-    font-weight: 600;
+    font-weight: 500;
     color: var(--color-ink-soft);
     margin-bottom: 0.4rem;
   }

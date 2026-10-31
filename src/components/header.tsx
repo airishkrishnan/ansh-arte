@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { useAccount } from "./account";
 import { useCart } from "./cart";
 import { BagIcon, ChevronIcon, CloseIcon, HeartIcon, MenuIcon, UserIcon } from "./icons";
+import { BrandMonogram, type LogoTone } from "./brand";
 import { SearchButton } from "./search";
 
 export type NavItem = {
@@ -15,36 +16,15 @@ export type NavItem = {
   collections: { name: string; href: string }[];
 };
 
-/** The arch (jharokha) monogram. Strokes and letter follow `currentColor` unless overridden. */
-export function Monogram({
-  className = "",
-  arch = "currentColor",
-  letter = "currentColor",
-}: {
-  className?: string;
-  arch?: string;
-  letter?: string;
-}) {
-  return (
-    <svg viewBox="0 0 76 96" className={className} aria-hidden="true">
-      <path d="M6 94V40a32 32 0 0 1 64 0v54" fill="none" stroke={arch} strokeWidth="2" />
-      <path d="M14 94V42a24 24 0 0 1 48 0v52" fill="none" stroke={arch} strokeWidth="1" />
-      <circle cx="38" cy="4" r="3" fill={arch} />
-      <text
-        x="38"
-        y="80"
-        textAnchor="middle"
-        fontSize="44"
-        fontWeight="500"
-        fill={letter}
-        style={{ fontFamily: "var(--font-cormorant), Georgia, serif" }}
-      >
-        A
-      </text>
-    </svg>
-  );
+/** The "anh" monogram from the Brand Book. See components/brand.tsx for the logo versions. */
+export function Monogram({ className = "", tone = "silver" }: { className?: string; tone?: LogoTone }) {
+  return <BrandMonogram className={className} tone={tone} />;
 }
 
+/**
+ * The store name set in type, for labels next to the monogram (admin, print).
+ * Never use it in place of the logo: the Brand Book asks for the logo files, not retyped lettering.
+ */
 export function Logo({ className = "", accent = "text-brass-deep" }: { className?: string; accent?: string }) {
   return (
     <span className={`font-serif tracking-[0.2em] uppercase leading-none ${className}`}>
@@ -152,8 +132,8 @@ export function Header({ nav, announcement }: { nav: NavItem[]; announcement: st
             </nav>
           </div>
 
-          <Link href="/" aria-label="Ansh Arte home" className="text-center">
-            <Logo className="text-[1.45rem] md:text-[1.85rem]" />
+          <Link href="/" aria-label="Ansh Arte home" className="block justify-self-center">
+            <BrandMonogram className="h-14 w-auto md:h-16" />
           </Link>
 
           <div className="flex items-center justify-end gap-1 md:gap-3">
@@ -220,7 +200,9 @@ export function Header({ nav, announcement }: { nav: NavItem[]; announcement: st
           aria-label="Menu"
         >
           <div className="flex h-16 items-center justify-between border-b border-line px-4">
-            <Logo className="text-xl" />
+            <Link href="/" aria-label="Ansh Arte home">
+              <BrandMonogram className="h-10 w-auto" />
+            </Link>
             <button type="button" onClick={() => setMenu(false)} className="-mr-2 p-2" aria-label="Close menu">
               <CloseIcon className="size-6" />
             </button>

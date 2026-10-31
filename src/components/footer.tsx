@@ -1,7 +1,8 @@
 import Link from "next/link";
 import { formatPrice, whatsappLink } from "@/lib/site";
 import type { Settings } from "@/lib/types";
-import { Logo, Monogram, type NavItem } from "./header";
+import { BrandLogo } from "./brand";
+import type { NavItem } from "./header";
 import { ArrowIcon, HandIcon, InstagramIcon, ShieldIcon, TruckIcon, WhatsAppIcon } from "./icons";
 
 /** A recent piece shown in the footer photo strip */
@@ -94,10 +95,8 @@ export function Footer({ nav, settings, strip }: { nav: NavItem[]; settings: Set
 
       <div className="container-lux grid gap-12 border-t border-paper/10 py-16 md:grid-cols-[1.4fr_1fr_1fr_1fr]">
         <div className="space-y-5">
-          <div className="flex items-end gap-4">
-            <Monogram className="h-14 w-11 text-silver" letter="var(--color-brass-soft)" />
-            <Logo className="text-3xl text-paper" accent="text-silver" />
-          </div>
+          <BrandLogo tone="silver-dark" className="h-auto w-[300px] max-w-full" />
+          <p className="subhead text-brass-soft">Art you wear.</p>
           <p className="max-w-xs text-sm leading-relaxed text-paper/60">
             Oxidised brass and German silver jewellery, handcrafted with an Indian heritage soul.
           </p>

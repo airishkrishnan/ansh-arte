@@ -1,12 +1,12 @@
 import type { Metadata, Viewport } from "next";
-import { Cormorant_Garamond, Urbanist } from "next/font/google";
+import { Cormorant_Garamond, Jost } from "next/font/google";
 import { OG_IMAGE, SITE_DESCRIPTION, SITE_NAME, SITE_TAGLINE, SITE_URL } from "@/lib/site";
 import "./globals.css";
 
-// Urbanist is a free geometric sans very close to Gilroy. To switch to a
-// licensed Gilroy later, load it with next/font/local into --font-urbanist.
-const sans = Urbanist({
-  variable: "--font-urbanist",
+// Brand Book typography: Jost for text (body, prices, labels, buttons),
+// Cormorant Garamond for display (headlines, collection names, quotes).
+const sans = Jost({
+  variable: "--font-jost",
   subsets: ["latin"],
   display: "swap",
 });
@@ -46,7 +46,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#f6efea",
+  themeColor: "#f4ece6",
   width: "device-width",
   initialScale: 1,
 };

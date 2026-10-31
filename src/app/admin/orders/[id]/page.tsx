@@ -16,7 +16,7 @@ import {
   timeFmt,
   type IconName,
 } from "@/components/admin/ui";
-import { Logo } from "@/components/header";
+import { BrandLogo } from "@/components/brand";
 import { WhatsAppIcon } from "@/components/icons";
 import { COURIERS, DEFAULT_SETTINGS, SITE_URL, formatPrice, whatsappLink, withIndiaCode } from "@/lib/site";
 import { getBrowserSupabase } from "@/lib/supabase/client";
@@ -489,7 +489,7 @@ export default function OrderDetail() {
       <div className="hidden p-8 text-ink print:block">
         <div className="flex items-start justify-between border-b border-ink pb-4">
           <div>
-            <Logo className="block text-2xl" />
+            <BrandLogo tone="oxidised" className="block h-20 w-auto" />
             <p className="mt-1 text-xs">Handcrafted jewellery · {SITE_URL.replace(/^https?:\/\//, "")}</p>
           </div>
           <div className="text-right">

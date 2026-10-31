@@ -5,6 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { createContext, useContext, useEffect, useState } from "react";
 import { getBrowserSupabase, supabaseConfigured } from "@/lib/supabase/client";
+import { BrandLogo } from "../brand";
 import { Logo, Monogram } from "../header";
 import { AdminSearch } from "./search";
 import { Icon, RoundButton, type IconName } from "./ui";
@@ -119,7 +120,7 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
       <div className={`admin-ui min-h-dvh bg-ivory md:pb-0 md:pl-64 print:bg-white print:p-0 ${editing ? "" : "pb-28"}`}>
         <aside className="fixed inset-y-0 left-0 z-40 hidden w-64 flex-col overflow-y-auto bg-ink px-3 py-5 text-paper md:flex print:hidden">
           <Link href="/admin" className="mb-6 flex items-center gap-3 px-3">
-            <Monogram className="h-10 w-8 shrink-0" arch="var(--color-silver)" letter="var(--color-brass-soft)" />
+            <Monogram className="h-10 w-auto shrink-0" tone="silver-dark" />
             <span>
               <Logo className="block text-lg" accent="text-silver" />
               <span className="mt-1 block text-[0.6rem] uppercase tracking-[0.3em] text-silver">Admin studio</span>
@@ -182,7 +183,7 @@ function BottomBar({ pathname, onSearch, onMenu }: { pathname: string; onSearch:
         </button>
       </div>
       <Link href="/" target="_blank" className={`grid size-14 shrink-0 place-items-center rounded-full ${glass}`} aria-label="View store">
-        <Monogram className="h-8 w-6" arch="var(--color-brass)" letter="var(--color-ink)" />
+        <Monogram className="h-8 w-auto" tone="silver" />
       </Link>
     </nav>
   );
@@ -255,7 +256,7 @@ function MobileMenu({ pathname, email, onClose, signOut }: { pathname: string; e
     <div className="fixed inset-0 z-50 overflow-y-auto bg-ink text-paper animate-[fade_0.2s_ease] md:hidden" role="dialog" aria-modal="true" aria-label="Menu">
       <div className="px-3 pb-36 pt-[max(env(safe-area-inset-top),1.25rem)]">
         <div className="mb-6 flex items-center gap-3 px-4">
-          <Monogram className="h-11 w-9 shrink-0" arch="var(--color-silver)" letter="var(--color-brass-soft)" />
+          <Monogram className="h-11 w-auto shrink-0" tone="silver-dark" />
           <div className="min-w-0">
             <Logo className="block text-xl" accent="text-silver" />
             <p className="mt-0.5 truncate text-xs text-paper/50">{email}</p>
@@ -304,8 +305,7 @@ function Centered({ children }: { children: React.ReactNode }) {
           className="absolute inset-0 -z-10 size-full object-cover object-[70%_center] opacity-70"
         />
         <div className="absolute inset-0 -z-10 bg-gradient-to-t from-ink via-ink/60 to-ink/10 md:bg-gradient-to-r md:from-ink/90 md:via-ink/50" />
-        <Monogram className="mb-5 h-14 w-11 md:h-20 md:w-16" arch="var(--color-silver)" letter="var(--color-brass-soft)" />
-        <Logo className="block text-2xl md:text-3xl" accent="text-silver" />
+        <BrandLogo tone="silver-dark" className="mb-2 h-28 w-auto self-start md:h-40" />
         <p className="mt-3 text-[0.65rem] uppercase tracking-[0.3em] text-silver">Admin studio</p>
       </div>
       <div className="grid place-items-center px-6 py-10">
