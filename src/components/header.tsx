@@ -149,7 +149,7 @@ export function Header({ nav, announcement }: { nav: NavItem[]; announcement: st
           </div>
 
           <Link href="/" aria-label="Ansh Arte home" className="block justify-self-center">
-            <BrandMonogram className="h-14 w-auto md:h-16" tone={clear ? "silver-dark" : "silver"} />
+            <BrandMonogram className="h-14 w-auto md:h-16" tone={clear ? "silver-dark" : "oxidised"} />
           </Link>
 
           <div className="flex items-center justify-end gap-1 md:gap-3">
@@ -217,7 +217,7 @@ export function Header({ nav, announcement }: { nav: NavItem[]; announcement: st
         >
           <div className="flex h-16 items-center justify-between border-b border-line px-4">
             <Link href="/" aria-label="Ansh Arte home">
-              <BrandMonogram className="h-10 w-auto" />
+              <BrandMonogram className="h-10 w-auto" tone="oxidised" />
             </Link>
             <button type="button" onClick={() => setMenu(false)} className="-mr-2 p-2" aria-label="Close menu">
               <CloseIcon className="size-6" />

@@ -183,7 +183,7 @@ function BottomBar({ pathname, onSearch, onMenu }: { pathname: string; onSearch:
         </button>
       </div>
       <Link href="/" target="_blank" className={`grid size-14 shrink-0 place-items-center rounded-full ${glass}`} aria-label="View store">
-        <Monogram className="h-8 w-auto" tone="silver" />
+        <Monogram className="h-8 w-auto" tone="oxidised" />
       </Link>
     </nav>
   );

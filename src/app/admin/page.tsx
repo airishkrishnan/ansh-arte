@@ -132,7 +132,7 @@ export default function AdminHome() {
             </span>
             <span className="flex items-center gap-2.5">
               <span className="grid size-9 place-items-center rounded-lg bg-paper">
-                <Monogram className="h-6 w-auto" tone="silver" />
+                <Monogram className="h-6 w-auto" tone="oxidised" />
               </span>
               <span className="font-serif text-2xl">Ansh Arte</span>
             </span>
