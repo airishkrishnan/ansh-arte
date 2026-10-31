@@ -1,12 +1,13 @@
 import type { MetadataRoute } from "next";
 
-// Makes the admin installable on a phone home screen like an app.
+// The store as a home-screen app. The admin has its own app: see admin/manifest.webmanifest.
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: "Ansh Arte Admin",
+    id: "/",
+    name: "Ansh Arte",
     short_name: "Ansh Arte",
-    description: "Manage Ansh Arte products and orders",
-    start_url: "/admin/orders",
+    description: "Handcrafted oxidised jewellery from Ansh Arte",
+    start_url: "/",
     scope: "/",
     display: "standalone",
     background_color: "#f4ece6",

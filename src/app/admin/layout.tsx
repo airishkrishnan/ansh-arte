@@ -4,7 +4,13 @@ import { AdminShell } from "@/components/admin/shell";
 export const metadata: Metadata = {
   title: { default: "Admin", template: "%s · Admin" },
   robots: { index: false, follow: false },
-  appleWebApp: { capable: true, title: "Ansh Arte", statusBarStyle: "default" },
+  // Installs as its own app, apart from the store: own name, icon and start page.
+  manifest: "/admin/manifest.webmanifest",
+  appleWebApp: { capable: true, title: "Ansh Admin", statusBarStyle: "default" },
+  icons: {
+    icon: [{ url: "/icons/admin-icon.svg", type: "image/svg+xml" }],
+    apple: [{ url: "/icons/admin-apple-icon.png", sizes: "180x180" }],
+  },
 };
 
 export const viewport: Viewport = { themeColor: "#211b1a" };
