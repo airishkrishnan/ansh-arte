@@ -97,10 +97,10 @@ export default async function OrderPage({ params, searchParams }: Props) {
                 >
                   {done && <CheckIcon className="size-2.5" />}
                 </span>
-                <p className={`mt-2 text-[0.6rem] font-semibold uppercase tracking-[0.1em] md:text-[0.68rem] ${done ? "text-ink" : "text-muted"}`}>
+                <p className={`mt-2 text-[0.72rem] font-semibold uppercase tracking-[0.1em] md:text-[0.72rem] ${done ? "text-ink" : "text-muted"}`}>
                   {s.label}
                 </p>
-                <p className="hidden text-[0.65rem] text-muted md:block">{date(at(s.status))}</p>
+                <p className="hidden text-[0.72rem] text-muted md:block">{date(at(s.status))}</p>
               </li>
             );
           })}

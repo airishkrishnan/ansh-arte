@@ -45,7 +45,7 @@ export function PayBox({
           <p className="text-ink-soft">Scan with GPay, PhonePe, Paytm or any UPI app. The amount and order number are filled in.</p>
           <div className="flex items-center justify-between gap-3 border border-line bg-paper px-3 py-2">
             <div>
-              <p className="text-[0.65rem] uppercase tracking-[0.16em] text-muted">UPI ID</p>
+              <p className="text-[0.72rem] uppercase tracking-[0.16em] text-muted">UPI ID</p>
               <p className="font-semibold">{upiId}</p>
             </div>
             <button type="button" onClick={() => copy(upiId)} className="text-xs font-semibold uppercase tracking-[0.14em] text-brass-deep">
@@ -55,7 +55,7 @@ export function PayBox({
           {gpayNumber && (
             <div className="flex items-center justify-between gap-3 border border-line bg-paper px-3 py-2">
               <div>
-                <p className="text-[0.65rem] uppercase tracking-[0.16em] text-muted">GPay number</p>
+                <p className="text-[0.72rem] uppercase tracking-[0.16em] text-muted">GPay number</p>
                 <p className="font-semibold">{gpayNumber}</p>
               </div>
               <button type="button" onClick={() => copy(gpayNumber)} className="text-xs font-semibold uppercase tracking-[0.14em] text-brass-deep">

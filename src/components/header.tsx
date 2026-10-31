@@ -54,7 +54,7 @@ export function Header({ nav, announcement }: { nav: NavItem[]; announcement: st
   return (
     <>
       {announcement && (
-        <div className="bg-ink px-4 py-2 text-center text-[0.68rem] font-medium uppercase tracking-[0.2em] text-brass-soft">
+        <div className="bg-ink px-4 py-2 text-center text-[0.72rem] font-medium uppercase tracking-[0.2em] text-brass-soft">
           {announcement}
         </div>
       )}
@@ -150,7 +150,7 @@ export function Header({ nav, announcement }: { nav: NavItem[]; announcement: st
             >
               <HeartIcon className="size-6" />
               {account.ready && account.wishlist.length > 0 && (
-                <span className="absolute right-0.5 top-0.5 grid size-[1.1rem] place-items-center rounded-full bg-brass-deep text-[0.62rem] font-bold text-paper">
+                <span className="absolute right-0.5 top-0.5 grid size-[1.15rem] place-items-center rounded-full bg-brass-deep text-[0.7rem] font-bold text-paper">
                   {account.wishlist.length}
                 </span>
               )}
@@ -173,7 +173,7 @@ export function Header({ nav, announcement }: { nav: NavItem[]; announcement: st
             >
               <BagIcon className="size-6" />
               {ready && count > 0 && (
-                <span className="absolute right-0.5 top-0.5 grid size-[1.1rem] place-items-center rounded-full bg-brass-deep text-[0.62rem] font-bold text-paper">
+                <span className="absolute right-0.5 top-0.5 grid size-[1.15rem] place-items-center rounded-full bg-brass-deep text-[0.7rem] font-bold text-paper">
                   {count}
                 </span>
               )}
