@@ -1,12 +1,20 @@
 import { useId } from "react";
-import { ARTE_PATH, LOGO_VIEWBOX, MONOGRAM_PATH } from "@/lib/logo-paths";
+import {
+  ARTE_PATH,
+  LOGO_VIEWBOX,
+  MARK_PATH,
+  OXIDISED,
+  SILVER_DARK,
+  SILVER_LIGHT,
+  type LogoGradient,
+} from "@/lib/logo-paths";
 
 /**
- * Logo versions from the Ansh Arte Brand Book (page 11).
- * - silver: primary, for light backgrounds
- * - silver-dark: for Kohl and charcoal backgrounds
- * - oxidised: one colour (Kohl)
- * - white: on Rosewood, photos and dark packs
+ * Logo versions, from the official logo files and the Brand Book (page 11).
+ * - silver: primary, for light backgrounds at 100px and up (footer-size marks, banners)
+ * - silver-dark: for Kohl, charcoal and dark photos
+ * - oxidised: one colour, for print and small marks on light grounds such as the header
+ * - white: on Rosewood and busy photos
  * - current: follows the surrounding text colour
  */
 export type LogoTone = "silver" | "silver-dark" | "oxidised" | "white" | "current";
@@ -14,9 +22,15 @@ export type LogoTone = "silver" | "silver-dark" | "oxidised" | "white" | "curren
 const [, , vbW, vbH] = LOGO_VIEWBOX.split(" ");
 const LOGO_ASPECT = `${vbW} / ${vbH}`;
 
-// Brand Book page 15: silver gradients, run at 45° across the whole mark.
-const SILVER_LIGHT = ["#62676E", "#989DA4", "#B3B7BD", "#8E939A", "#6A6F76", "#A7ACB2", "#B6BAC0", "#5F646B"];
-const SILVER_DARK = ["#7D8289", "#C9CDD2", "#F4F5F7", "#B4B8BE", "#8E939A", "#D8DBDF", "#FBFCFD", "#868B92"];
+function Gradient({ id, g }: { id: string; g: LogoGradient }) {
+  return (
+    <linearGradient id={id} gradientUnits="userSpaceOnUse" x1={g.x1} y1={g.y1} x2={g.x2} y2={g.y2}>
+      {g.stops.map(([o, c]) => (
+        <stop key={o} offset={o} stopColor={c} />
+      ))}
+    </linearGradient>
+  );
+}
 
 function Mark({
   tone,
@@ -30,14 +44,8 @@ function Mark({
   title?: string;
 }) {
   const id = useId().replace(/[^a-zA-Z0-9_-]/g, "");
-  const stops = tone === "silver" ? SILVER_LIGHT : tone === "silver-dark" ? SILVER_DARK : null;
-  const fill = stops
-    ? `url(#${id})`
-    : tone === "oxidised"
-      ? "#211B1A"
-      : tone === "white"
-        ? "#FFFFFF"
-        : "currentColor";
+  const grads = tone === "silver" ? SILVER_LIGHT : tone === "silver-dark" ? SILVER_DARK : null;
+  const solid = tone === "oxidised" ? OXIDISED : tone === "white" ? "#FFFFFF" : "currentColor";
   return (
     <svg
       viewBox={LOGO_VIEWBOX}
@@ -48,16 +56,24 @@ function Mark({
       aria-label={title}
       aria-hidden={title ? undefined : true}
     >
-      {stops && (
+      {grads && (
         <defs>
-          <linearGradient id={id} x1="0" y1="1" x2="1" y2="0">
-            {stops.map((c, i) => (
-              <stop key={i} offset={i / (stops.length - 1)} stopColor={c} />
-            ))}
-          </linearGradient>
+          <Gradient id={`${id}m`} g={grads[0]} />
+          <Gradient id={`${id}a`} g={grads[1]} />
         </defs>
       )}
-      <path fill={fill} fillRule="evenodd" d={withName ? MONOGRAM_PATH + ARTE_PATH : MONOGRAM_PATH} />
+      <path fill={grads ? `url(#${id}m)` : solid} d={MARK_PATH} />
+      {withName && (
+        <path
+          fill={grads ? `url(#${id}a)` : solid}
+          d={ARTE_PATH}
+          // A hairline outline keeps "arte" visible when the logo is small (header, icons);
+          // at large sizes it adds well under a pixel.
+          stroke={grads ? `url(#${id}a)` : solid}
+          strokeWidth={0.6}
+          vectorEffect="non-scaling-stroke"
+        />
+      )}
     </svg>
   );
 }

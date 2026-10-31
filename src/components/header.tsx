@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import { useAccount } from "./account";
 import { useCart } from "./cart";
 import { BagIcon, ChevronIcon, CloseIcon, HeartIcon, MenuIcon, UserIcon } from "./icons";
-import { BrandMonogram, type LogoTone } from "./brand";
+import { BrandLogo } from "./brand";
 import { SearchButton } from "./search";
 
 export type NavItem = {
@@ -15,23 +15,6 @@ export type NavItem = {
   children: { name: string; href: string }[];
   collections: { name: string; href: string }[];
 };
-
-/** The "anh" monogram from the Brand Book. See components/brand.tsx for the logo versions. */
-export function Monogram({ className = "", tone = "silver" }: { className?: string; tone?: LogoTone }) {
-  return <BrandMonogram className={className} tone={tone} />;
-}
-
-/**
- * The store name set in type, for labels next to the monogram (admin, print).
- * Never use it in place of the logo: the Brand Book asks for the logo files, not retyped lettering.
- */
-export function Logo({ className = "", accent = "text-brass-deep" }: { className?: string; accent?: string }) {
-  return (
-    <span className={`font-serif tracking-[0.2em] uppercase leading-none ${className}`}>
-      Ansh <span className={accent}>Arte</span>
-    </span>
-  );
-}
 
 export function Header({ nav, announcement }: { nav: NavItem[]; announcement: string }) {
   const { count, setOpen, ready } = useCart();
@@ -149,7 +132,7 @@ export function Header({ nav, announcement }: { nav: NavItem[]; announcement: st
           </div>
 
           <Link href="/" aria-label="Ansh Arte home" className="block justify-self-center">
-            <BrandMonogram className="h-14 w-auto md:h-16" tone={clear ? "silver-dark" : "silver"} />
+            <BrandLogo className="h-14 w-auto md:h-[4.25rem]" tone={clear ? "silver-dark" : "oxidised"} />
           </Link>
 
           <div className="flex items-center justify-end gap-1 md:gap-3">
@@ -217,7 +200,7 @@ export function Header({ nav, announcement }: { nav: NavItem[]; announcement: st
         >
           <div className="flex h-16 items-center justify-between border-b border-line px-4">
             <Link href="/" aria-label="Ansh Arte home">
-              <BrandMonogram className="h-10 w-auto" />
+              <BrandLogo className="h-11 w-auto" tone="oxidised" />
             </Link>
             <button type="button" onClick={() => setMenu(false)} className="-mr-2 p-2" aria-label="Close menu">
               <CloseIcon className="size-6" />

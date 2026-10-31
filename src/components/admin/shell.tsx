@@ -6,7 +6,6 @@ import { usePathname } from "next/navigation";
 import { createContext, useContext, useEffect, useState } from "react";
 import { getBrowserSupabase, supabaseConfigured } from "@/lib/supabase/client";
 import { BrandLogo } from "../brand";
-import { Logo, Monogram } from "../header";
 import { AdminSearch } from "./search";
 import { Icon, RoundButton, type IconName } from "./ui";
 
@@ -120,11 +119,8 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
       <div className={`admin-ui min-h-dvh bg-ivory md:pb-0 md:pl-64 print:bg-white print:p-0 ${editing ? "" : "pb-28"}`}>
         <aside className="fixed inset-y-0 left-0 z-40 hidden w-64 flex-col overflow-y-auto bg-ink px-3 py-5 text-paper md:flex print:hidden">
           <Link href="/admin" className="mb-6 flex items-center gap-3 px-3">
-            <Monogram className="h-10 w-auto shrink-0" tone="silver-dark" />
-            <span>
-              <Logo className="block text-lg" accent="text-silver" />
-              <span className="mt-1 block text-[0.6rem] uppercase tracking-[0.3em] text-silver">Admin studio</span>
-            </span>
+            <BrandLogo className="h-14 w-auto shrink-0" tone="silver-dark" />
+            <span className="block text-[0.6rem] uppercase tracking-[0.3em] text-silver">Admin studio</span>
           </Link>
           <button
             type="button"
@@ -183,7 +179,7 @@ function BottomBar({ pathname, onSearch, onMenu }: { pathname: string; onSearch:
         </button>
       </div>
       <Link href="/" target="_blank" className={`grid size-14 shrink-0 place-items-center rounded-full ${glass}`} aria-label="View store">
-        <Monogram className="h-8 w-auto" tone="silver" />
+        <BrandLogo className="h-9 w-auto" tone="oxidised" />
       </Link>
     </nav>
   );
@@ -256,9 +252,9 @@ function MobileMenu({ pathname, email, onClose, signOut }: { pathname: string; e
     <div className="fixed inset-0 z-50 overflow-y-auto bg-ink text-paper animate-[fade_0.2s_ease] md:hidden" role="dialog" aria-modal="true" aria-label="Menu">
       <div className="px-3 pb-36 pt-[max(env(safe-area-inset-top),1.25rem)]">
         <div className="mb-6 flex items-center gap-3 px-4">
-          <Monogram className="h-11 w-auto shrink-0" tone="silver-dark" />
+          <BrandLogo className="h-14 w-auto shrink-0" tone="silver-dark" />
           <div className="min-w-0">
-            <Logo className="block text-xl" accent="text-silver" />
+            <p className="text-[0.6rem] uppercase tracking-[0.3em] text-silver">Admin studio</p>
             <p className="mt-0.5 truncate text-xs text-paper/50">{email}</p>
           </div>
         </div>
