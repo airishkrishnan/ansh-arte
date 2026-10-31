@@ -4,7 +4,7 @@ import { useState } from "react";
 import { supabaseConfigured } from "@/lib/supabase/client";
 import { CameraIcon, CheckIcon, CloseIcon, StarIcon } from "./icons";
 
-const LABELS = ["", "Not for me", "It's okay", "Good", "Love it", "Absolutely stunning"];
+const LABELS = ["", "Not for me", "It's okay", "Good", "Love it", "A part of me now"];
 
 /** Write a review: stars, a few words and up to three photos. Held for approval. */
 export function ReviewForm({ productId, productName }: { productId: string; productName: string }) {

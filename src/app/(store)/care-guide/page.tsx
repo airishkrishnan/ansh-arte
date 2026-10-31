@@ -32,10 +32,12 @@ export default function CareGuidePage() {
       <ul>
         <li>Never use silver polish, chemical dips or ultrasonic cleaners: they remove the oxidised finish.</li>
         <li>For dust, use a soft dry toothbrush. Avoid water and soap.</li>
+        <li>Don&apos;t polish the dark areas: the patina is the design.</li>
       </ul>
       <h2>Skin-friendly tips</h2>
       <p>
-        If you have sensitive skin, wear pieces for a few hours at first and keep the hooks clean and dry. Slight
+        German silver (nickel silver alloy) contains nickel and no silver. If your skin is sensitive, patch-test first:
+        wear the piece for a few hours and keep the hooks clean and dry. Slight
         darkening over time is natural for oxidised metal and adds to its antique charm.
       </p>
     </ProsePage>
