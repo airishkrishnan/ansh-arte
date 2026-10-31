@@ -114,7 +114,7 @@ function render(o: EmailOrder, c: Copy, s: Settings) {
   return `<!doctype html><html><body style="margin:0;background:#f4ece6;font-family:Helvetica,Arial,sans-serif;color:#211b1a">
 <table width="100%" cellpadding="0" cellspacing="0" style="background:#f4ece6"><tr><td align="center" style="padding:24px 12px">
 <table width="100%" cellpadding="0" cellspacing="0" style="max-width:560px;background:#fbf7f4;border:1px solid #eadfd8">
-<tr><td align="center" style="background:#211b1a;padding:18px 28px"><img src="${SITE_URL}/brand/monogram-silver-dark.png" width="72" height="72" alt="Ansh Arte" style="display:block;border:0;color:#e8d8ce;font-family:Georgia,serif;font-size:20px;letter-spacing:4px"></td></tr>
+<tr><td align="center" style="background:#211b1a;padding:18px 28px"><img src="${SITE_URL}/brand/logo-silver-dark.png" width="120" height="109" alt="Ansh Arte" style="display:block;border:0;color:#e8d8ce;font-family:Georgia,serif;font-size:20px;letter-spacing:4px"></td></tr>
 <tr><td style="padding:28px">
 <h1 style="margin:0 0 16px;font-family:Georgia,serif;font-weight:normal;font-size:26px">${c.heading}</h1>
 ${c.lines.map((l) => `<p style="margin:0 0 12px;font-size:15px;line-height:1.6;color:#382a28">${l}</p>`).join("")}

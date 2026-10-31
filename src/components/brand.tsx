@@ -63,7 +63,17 @@ function Mark({
         </defs>
       )}
       <path fill={grads ? `url(#${id}m)` : solid} d={MARK_PATH} />
-      {withName && <path fill={grads ? `url(#${id}a)` : solid} d={ARTE_PATH} />}
+      {withName && (
+        <path
+          fill={grads ? `url(#${id}a)` : solid}
+          d={ARTE_PATH}
+          // A hairline outline keeps "arte" visible when the logo is small (header, icons);
+          // at large sizes it adds well under a pixel.
+          stroke={grads ? `url(#${id}a)` : solid}
+          strokeWidth={0.6}
+          vectorEffect="non-scaling-stroke"
+        />
+      )}
     </svg>
   );
 }
