@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import { useAccount } from "./account";
 import { useCart } from "./cart";
 import { BagIcon, ChevronIcon, CloseIcon, HeartIcon, MenuIcon, UserIcon } from "./icons";
-import { BrandLogo } from "./brand";
+import { BrandLockup } from "./brand";
 import { SearchButton } from "./search";
 
 export type NavItem = {
@@ -54,7 +54,7 @@ export function Header({ nav, announcement }: { nav: NavItem[]; announcement: st
   return (
     <>
       {announcement && (
-        <div className="bg-ink px-4 py-2 text-center text-[0.72rem] font-medium uppercase tracking-[0.2em] text-brass-soft">
+        <div className="bg-ink px-4 py-2 text-center text-[0.72rem] font-normal uppercase tracking-[0.12em] sm:tracking-[0.2em] text-brass-soft">
           {announcement}
         </div>
       )}
@@ -69,7 +69,7 @@ export function Header({ nav, announcement }: { nav: NavItem[]; announcement: st
               : "border-transparent bg-ivory text-ink"
         }`}
       >
-        <div className="container-lux grid h-16 grid-cols-[1fr_auto_1fr] items-center md:h-20">
+        <div className="container-lux grid h-16 grid-cols-[auto_1fr_auto] items-center md:h-20 md:grid-cols-[1fr_auto_1fr]">
           <div className="flex items-center">
             <button
               type="button"
@@ -132,7 +132,13 @@ export function Header({ nav, announcement }: { nav: NavItem[]; announcement: st
           </div>
 
           <Link href="/" aria-label="Ansh Arte home" className="block justify-self-center">
-            <BrandLogo className="h-14 w-auto md:h-[4.25rem]" tone={clear ? "silver-dark" : "oxidised"} />
+            {/* Horizontal lockup, as the guidelines set it for website headers */}
+            <span className="block text-[0.8rem] sm:hidden">
+              <BrandLockup dark={clear} descriptor={false} />
+            </span>
+            <span className="hidden text-[0.95rem] sm:block lg:text-[1.05rem]">
+              <BrandLockup dark={clear} />
+            </span>
           </Link>
 
           <div className="flex items-center justify-end gap-1 md:gap-3">
@@ -200,7 +206,7 @@ export function Header({ nav, announcement }: { nav: NavItem[]; announcement: st
         >
           <div className="flex h-16 items-center justify-between border-b border-line px-4">
             <Link href="/" aria-label="Ansh Arte home">
-              <BrandLogo className="h-11 w-auto" tone="oxidised" />
+              <BrandLockup descriptor={false} className="text-[0.8rem]" />
             </Link>
             <button type="button" onClick={() => setMenu(false)} className="-mr-2 p-2" aria-label="Close menu">
               <CloseIcon className="size-6" />

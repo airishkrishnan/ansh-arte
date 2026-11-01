@@ -5,7 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { createContext, useContext, useEffect, useState } from "react";
 import { getBrowserSupabase, supabaseConfigured } from "@/lib/supabase/client";
-import { BrandLogo } from "../brand";
+import { BrandLockup, BrandLogo, BrandMonogram } from "../brand";
 import { AdminSearch } from "./search";
 import { Icon, RoundButton, type IconName } from "./ui";
 
@@ -118,9 +118,9 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
     <Ctx.Provider value={{ session, signOut, openSearch: () => setSearch(true) }}>
       <div className={`admin-ui min-h-dvh bg-ivory md:pb-0 md:pl-64 print:bg-white print:p-0 ${editing ? "" : "pb-28"}`}>
         <aside className="fixed inset-y-0 left-0 z-40 hidden w-64 flex-col overflow-y-auto bg-ink px-3 py-5 text-paper md:flex print:hidden">
-          <Link href="/admin" className="mb-6 flex items-center gap-3 px-3">
-            <BrandLogo className="h-14 w-auto shrink-0" tone="silver-dark" />
-            <span className="block text-[0.6rem] uppercase tracking-[0.3em] text-silver">Admin studio</span>
+          <Link href="/admin" className="mb-6 block px-3">
+            <BrandLockup dark descriptor={false} className="text-[0.85rem]" />
+            <span className="mt-2 block text-[0.72rem] uppercase tracking-[0.3em] text-silver">Admin studio</span>
           </Link>
           <button
             type="button"
@@ -179,7 +179,7 @@ function BottomBar({ pathname, onSearch, onMenu }: { pathname: string; onSearch:
         </button>
       </div>
       <Link href="/" target="_blank" className={`grid size-14 shrink-0 place-items-center rounded-full ${glass}`} aria-label="View store">
-        <BrandLogo className="h-9 w-auto" tone="oxidised" />
+        <BrandMonogram className="h-8 w-auto" tone="oxidised" />
       </Link>
     </nav>
   );
@@ -251,12 +251,10 @@ function MobileMenu({ pathname, email, onClose, signOut }: { pathname: string; e
   return (
     <div className="fixed inset-0 z-50 overflow-y-auto bg-ink text-paper animate-[fade_0.2s_ease] md:hidden" role="dialog" aria-modal="true" aria-label="Menu">
       <div className="px-3 pb-36 pt-[max(env(safe-area-inset-top),1.25rem)]">
-        <div className="mb-6 flex items-center gap-3 px-4">
-          <BrandLogo className="h-14 w-auto shrink-0" tone="silver-dark" />
-          <div className="min-w-0">
-            <p className="text-[0.6rem] uppercase tracking-[0.3em] text-silver">Admin studio</p>
-            <p className="mt-0.5 truncate text-xs text-paper/50">{email}</p>
-          </div>
+        <div className="mb-6 px-4">
+          <BrandLockup dark descriptor={false} className="text-[0.9rem]" />
+          <p className="mt-3 text-[0.72rem] uppercase tracking-[0.3em] text-silver">Admin studio</p>
+          <p className="mt-0.5 truncate text-xs text-paper/50">{email}</p>
         </div>
         <NavTree pathname={pathname} large />
         <p className="mt-8 px-4 text-sm font-semibold text-paper/50">Your store</p>

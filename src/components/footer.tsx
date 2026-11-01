@@ -96,9 +96,10 @@ export function Footer({ nav, settings, strip }: { nav: NavItem[]; settings: Set
       <div className="container-lux grid gap-12 border-t border-paper/10 py-16 md:grid-cols-[1.4fr_1fr_1fr_1fr]">
         <div className="space-y-5">
           <BrandLogo tone="silver-dark" className="h-auto w-[300px] max-w-full" />
-          <p className="subhead text-brass-soft">Art you wear.</p>
+          {/* Brand line (guidelines p.13): a sign-off, never locked into the logo */}
+          <p className="subhead text-brass-soft">a piece of art.</p>
           <p className="max-w-xs text-sm leading-relaxed text-paper/60">
-            Oxidised brass and German silver jewellery, handcrafted with an Indian heritage soul.
+            Oxidised brass and German silver jewellery, made slowly, by hand.
           </p>
           <div className="flex gap-3">
             <a

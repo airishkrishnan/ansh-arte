@@ -6,7 +6,7 @@ export const SITE_DESCRIPTION =
   "Ansh Arte crafts oxidised brass and German silver jewellery: jhumkas, hoops, dangles, studs and rings with an Indian heritage soul. Order easily on WhatsApp and pay by UPI.";
 
 /** Default link-preview picture for WhatsApp, Instagram and Google */
-export const OG_IMAGE = { url: "/brand/link-preview.jpg", width: 1200, height: 630, alt: "Ansh Arte handcrafted jewellery" };
+export const OG_IMAGE = { url: "/brand/link-preview.jpg", width: 1200, height: 630, alt: "Ansh Arte: a piece of art. Oxidised brass and German silver jewellery" };
 
 export const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000").replace(/\/$/, "");
 

@@ -489,7 +489,7 @@ export default function OrderDetail() {
       <div className="hidden p-8 text-ink print:block">
         <div className="flex items-start justify-between border-b border-ink pb-4">
           <div>
-            <BrandLogo tone="oxidised" className="block h-20 w-auto" />
+            <BrandLogo tone="brass" className="block h-28 w-auto" />
             <p className="mt-1 text-xs">Handcrafted jewellery · {SITE_URL.replace(/^https?:\/\//, "")}</p>
           </div>
           <div className="text-right">

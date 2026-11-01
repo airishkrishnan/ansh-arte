@@ -1,6 +1,8 @@
 import { useId } from "react";
 import {
   ARTE_PATH,
+  BRASS,
+  GERMAN_SILVER,
   LOGO_VIEWBOX,
   MARK_PATH,
   OXIDISED,
@@ -10,14 +12,32 @@ import {
 } from "@/lib/logo-paths";
 
 /**
- * Logo versions, from the official logo files and the Brand Book (page 11).
- * - silver: primary, for light backgrounds at 100px and up (footer-size marks, banners)
- * - silver-dark: for Kohl, charcoal and dark photos
- * - oxidised: one colour, for print and small marks on light grounds such as the header
- * - white: on Rosewood and busy photos
+ * Logo colour versions, from the Brand Guidelines (Edition 01, page 07).
+ * - brass: Oxidised Brass on Ivory, the primary logo on light grounds
+ * - silver-dark: German Silver on Kohl, the signature version on dark grounds and photos
+ * - flat-silver: single-colour German Silver (on Espresso)
+ * - muslin: tonal, on Sheesham or Mauve Taupe
+ * - silver: the lighter silver gradient from the logo files
+ * - oxidised: one dark colour, for small marks and print
+ * - white: over busy photos
  * - current: follows the surrounding text colour
  */
-export type LogoTone = "silver" | "silver-dark" | "oxidised" | "white" | "current";
+export type LogoTone =
+  | "brass"
+  | "silver"
+  | "silver-dark"
+  | "flat-silver"
+  | "muslin"
+  | "oxidised"
+  | "white"
+  | "current";
+
+const SOLID: Partial<Record<LogoTone, string>> = {
+  "flat-silver": GERMAN_SILVER,
+  muslin: "#E8D8CE",
+  oxidised: OXIDISED,
+  white: "#FFFFFF",
+};
 
 const [, , vbW, vbH] = LOGO_VIEWBOX.split(" ");
 const LOGO_ASPECT = `${vbW} / ${vbH}`;
@@ -44,8 +64,9 @@ function Mark({
   title?: string;
 }) {
   const id = useId().replace(/[^a-zA-Z0-9_-]/g, "");
-  const grads = tone === "silver" ? SILVER_LIGHT : tone === "silver-dark" ? SILVER_DARK : null;
-  const solid = tone === "oxidised" ? OXIDISED : tone === "white" ? "#FFFFFF" : "currentColor";
+  const grads =
+    tone === "brass" ? BRASS : tone === "silver" ? SILVER_LIGHT : tone === "silver-dark" ? SILVER_DARK : null;
+  const solid = SOLID[tone] ?? "currentColor";
   return (
     <svg
       viewBox={LOGO_VIEWBOX}
@@ -79,11 +100,11 @@ function Mark({
 }
 
 /**
- * The full Ansh Arte logo (monogram with the hairline "arte").
- * The Brand Book asks for at least 300px of width on screen; below that use `BrandMonogram`.
+ * The primary Ansh Arte logo (monogram with "arte" set wide beneath).
+ * Minimum 120px wide on screen; below that use `BrandMonogram` or `BrandLockup`.
  */
 export function BrandLogo({
-  tone = "silver",
+  tone = "brass",
   className = "",
   title = "Ansh Arte",
 }: {
@@ -94,9 +115,9 @@ export function BrandLogo({
   return <Mark tone={tone} withName className={className} title={title} />;
 }
 
-/** The "anh" monogram alone: for the header, avatars, icons and small sizes (64px wide or more). */
+/** The monogram alone: favicons, app icons, avatars and tight spaces (32px wide or more). */
 export function BrandMonogram({
-  tone = "silver",
+  tone = "brass",
   className = "",
   title,
 }: {
@@ -105,4 +126,42 @@ export function BrandMonogram({
   title?: string;
 }) {
   return <Mark tone={tone} withName={false} className={className} title={title} />;
+}
+
+/**
+ * Horizontal lockup (guidelines page 08): the monogram beside the name in Poppins Light,
+ * with the descriptor beneath. For website headers and other wide, short spaces.
+ * `dark` sets it for Kohl grounds and photos (German Silver mark, Muslin name).
+ */
+export function BrandLockup({
+  dark = false,
+  descriptor = true,
+  className = "",
+}: {
+  dark?: boolean;
+  descriptor?: boolean;
+  className?: string;
+}) {
+  return (
+    <span className={`inline-flex items-center gap-3 md:gap-4 ${className}`} role="img" aria-label="Ansh Arte">
+      <Mark tone={dark ? "silver-dark" : "oxidised"} withName={false} className="h-[3em] w-auto" />
+      <span aria-hidden className={`h-[2.4em] w-px ${dark ? "bg-silver/70" : "bg-silver"}`} />
+      <span aria-hidden className="flex flex-col items-start leading-none">
+        <span
+          className={`font-sans text-[1em] font-light uppercase tracking-[0.32em] ${dark ? "text-brass-soft" : "text-ink"}`}
+        >
+          Ansh Arte
+        </span>
+        {descriptor && (
+          <span
+            className={`mt-[0.6em] font-sans text-[0.5em] font-normal uppercase tracking-[0.24em] ${
+              dark ? "text-silver" : "text-brass"
+            }`}
+          >
+            Oxidised Brass &amp; German Silver
+          </span>
+        )}
+      </span>
+    </span>
+  );
 }

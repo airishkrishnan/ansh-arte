@@ -1,38 +1,50 @@
 @import "tailwindcss";
 
-/* Ansh Arte design tokens, from the Brand Book (v1.0, October 2026).
-   Palette: Kohl #211b1a, Cocoa #382a28, Clove #60433d, Rosewood #916b60,
-   Sandalwood #c1a094, Muslin #e8d8ce. Mix: Muslin 40%, Kohl 25%, Cocoa, Clove and
-   Sandalwood 10% each, Rosewood 5% (buttons, festive cues, price tags).
-   Text pairs: Kohl, Cocoa or Clove on Muslin; Muslin or Sandalwood on Kohl.
-   Rosewood is a fill with white text. Silver is for the logo only (components/brand.tsx).
-   Type: Cormorant Garamond for display, Jost for text. */
+/* Ansh Arte design tokens, from the Brand Guidelines (Edition 01, November 2026).
+   Seven earth tones: Kohl #211b1a, Espresso #382a28, Sheesham #60433d, Mauve Taupe #926262,
+   Terracotta Clay #916b60, Sandalwood #c1a094, Muslin #e8d8ce. Two metals, German Silver
+   #c4c7cd and Oxidised Brass #5b4a30, are for the logo and moments of shine only
+   (components/brand.tsx). Mix: Muslin 32%, Kohl 24%, Espresso 13%, Sheesham 9%, Mauve 7%,
+   Sandalwood 6%, Clay 4%, metals 5%.
+   Body-copy pairs (WCAG): Kohl on Muslin 12.2:1, Muslin on Kohl, Muslin on Sheesham 6.4:1,
+   Kohl on Sandalwood 7.1:1, Muslin on Espresso 8.1:1. Muslin on Mauve (3.7:1) is large text only.
+   Type: Lora for headlines, quotes and prices; Poppins Light for text and labels. */
 @theme {
-  --color-ivory: #f4ece6; /* page: Muslin, lifted so product photos stay true */
+  --color-ivory: #f4ece6; /* page: Muslin, lifted (the Ivory ground of the primary logo) */
   --color-paper: #fbf7f4; /* cards, inputs */
   --color-sand: #e8d8ce; /* Muslin: panels, image placeholders */
   --color-line: #dcc8bc;
   --color-ink: #211b1a; /* Kohl */
-  --color-ink-soft: #382a28; /* Cocoa */
-  --color-muted: #60433d; /* Clove */
-  --color-brass: #916b60; /* Rosewood: accents, icons */
-  --color-brass-deep: #60433d; /* Clove: small accent text, links */
+  --color-ink-soft: #382a28; /* Espresso */
+  --color-muted: #60433d; /* Sheesham */
+  --color-brass: #916b60; /* Terracotta Clay: accents, icons */
+  --color-brass-deep: #60433d; /* Sheesham: small accent text, links, buttons */
   --color-brass-soft: #e8d8ce; /* Muslin: accent text on dark */
   --color-silver: #c1a094; /* Sandalwood */
-  --color-cocoa: #382a28;
-  --color-rosewood: #916b60; /* buttons and festive fills, always with white text */
+  --color-cocoa: #382a28; /* Espresso */
+  --color-espresso: #382a28;
+  --color-sheesham: #60433d;
+  --color-mauve: #926262; /* Mauve Taupe: ribbons, cards, festive fills (large text only) */
+  --color-rosewood: #916b60; /* Terracotta Clay */
+  --color-clay: #916b60;
+  --color-german-silver: #c4c7cd; /* metal: logo and moments of shine */
+  --color-oxidised-brass: #5b4a30; /* metal: logo on light, details */
   --color-temple: #8a352c; /* errors and sold-out only */
   --color-success: #2f6b3f;
 
-  --font-sans: var(--font-jost), Arial, ui-sans-serif, system-ui, sans-serif;
-  --font-serif: var(--font-cormorant), Georgia, ui-serif, serif;
+  --font-sans: var(--font-poppins), Arial, ui-sans-serif, system-ui, sans-serif;
+  --font-serif: var(--font-lora), Georgia, ui-serif, serif;
+
+  /* Poppins is set light; cap the heavy weights so labels stay quiet ("refined, not flashy") */
+  --font-weight-semibold: 500;
+  --font-weight-bold: 500;
 
   --ease-lux: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 html {
   -webkit-text-size-adjust: 100%;
-  /* Cormorant defaults to old-style figures; prices and order numbers read better lining */
+  /* Lining figures for prices and order numbers */
   font-variant-numeric: lining-nums;
   scroll-behavior: smooth;
 }
@@ -41,7 +53,7 @@ body {
   background: var(--color-ivory);
   color: var(--color-ink);
   font-family: var(--font-sans);
-  font-weight: 400;
+  font-weight: 300; /* Poppins Light, per the guidelines */
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
 }
@@ -76,40 +88,41 @@ li {
   }
 
   .eyebrow {
-    font-size: 0.7rem;
-    letter-spacing: 0.25em;
+    font-size: 0.72rem;
+    letter-spacing: 0.3em; /* guidelines: Poppins caps, tracking +300 */
     text-transform: uppercase;
-    font-weight: 500;
+    font-weight: 400;
     color: var(--color-brass-deep);
   }
 
+  /* Guidelines hierarchy: Lora Regular for display (1.05 leading) and headlines */
   .heading-xl {
     font-family: var(--font-serif);
-    font-weight: 500;
-    line-height: 1.02;
+    font-weight: 400;
+    line-height: 1.05;
     letter-spacing: -0.01em;
-    font-size: clamp(2.5rem, 7vw, 5.25rem);
+    font-size: clamp(2.25rem, 6vw, 4.5rem);
   }
   .heading-lg {
     font-family: var(--font-serif);
-    font-weight: 500;
-    line-height: 1.08;
-    font-size: clamp(2rem, 4.5vw, 3.25rem);
+    font-weight: 400;
+    line-height: 1.1;
+    font-size: clamp(1.85rem, 4vw, 2.85rem);
   }
   .heading-md {
     font-family: var(--font-serif);
-    font-weight: 500;
-    line-height: 1.15;
-    font-size: clamp(1.5rem, 3vw, 2rem);
+    font-weight: 400;
+    line-height: 1.2;
+    font-size: clamp(1.4rem, 2.6vw, 1.8rem);
   }
 
-  /* Brand Book subhead: Cormorant Italic */
+  /* Accent: Lora Italic for quotes, signatures and the brand line */
   .subhead {
     font-family: var(--font-serif);
     font-style: italic;
     font-weight: 400;
     line-height: 1.2;
-    font-size: clamp(1.25rem, 2.6vw, 1.75rem);
+    font-size: clamp(1.15rem, 2.3vw, 1.55rem);
   }
 
   .btn {
@@ -119,9 +132,9 @@ li {
     gap: 0.5rem;
     min-height: 3rem;
     padding: 0 1.75rem;
-    font-size: 0.78rem;
-    font-weight: 500;
-    letter-spacing: 0.16em;
+    font-size: 0.75rem;
+    font-weight: 400;
+    letter-spacing: 0.22em;
     text-transform: uppercase;
     transition:
       background-color 0.3s var(--ease-lux),
@@ -138,13 +151,13 @@ li {
     opacity: 0.5;
     cursor: not-allowed;
   }
-  /* Brand Book: Rosewood buttons with white text (4.7:1) */
+  /* Guidelines: Sheesham is the button accent; Muslin on Sheesham is 6.4:1 (AA) */
   .btn-primary {
-    background: var(--color-rosewood);
-    color: #fff;
+    background: var(--color-sheesham);
+    color: var(--color-brass-soft);
   }
   .btn-primary:hover {
-    background: var(--color-brass-deep);
+    background: var(--color-espresso);
   }
   .btn-outline {
     border: 1px solid var(--color-ink);
