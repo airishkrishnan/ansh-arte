@@ -1,20 +1,21 @@
 import type { Metadata, Viewport } from "next";
-import { Cormorant_Garamond, Jost } from "next/font/google";
+import { Lora, Poppins } from "next/font/google";
 import { OG_IMAGE, SITE_DESCRIPTION, SITE_NAME, SITE_TAGLINE, SITE_URL } from "@/lib/site";
 import "./globals.css";
 
-// Brand Book typography: Jost for text (body, prices, labels, buttons),
-// Cormorant Garamond for display (headlines, collection names, quotes).
-const sans = Jost({
-  variable: "--font-jost",
+// Brand Guidelines (Edition 01, Nov 2026), section 06: Lora for headlines, quotes and
+// prices; Poppins Light for text and labels (the same pairing the logo makes).
+const sans = Poppins({
+  variable: "--font-poppins",
   subsets: ["latin"],
+  weight: ["300", "400", "500"],
   display: "swap",
 });
 
-const serif = Cormorant_Garamond({
-  variable: "--font-cormorant",
+const serif = Lora({
+  variable: "--font-lora",
   subsets: ["latin"],
-  weight: ["400", "500", "600"],
+  weight: ["400", "500"],
   style: ["normal", "italic"],
   display: "swap",
 });

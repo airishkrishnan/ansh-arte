@@ -111,14 +111,14 @@ function render(o: EmailOrder, c: Copy, s: Settings) {
     )
     .join("");
   const wa = `https://wa.me/${s.whatsapp_number.replace(/\D/g, "")}`;
-  return `<!doctype html><html><body style="margin:0;background:#f4ece6;font-family:Helvetica,Arial,sans-serif;color:#211b1a">
+  return `<!doctype html><html><body style="margin:0;background:#f4ece6;font-family:Poppins,Helvetica,Arial,sans-serif;color:#211b1a">
 <table width="100%" cellpadding="0" cellspacing="0" style="background:#f4ece6"><tr><td align="center" style="padding:24px 12px">
 <table width="100%" cellpadding="0" cellspacing="0" style="max-width:560px;background:#fbf7f4;border:1px solid #eadfd8">
 <tr><td align="center" style="background:#211b1a;padding:18px 28px"><img src="${SITE_URL}/brand/logo-silver-dark.png" width="120" height="109" alt="Ansh Arte" style="display:block;border:0;color:#e8d8ce;font-family:Georgia,serif;font-size:20px;letter-spacing:4px"></td></tr>
 <tr><td style="padding:28px">
-<h1 style="margin:0 0 16px;font-family:Georgia,serif;font-weight:normal;font-size:26px">${c.heading}</h1>
+<h1 style="margin:0 0 16px;font-family:Lora,Georgia,serif;font-weight:normal;font-size:26px">${c.heading}</h1>
 ${c.lines.map((l) => `<p style="margin:0 0 12px;font-size:15px;line-height:1.6;color:#382a28">${l}</p>`).join("")}
-${c.button ? `<p style="margin:24px 0"><a href="${c.button.href}" style="display:inline-block;background:#916b60;color:#ffffff;text-decoration:none;padding:12px 24px;font-size:13px;letter-spacing:2px;text-transform:uppercase">${c.button.label}</a></p>` : ""}
+${c.button ? `<p style="margin:24px 0"><a href="${c.button.href}" style="display:inline-block;background:#60433d;color:#e8d8ce;text-decoration:none;padding:12px 24px;font-size:13px;letter-spacing:2px;text-transform:uppercase">${c.button.label}</a></p>` : ""}
 <table width="100%" cellpadding="0" cellspacing="0" style="margin-top:12px;font-size:14px">
 <tr><td colspan="2" style="padding-bottom:4px;font-size:12px;letter-spacing:2px;text-transform:uppercase;color:#916b60">Order ${o.number}</td></tr>
 ${rows}

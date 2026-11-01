@@ -5,7 +5,7 @@ import { useEffect, useMemo, useState } from "react";
 import { SampleData } from "@/components/admin/sample-data";
 import { useAdmin } from "@/components/admin/shell";
 import { Card, Icon, OrderPills, ago, dayFmt, type IconName } from "@/components/admin/ui";
-import { BrandLogo } from "@/components/brand";
+import { BrandLockup } from "@/components/brand";
 import { SITE_URL, formatPrice } from "@/lib/site";
 import { getBrowserSupabase } from "@/lib/supabase/client";
 import type { Order, Product } from "@/lib/types";
@@ -130,7 +130,7 @@ export default function AdminHome() {
             <span className="grid size-11 place-items-center rounded-full bg-gradient-to-br from-brass to-brass-deep text-sm font-semibold uppercase" title={email}>
               {email.slice(0, 2)}
             </span>
-            <BrandLogo className="h-12 w-auto" tone="silver-dark" />
+            <BrandLockup dark descriptor={false} className="text-[0.8rem]" />
             <Link href="/admin/inbox" className="relative grid size-11 place-items-center rounded-full hover:bg-paper/10" aria-label={`Reviews and alerts${alertsWaiting ? `, ${alertsWaiting} waiting` : ""}`}>
               <Icon name="inbox" className="size-6" />
               {alertsWaiting > 0 && (

@@ -1,7 +1,7 @@
 import type { MetadataRoute } from "next";
 
 // The admin as its own home-screen app, separate from the store app.
-// Rosewood icon so it is easy to tell apart from the store's Kohl icon.
+// Sheesham icon with a Muslin monogram, easy to tell apart from the store's Kohl icon.
 export const dynamic = "force-static";
 
 export function GET() {
